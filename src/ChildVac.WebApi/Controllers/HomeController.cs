@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ChildVac.WebApi.Models;
+using ChildVac.WebApi.ViewModels;
 
 namespace ChildVac.WebApi.Controllers
 {

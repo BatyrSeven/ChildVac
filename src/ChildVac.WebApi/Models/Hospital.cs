@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace ChildVac.WebApi.Models
 {
-    public class Stuff : User
+    public class Hospital
     {
-        public Hospital Hospital { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
     }
 }
