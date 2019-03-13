@@ -28,6 +28,28 @@ namespace ChildVac.WebApi.Services
             _context.SaveChanges();
         }
 
+        public Hospital Get(int id)
+        {
+            return _context.Hospitals
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable<Hospital> GetAll()
+        {
+            return _context.Hospitals
+                .OrderBy(x => x.Name);
+        }
+
+        public void Delete(int id)
+        {
+            var hospital = Get(id);
+            if (hospital != null)
+            {
+                _context.Hospitals.Remove(hospital);
+                _context.SaveChanges();
+            }
+        }
+
         public IEnumerable<Hospital> Find(string name)
         {
             return _context.Hospitals
