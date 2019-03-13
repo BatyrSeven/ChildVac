@@ -6,9 +6,14 @@ namespace ChildVac.WebApi.Infrastructure
 {
     public class ApplicationContext : DbContext
     {
+        public ApplicationContext()
+        {
+
+        }
+
         public ApplicationContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +29,14 @@ namespace ChildVac.WebApi.Infrastructure
             modelBuilder.ApplyConfiguration(new VaccineDbConfiguration());
         }
 
+        public DbSet<Child> Children { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Hospital> Hospitals { get; set; }
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Vaccination> Vaccinations { get; set; }
+        public DbSet<Vaccine> Vaccines { get; set; }
     }
 }
