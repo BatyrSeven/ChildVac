@@ -8,9 +8,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Prescription> builder)
         {
-            builder.Property(x => x.Ticket)
-                .IsRequired();
-
             builder.Property(x => x.DateTime)
                 .IsRequired();
         }

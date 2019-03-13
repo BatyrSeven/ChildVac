@@ -7,6 +7,7 @@ namespace ChildVac.WebApi.Models
 {
     public class Doctor : User
     {
+        public int HospitalId { get; set; }
         public Hospital Hospital { get; set; }
     }
 }

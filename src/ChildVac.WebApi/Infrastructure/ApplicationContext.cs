@@ -13,13 +13,13 @@ namespace ChildVac.WebApi.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new UserDbConfiguration());
             modelBuilder.ApplyConfiguration(new ChildDbConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorDbConfiguration());
             modelBuilder.ApplyConfiguration(new HospitalDbConfiguration());
             modelBuilder.ApplyConfiguration(new ParentDbConfiguration());
             modelBuilder.ApplyConfiguration(new PrescriptionDbConfiguration());
             modelBuilder.ApplyConfiguration(new TicketDbConfiguration());
+            modelBuilder.ApplyConfiguration(new UserDbConfiguration());
             modelBuilder.ApplyConfiguration(new VaccinationDbConfiguration());
             modelBuilder.ApplyConfiguration(new VaccineDbConfiguration());
         }

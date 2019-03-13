@@ -27,7 +27,7 @@ namespace ChildVac.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ChildVacDatabase")));
+                options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase")));
 
             services.Configure<CookiePolicyOptions>(options =>
             {

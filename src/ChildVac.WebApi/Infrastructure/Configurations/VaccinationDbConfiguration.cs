@@ -8,12 +8,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Vaccination> builder)
         {
-            builder.Property(x => x.Vaccine)
-                .IsRequired();
-
-            builder.Property(x => x.Ticket)
-                .IsRequired();
-
             builder.Property(x => x.DateTime)
                 .IsRequired();
         }

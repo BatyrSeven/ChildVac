@@ -8,9 +8,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
-            builder.Property(x => x.Hospital)
-                .IsRequired();
-            
             builder.HasBaseType<User>();
         }
     }

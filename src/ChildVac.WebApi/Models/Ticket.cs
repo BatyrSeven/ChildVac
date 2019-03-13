@@ -7,7 +7,7 @@ namespace ChildVac.WebApi.Models
 {
     public class Ticket
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public Child Child { get; set; }
         public Doctor Doctor { get; set; }
         public DateTime StartDateTime { get; set; }

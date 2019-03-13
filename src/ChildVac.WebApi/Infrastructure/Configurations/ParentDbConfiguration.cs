@@ -8,8 +8,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Parent> builder)
         {
-            builder.Property(x => x.Children);
-
             builder.Property(x => x.Address)
                 .IsRequired()
                 .HasMaxLength(100);

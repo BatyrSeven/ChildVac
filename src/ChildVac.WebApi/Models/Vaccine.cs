@@ -7,7 +7,7 @@ namespace ChildVac.WebApi.Models
 {
     public class Vaccine
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public TimeSpan RecieveTime { get; set; }
     }

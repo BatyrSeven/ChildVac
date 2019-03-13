@@ -7,7 +7,7 @@ namespace ChildVac.WebApi.Models
 {
     public class Prescription
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public Ticket Ticket { get; set; }
         public DateTime DateTime { get; set; }
         public string Diagnosis { get; set; }
