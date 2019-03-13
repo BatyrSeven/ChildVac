@@ -8,5 +8,6 @@ namespace ChildVac.WebApi.Models
     public class Parent : User
     {
         public List<Child> Children { get; set; }
+        public string Address { get; set; }
     }
 }

@@ -10,7 +10,6 @@ namespace ChildVac.WebApi.Models
         public long Id { get; set; }
         public Vaccine Vaccine { get; set; }
         public Ticket Ticket { get; set; }
-        public Nurse Nurse { get; set; }
         public DateTime DateTime { get; set; }
     }
 }

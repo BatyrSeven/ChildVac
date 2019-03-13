@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ChildVac.WebApi.Models
 {
-    public class Doctor : Stuff
+    public class Doctor : User
     {
-
+        public Hospital Hospital { get; set; }
     }
 }

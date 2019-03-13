@@ -8,9 +8,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(x => x.Id)
-                .ValueGeneratedOnAdd();
-
             builder.Property(x => x.Login)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -26,8 +23,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            builder.HasIndex(x => x.Id);
         }
     }
 }

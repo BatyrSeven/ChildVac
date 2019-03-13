@@ -15,7 +15,7 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.DateOfBirth)
                 .IsRequired();
 
-            builder.HasIndex(x => x.Id);
+            builder.HasBaseType<User>();
         }
     }
 }
