@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Infrastructure;
+using ChildVac.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,8 @@ namespace ChildVac.WebApi
                     options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase"));
                 }
             });
+
+            services.AddTransient<IHospitalService, HospitalService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

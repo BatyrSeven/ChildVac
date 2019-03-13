@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChildVac.WebApi.Services
 {
-    public class HospitalService
+    public class HospitalService : IHospitalService
     {
         private ApplicationContext _context;
 
