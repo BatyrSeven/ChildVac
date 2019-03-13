@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace ChildVac.Web
+namespace ChildVac.WebApi
 {
     public class Program
     {

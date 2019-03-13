@@ -1,6 +1,6 @@
 using System;
 
-namespace ChildVac.Web.Models
+namespace ChildVac.WebApi.ViewModels
 {
     public class ErrorViewModel
     {
