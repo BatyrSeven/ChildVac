@@ -5,21 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190313165150_Initial")]
-    partial class Initial
+    [Migration("20190321053215_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Hospital", b =>
                 {
@@ -35,7 +32,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hospital");
+                    b.ToTable("Hospitals");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Prescription", b =>
@@ -55,7 +52,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Prescription");
+                    b.ToTable("Prescriptions");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Ticket", b =>
@@ -77,7 +74,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.User", b =>
@@ -128,7 +125,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasIndex("VaccineId");
 
-                    b.ToTable("Vaccination");
+                    b.ToTable("Vaccinations");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Vaccine", b =>
@@ -144,7 +141,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vaccine");
+                    b.ToTable("Vaccines");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Child", b =>

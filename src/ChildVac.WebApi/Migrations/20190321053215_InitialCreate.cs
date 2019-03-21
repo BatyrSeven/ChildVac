@@ -1,39 +1,38 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChildVac.WebApi.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Hospital",
+                name: "Hospitals",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     Address = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hospital", x => x.Id);
+                    table.PrimaryKey("PK_Hospitals", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vaccine",
+                name: "Vaccines",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     RecieveTime = table.Column<TimeSpan>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vaccine", x => x.Id);
+                    table.PrimaryKey("PK_Vaccines", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,7 +40,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Login = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
@@ -63,19 +62,19 @@ namespace ChildVac.WebApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Hospital_HospitalId",
+                        name: "FK_Users_Hospitals_HospitalId",
                         column: x => x.HospitalId,
-                        principalTable: "Hospital",
+                        principalTable: "Hospitals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ticket",
+                name: "Tickets",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ChildId = table.Column<int>(nullable: true),
                     DoctorId = table.Column<int>(nullable: true),
                     StartDateTime = table.Column<DateTime>(nullable: false),
@@ -83,15 +82,15 @@ namespace ChildVac.WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ticket", x => x.Id);
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ticket_Users_ChildId",
+                        name: "FK_Tickets_Users_ChildId",
                         column: x => x.ChildId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Ticket_Users_DoctorId",
+                        name: "FK_Tickets_Users_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -99,11 +98,11 @@ namespace ChildVac.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prescription",
+                name: "Prescriptions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     TicketId = table.Column<int>(nullable: true),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Diagnosis = table.Column<string>(nullable: true),
@@ -111,55 +110,55 @@ namespace ChildVac.WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prescription", x => x.Id);
+                    table.PrimaryKey("PK_Prescriptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Prescription_Ticket_TicketId",
+                        name: "FK_Prescriptions_Tickets_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Ticket",
+                        principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vaccination",
+                name: "Vaccinations",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     VaccineId = table.Column<int>(nullable: true),
                     TicketId = table.Column<int>(nullable: true),
                     DateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vaccination", x => x.Id);
+                    table.PrimaryKey("PK_Vaccinations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vaccination_Ticket_TicketId",
+                        name: "FK_Vaccinations_Tickets_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Ticket",
+                        principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Vaccination_Vaccine_VaccineId",
+                        name: "FK_Vaccinations_Vaccines_VaccineId",
                         column: x => x.VaccineId,
-                        principalTable: "Vaccine",
+                        principalTable: "Vaccines",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prescription_TicketId",
-                table: "Prescription",
+                name: "IX_Prescriptions_TicketId",
+                table: "Prescriptions",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_ChildId",
-                table: "Ticket",
+                name: "IX_Tickets_ChildId",
+                table: "Tickets",
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_DoctorId",
-                table: "Ticket",
+                name: "IX_Tickets_DoctorId",
+                table: "Tickets",
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
@@ -173,35 +172,35 @@ namespace ChildVac.WebApi.Migrations
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vaccination_TicketId",
-                table: "Vaccination",
+                name: "IX_Vaccinations_TicketId",
+                table: "Vaccinations",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vaccination_VaccineId",
-                table: "Vaccination",
+                name: "IX_Vaccinations_VaccineId",
+                table: "Vaccinations",
                 column: "VaccineId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Prescription");
+                name: "Prescriptions");
 
             migrationBuilder.DropTable(
-                name: "Vaccination");
+                name: "Vaccinations");
 
             migrationBuilder.DropTable(
-                name: "Ticket");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Vaccine");
+                name: "Vaccines");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Hospital");
+                name: "Hospitals");
         }
     }
 }

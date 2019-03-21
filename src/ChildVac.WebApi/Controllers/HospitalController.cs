@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
-using ChildVac.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildVac.WebApi.Controllers
@@ -10,46 +10,59 @@ namespace ChildVac.WebApi.Controllers
     [ApiController]
     public class HospitalController : ControllerBase
     {
-        private IHospitalService _service;
+        private readonly ApplicationContext _context;
 
-        public HospitalController(IHospitalService service)
+        public HospitalController(ApplicationContext context)
         {
-            _service = service;
+            _context = context;
         }
 
         // GET: api/Hospital
         [HttpGet]
         public IEnumerable<Hospital> Get()
         {
-            return _service.GetAll();
+            return _context.Hospitals
+                .OrderBy(x => x.Name);
         }
 
         // GET: api/Hospital/5
         [HttpGet("{id}", Name = "Get")]
         public Hospital Get(int id)
         {
-            return _service.Get(id);
+            return _context.Hospitals
+                .FirstOrDefault(x => x.Id == id);
         }
 
         // POST: api/Hospital
         [HttpPost]
-        public void Post([FromBody] string name, [FromBody] string address)
+        public void Post([FromBody] Hospital hospital)
         {
-            _service.Add(name, address);
+            if (hospital == null) return;
+
+            _context.Hospitals.Add(hospital);
+            _context.SaveChanges();
         }
 
         // PUT: api/Hospital/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Hospital hospital)
         {
-            throw new NotImplementedException();
+            if (hospital == null) return;
+            
+            _context.Hospitals.Update(hospital);
+            _context.SaveChanges();
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Hospital/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _service.Delete(id);
+            var hospital = Get(id);
+
+            if (hospital == null) return;
+
+            _context.Hospitals.Remove(hospital);
+            _context.SaveChanges();
         }
     }
 }

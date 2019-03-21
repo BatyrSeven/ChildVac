@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Services;
+﻿using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,9 +11,12 @@ namespace ChildVac.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private string DbPath { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            DbPath = env.ContentRootPath + "/childvac.db";
         }
 
         public IConfiguration Configuration { get; }
@@ -31,11 +28,13 @@ namespace ChildVac.WebApi
             {
                 if (!options.IsConfigured)
                 {
-                    options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase"));
+                    // for production
+                    //options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase"));
+                    
+                    // sqlite for development only
+                    options.UseSqlite($"Data Source={DbPath}");
                 }
             });
-
-            services.AddTransient<IHospitalService, HospitalService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
