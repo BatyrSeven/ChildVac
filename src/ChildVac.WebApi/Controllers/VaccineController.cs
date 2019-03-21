@@ -8,52 +8,52 @@ namespace ChildVac.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HospitalController : ControllerBase
+    public class VaccineController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
-        public HospitalController(ApplicationContext context)
+        public VaccineController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Hospital
+        // GET: api/Vaccine
         [HttpGet]
-        public IEnumerable<Hospital> Get()
+        public IEnumerable<Vaccine> Get()
         {
-            return _context.Hospitals
+            return _context.Vaccines
                 .OrderBy(x => x.Id);
         }
 
-        // GET: api/Hospital/5
-        [HttpGet("{id}", Name = "GetHospital")]
-        public Hospital Get(int id)
+        // GET: api/Vaccine/5
+        [HttpGet("{id}", Name = "GetVaccine")]
+        public Vaccine Get(int id)
         {
-            return _context.Hospitals
+            return _context.Vaccines
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        // POST: api/Hospital
+        // POST: api/Vaccine
         [HttpPost]
-        public void Post([FromBody] Hospital hospital)
+        public void Post([FromBody] Vaccine hospital)
         {
             if (hospital == null) return;
 
-            _context.Hospitals.Add(hospital);
+            _context.Vaccines.Add(hospital);
             _context.SaveChanges();
         }
 
-        // PUT: api/Hospital/5
+        // PUT: api/Vaccine/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Hospital hospital)
+        public void Put(int id, [FromBody] Vaccine hospital)
         {
             if (hospital == null) return;
             
-            _context.Hospitals.Update(hospital);
+            _context.Vaccines.Update(hospital);
             _context.SaveChanges();
         }
 
-        // DELETE: api/Hospital/5
+        // DELETE: api/Vaccine/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
@@ -61,7 +61,7 @@ namespace ChildVac.WebApi.Controllers
 
             if (hospital == null) return;
 
-            _context.Hospitals.Remove(hospital);
+            _context.Vaccines.Remove(hospital);
             _context.SaveChanges();
         }
     }
