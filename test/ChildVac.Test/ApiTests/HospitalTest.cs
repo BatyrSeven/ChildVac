@@ -1,41 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ChildVac.WebApi;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace ChildVac.Test.ApiTests
 {
-    public class HospitalTest : IClassFixture<ApiWebApplicationFactory<Startup>>
+    public class HospitalTest : ApiTestBase
     {
-        public HospitalTest(ApiWebApplicationFactory<Startup> factory)
+        public HospitalTest(ApiWebApplicationFactory<Startup> factory) : base(factory)
         {
-            _factory = factory;
-
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
-            _client.BaseAddress = new Uri("https://localhost:44319");
-            _client.DefaultRequestHeaders
-                .Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json")); //ACCEPT header
+            
         }
 
-        private readonly HttpClient _client;
-        private readonly ApiWebApplicationFactory<Startup> _factory;
-        private IServiceScopeFactory ScopeFactory => _factory.Server.Host.Services.GetService<IServiceScopeFactory>();
-        private string Resource => "/api/Hospital";
+        protected override string Resource => "/api/Hospital";
 
         [Theory]
         [InlineData("test name", "test address")]
