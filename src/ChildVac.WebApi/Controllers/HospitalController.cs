@@ -35,7 +35,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // POST: api/Hospital
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public void Post([FromBody] Hospital hospital)
         {
@@ -46,7 +46,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // PUT: api/Hospital/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Hospital hospital)
         {
@@ -57,7 +57,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // DELETE: api/Hospital/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

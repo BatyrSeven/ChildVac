@@ -21,9 +21,49 @@ namespace ChildVac.Test.ApiTests
         protected override string Resource => "/api/Account";
 
         [Fact]
-        public async Task ShouldReturnTokenWhenPost()
+        public async Task ShouldReturnTokenWhenPostValid()
         {
-            Assert.True(false);
+            // Arrange
+            var data = new JObject
+            {
+                ["login"] = "qwerty",
+                ["password"] = "55555"
+            };
+
+            var content = new StringContent(data.ToString(),
+                Encoding.UTF8,
+                "application/json"); //CONTENT-TYPE header
+
+            // Act
+            var response = await _client.PostAsync(Resource, content);
+            string resultContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var result = JObject.Parse(resultContent);
+            Assert.True(result.ContainsKey("token"));
+            Assert.True(result.ContainsKey("login"));
+        }
+
+        [Fact]
+        public async Task ShouldReturnTokenWhenPostInvalid()
+        {
+            // Arrange
+            var data = new JObject
+            {
+                ["login"] = "qwerty",
+                ["password"] = "12345"
+            };
+
+            var content = new StringContent(data.ToString(),
+                Encoding.UTF8,
+                "application/json"); //CONTENT-TYPE header
+
+            // Act
+            var response = await _client.PostAsync(Resource, content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }
