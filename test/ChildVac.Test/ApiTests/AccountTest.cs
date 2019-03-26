@@ -35,7 +35,7 @@ namespace ChildVac.Test.ApiTests
                 "application/json"); //CONTENT-TYPE header
 
             // Act
-            var response = await _client.PostAsync(Resource, content);
+            var response = await Client.PostAsync(Resource, content);
             string resultContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -60,7 +60,7 @@ namespace ChildVac.Test.ApiTests
                 "application/json"); //CONTENT-TYPE header
 
             // Act
-            var response = await _client.PostAsync(Resource, content);
+            var response = await Client.PostAsync(Resource, content);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

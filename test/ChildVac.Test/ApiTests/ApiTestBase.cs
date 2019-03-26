@@ -14,21 +14,21 @@ namespace ChildVac.Test.ApiTests
     {
         protected ApiTestBase(ApiWebApplicationFactory<Startup> factory)
         {
-            _factory = factory;
+            Factory = factory;
 
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+            Client = factory.CreateClient(new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false
             });
-            _client.BaseAddress = new Uri("https://localhost:44319");
-            _client.DefaultRequestHeaders
+            Client.BaseAddress = new Uri("https://localhost:44319");
+            Client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json")); //ACCEPT header
         }
 
-        protected readonly HttpClient _client;
-        protected readonly ApiWebApplicationFactory<Startup> _factory;
-        protected IServiceScopeFactory ScopeFactory => _factory.Server.Host.Services.GetService<IServiceScopeFactory>();
+        protected readonly HttpClient Client;
+        protected readonly ApiWebApplicationFactory<Startup> Factory;
+        protected IServiceScopeFactory ScopeFactory => Factory.Server.Host.Services.GetService<IServiceScopeFactory>();
         protected abstract string Resource { get; }
     }
 }

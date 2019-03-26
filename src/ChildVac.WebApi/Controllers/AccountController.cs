@@ -20,8 +20,8 @@ namespace ChildVac.WebApi.Controllers
         // TODO: добавить контекст БД и заменить '_parents'
         private readonly List<Parent> _parents = new List<Parent>
         {
-            new Parent { Login="admin@gmail.com", Password="12345", Role = "admin" },
-            new Parent { Login="qwerty", Password="55555", Role = "user" }
+            new Parent { Login="admin@gmail.com", Password="12345", Role = "Admin" },
+            new Parent { Login="qwerty", Password="55555", Role = "User" }
         };
 
         // GET: api/Account

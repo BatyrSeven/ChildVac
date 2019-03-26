@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using ChildVac.Test.Helpers;
 using ChildVac.WebApi;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
@@ -39,8 +41,11 @@ namespace ChildVac.Test.ApiTests
                 Encoding.UTF8,
                 "application/json"); //CONTENT-TYPE header
 
+            var token = await AuthenticationHelper.GetAdminToken(Client);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             // Act
-            var response = await _client.PostAsync(Resource, content);
+            var response = await Client.PostAsync(Resource, content);
             //string resultContent = await result.Content.ReadAsStringAsync();
 
             // Assert
@@ -84,7 +89,7 @@ namespace ChildVac.Test.ApiTests
             }
 
             // Act
-            var response = await _client.GetAsync(Resource);
+            var response = await Client.GetAsync(Resource);
             var vaccineList = await response.Content.ReadAsAsync<List<Vaccine>>();
 
             // Assert
@@ -129,7 +134,7 @@ namespace ChildVac.Test.ApiTests
             }
 
             // Act
-            var response = await _client.GetAsync($"{Resource}/{first.Id}");
+            var response = await Client.GetAsync($"{Resource}/{first.Id}");
             var vaccine = await response.Content.ReadAsAsync<Vaccine>();
 
             // Assert
@@ -177,12 +182,15 @@ namespace ChildVac.Test.ApiTests
                 ["recieveTime"] = updatedRecieveTime
             };
 
+            var token = await AuthenticationHelper.GetAdminToken(Client);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             // Act
             var content = new StringContent(updatedVaccine.ToString(),
                 Encoding.UTF8,
                 "application/json"); //CONTENT-TYPE header
 
-            var response = await _client.PutAsync($"{Resource}/{first.Id}", content);
+            var response = await Client.PutAsync($"{Resource}/{first.Id}", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -228,8 +236,11 @@ namespace ChildVac.Test.ApiTests
                 context.SaveChanges();
             }
 
+            var token = await AuthenticationHelper.GetAdminToken(Client);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             // Act
-            var response = await _client.DeleteAsync($"{Resource}/{first.Id}");
+            var response = await Client.DeleteAsync($"{Resource}/{first.Id}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
