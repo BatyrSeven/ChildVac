@@ -14,8 +14,9 @@ namespace ChildVac.Test.Helpers
         {
             var data = new JObject
             {
-                ["login"] = "qwerty",
-                ["password"] = "55555"
+                ["login"] = "parent_login",
+                ["password"] = "55555",
+                ["role"] = "Parent"
             };
 
             return await RequestToken(client, data);
@@ -25,8 +26,9 @@ namespace ChildVac.Test.Helpers
         {
             var data = new JObject
             {
-                ["login"] = "admin@gmail.com",
-                ["password"] = "12345"
+                ["login"] = "admin_login",
+                ["password"] = "12345",
+                ["role"] = "Admin"
             };
 
             return await RequestToken(client, data);

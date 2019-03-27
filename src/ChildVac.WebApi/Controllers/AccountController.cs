@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,12 +18,12 @@ namespace ChildVac.WebApi.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        // TODO: добавить контекст БД и заменить '_parents'
-        private readonly List<Parent> _parents = new List<Parent>
+        private readonly ApplicationContext _context;
+
+        public AccountController(ApplicationContext context)
         {
-            new Parent { Login="admin@gmail.com", Password="12345", Role = "Admin" },
-            new Parent { Login="qwerty", Password="55555", Role = "User" }
-        };
+            _context = context;
+        }
 
         // GET: api/Account
         [HttpGet]
@@ -61,7 +62,7 @@ namespace ChildVac.WebApi.Controllers
 
             var now = DateTime.UtcNow;
 
-            // создаем JWT-токен
+            // create JWT-token
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
@@ -78,7 +79,7 @@ namespace ChildVac.WebApi.Controllers
                 login = identity.Name
             };
 
-            // сериализация ответа
+            // serialize response
             Response.ContentType = "application/json";
             await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
         }
@@ -86,23 +87,44 @@ namespace ChildVac.WebApi.Controllers
         [NonAction]
         private ClaimsIdentity GetIdentity(Token token)
         {
-            Parent parent = _parents.FirstOrDefault(x => x.Login == token.Login && x.Password == token.Password);
-            if (parent != null)
+            User user = null;
+
+            switch (token.Role)
+            {
+                case "Admin":
+                    user = _context.Admins.FirstOrDefault(x =>
+                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
+                    break;
+                case "Child":
+                    user = _context.Children.FirstOrDefault(x =>
+                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
+                    break;
+                case "Doctor":
+                    user = _context.Doctors.FirstOrDefault(x =>
+                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
+                    break;
+                case "Parent":
+                    user = _context.Parents.FirstOrDefault(x =>
+                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
+                    break;
+            }
+
+            if (user != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, parent.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, parent.Role)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                 };
 
-                ClaimsIdentity claimsIdentity =
+                var claimsIdentity =
                     new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);
 
                 return claimsIdentity;
             }
 
-            // если пользователя не найдено
+            // user not found
             return null;
         }
     }

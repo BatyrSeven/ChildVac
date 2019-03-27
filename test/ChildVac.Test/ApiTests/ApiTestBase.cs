@@ -4,8 +4,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using ChildVac.WebApi;
+using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace ChildVac.Test.ApiTests
@@ -20,6 +22,7 @@ namespace ChildVac.Test.ApiTests
             {
                 AllowAutoRedirect = false
             });
+
             Client.BaseAddress = new Uri("https://localhost:44319");
             Client.DefaultRequestHeaders
                 .Accept

@@ -9,5 +9,7 @@ namespace ChildVac.WebApi.Models
     {
         public List<Child> Children { get; set; }
         public string Address { get; set; }
+
+        public override string Role => "Parent";
     }
 }

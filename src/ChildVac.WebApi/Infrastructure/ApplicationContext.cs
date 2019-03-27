@@ -18,6 +18,7 @@ namespace ChildVac.WebApi.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new AdminDbConfiguration());
             modelBuilder.ApplyConfiguration(new ChildDbConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorDbConfiguration());
             modelBuilder.ApplyConfiguration(new HospitalDbConfiguration());
@@ -29,6 +30,7 @@ namespace ChildVac.WebApi.Infrastructure
             modelBuilder.ApplyConfiguration(new VaccineDbConfiguration());
         }
 
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Hospital> Hospitals { get; set; }

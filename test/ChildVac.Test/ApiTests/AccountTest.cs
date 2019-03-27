@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChildVac.WebApi;
 using ChildVac.WebApi.Infrastructure;
+using ChildVac.WebApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
@@ -13,6 +14,8 @@ namespace ChildVac.Test.ApiTests
 {
     public class AccountTest : ApiTestBase
     {
+        private Admin _admin = Utilities.GetAdminUser();
+
         public AccountTest(ApiWebApplicationFactory<Startup> factory) : base(factory)
         {
            
@@ -20,14 +23,19 @@ namespace ChildVac.Test.ApiTests
 
         protected override string Resource => "/api/Account";
 
-        [Fact]
-        public async Task ShouldReturnTokenWhenPostValid()
+        [Theory]
+        [InlineData("admin_login", "12345", "Admin")]
+        [InlineData("child_login", "12345", "Child")]
+        [InlineData("doctor_login", "12345", "Doctor")]
+        [InlineData("parent_login", "12345", "Parent")]
+        public async Task ShouldReturnTokenWhenPostValid(string login, string password, string role)
         {
             // Arrange
             var data = new JObject
             {
-                ["login"] = "qwerty",
-                ["password"] = "55555"
+                ["login"] = login,
+                ["password"] = password,
+                ["role"] = role
             };
 
             var content = new StringContent(data.ToString(),
@@ -43,6 +51,7 @@ namespace ChildVac.Test.ApiTests
             var result = JObject.Parse(resultContent);
             Assert.True(result.ContainsKey("token"));
             Assert.True(result.ContainsKey("login"));
+            Assert.Equal(login, result["login"].ToString());
         }
 
         [Fact]
