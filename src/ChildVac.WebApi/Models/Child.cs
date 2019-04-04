@@ -9,6 +9,5 @@ namespace ChildVac.WebApi.Models
     {
         public string Iin { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public override string Role => "Child";
     }
 }

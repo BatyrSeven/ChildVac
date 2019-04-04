@@ -9,6 +9,5 @@ namespace ChildVac.WebApi.Models
     {
         public int HospitalId { get; set; }
         public Hospital Hospital { get; set; }
-        public override string Role => "Doctor";
     }
 }

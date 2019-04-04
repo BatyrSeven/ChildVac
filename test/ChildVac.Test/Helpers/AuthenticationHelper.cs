@@ -15,8 +15,7 @@ namespace ChildVac.Test.Helpers
             var data = new JObject
             {
                 ["login"] = "parent_login",
-                ["password"] = "55555",
-                ["role"] = "Parent"
+                ["password"] = "55555"
             };
 
             return await RequestToken(client, data);
@@ -27,8 +26,7 @@ namespace ChildVac.Test.Helpers
             var data = new JObject
             {
                 ["login"] = "admin_login",
-                ["password"] = "12345",
-                ["role"] = "Admin"
+                ["password"] = "12345"
             };
 
             return await RequestToken(client, data);
@@ -44,7 +42,7 @@ namespace ChildVac.Test.Helpers
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception(
-                    $"Server returned error with code: {(int) response.StatusCode} {response.StatusCode.ToString()}");
+                    $"Failed to authenticate. Server returned error with code: {(int) response.StatusCode} {response.StatusCode.ToString()}");
 
             var resultContent = await response.Content.ReadAsStringAsync();
 
@@ -52,7 +50,14 @@ namespace ChildVac.Test.Helpers
 
             if (!result.ContainsKey("token")) throw new Exception("Token was not returned");
 
-            return result["token"].ToString();
+            var token = result["token"].ToString();
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new Exception("Failed to authenticate. Token is empty");
+            }
+
+            return token;
         }
     }
 }

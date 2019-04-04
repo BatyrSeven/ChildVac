@@ -14,8 +14,6 @@ namespace ChildVac.Test.ApiTests
 {
     public class AccountTest : ApiTestBase
     {
-        private Admin _admin = Utilities.GetAdminUser();
-
         public AccountTest(ApiWebApplicationFactory<Startup> factory) : base(factory)
         {
            
@@ -28,14 +26,13 @@ namespace ChildVac.Test.ApiTests
         [InlineData("child_login", "12345", "Child")]
         [InlineData("doctor_login", "12345", "Doctor")]
         [InlineData("parent_login", "12345", "Parent")]
-        public async Task ShouldReturnTokenWhenPostValid(string login, string password, string role)
+        public async Task ShouldReturnTokenWhenPostValid(string login, string password, string expectedRole)
         {
             // Arrange
             var data = new JObject
             {
                 ["login"] = login,
-                ["password"] = password,
-                ["role"] = role
+                ["password"] = password
             };
 
             var content = new StringContent(data.ToString(),
@@ -48,10 +45,15 @@ namespace ChildVac.Test.ApiTests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
             var result = JObject.Parse(resultContent);
+
             Assert.True(result.ContainsKey("token"));
             Assert.True(result.ContainsKey("login"));
+            Assert.True(result.ContainsKey("role"));
+
             Assert.Equal(login, result["login"].ToString());
+            Assert.Equal(expectedRole, result["role"].ToString());
         }
 
         [Fact]

@@ -9,6 +9,7 @@ using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -52,11 +53,11 @@ namespace ChildVac.WebApi.Controllers
         [HttpPost]
         public async Task Post([FromBody] Token token)
         {
-            var identity = GetIdentity(token);
+            var identity = GetIdentity(token, out var errorMessage);
             if (identity == null)
             {
                 Response.StatusCode = 400;
-                await Response.WriteAsync("Invalid login or password.");
+                await Response.WriteAsync(errorMessage);
                 return;
             }
 
@@ -76,7 +77,11 @@ namespace ChildVac.WebApi.Controllers
             var response = new
             {
                 token = encodedJwt,
-                login = identity.Name
+                login = identity.Name,
+                role = identity.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .FirstOrDefault()
             };
 
             // serialize response
@@ -85,47 +90,38 @@ namespace ChildVac.WebApi.Controllers
         }
 
         [NonAction]
-        private ClaimsIdentity GetIdentity(Token token)
+        private ClaimsIdentity GetIdentity(Token token, out string errorMessage)
         {
+            errorMessage = null;
             User user = null;
 
-            switch (token.Role)
+            user = _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefault(x => x.Login == token.Login);
+
+            if (user == null)
             {
-                case "Admin":
-                    user = _context.Admins.FirstOrDefault(x =>
-                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
-                    break;
-                case "Child":
-                    user = _context.Children.FirstOrDefault(x =>
-                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
-                    break;
-                case "Doctor":
-                    user = _context.Doctors.FirstOrDefault(x =>
-                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
-                    break;
-                case "Parent":
-                    user = _context.Parents.FirstOrDefault(x =>
-                        x.Login == token.Login && x.Password == token.Password && x.Role == token.Role);
-                    break;
+                errorMessage = "User not found";
+                return null;
             }
 
-            if (user != null)
+            if (user.Password != token.Password)
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
-                };
-
-                var claimsIdentity =
-                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                        ClaimsIdentity.DefaultRoleClaimType);
-
-                return claimsIdentity;
+                errorMessage = "Invalid login or password";
+                return null;
             }
 
-            // user not found
-            return null;
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+            };
+
+            var claimsIdentity =
+                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+
+            return claimsIdentity;
         }
     }
 }

@@ -92,10 +92,12 @@ namespace ChildVac.Test.ApiTests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(2, hostpitalList.Count);
+            Assert.True(hostpitalList.Count >= 2);
 
-            Assert.Equal(first.Address, hostpitalList.First().Address);
-            Assert.Equal(first.Name, hostpitalList.First().Name);
+            
+            var firstHospital = hostpitalList.OrderByDescending(x => x.Id).Skip(1).FirstOrDefault();
+            Assert.Equal(first.Address, firstHospital?.Address);
+            Assert.Equal(first.Name, firstHospital?.Name);
 
             Assert.Equal(second.Address, hostpitalList.Last().Address);
             Assert.Equal(second.Name, hostpitalList.Last().Name);

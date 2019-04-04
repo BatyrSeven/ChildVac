@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190321053215_InitialCreate")]
+    [Migration("20190327070123_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,42 @@ namespace ChildVac.WebApi.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("Prescriptions");
+                });
+
+            modelBuilder.Entity("ChildVac.WebApi.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "user"
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Ticket", b =>
@@ -101,7 +137,11 @@ namespace ChildVac.WebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<int?>("RoleId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
 
@@ -142,6 +182,13 @@ namespace ChildVac.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vaccines");
+                });
+
+            modelBuilder.Entity("ChildVac.WebApi.Models.Admin", b =>
+                {
+                    b.HasBaseType("ChildVac.WebApi.Models.User");
+
+                    b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Child", b =>
@@ -199,6 +246,13 @@ namespace ChildVac.WebApi.Migrations
                     b.HasOne("ChildVac.WebApi.Models.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId");
+                });
+
+            modelBuilder.Entity("ChildVac.WebApi.Models.User", b =>
+                {
+                    b.HasOne("ChildVac.WebApi.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Models.Vaccination", b =>

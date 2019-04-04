@@ -94,10 +94,11 @@ namespace ChildVac.Test.ApiTests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(2, vaccineList.Count);
+            Assert.True(vaccineList.Count >= 2);
 
-            Assert.Equal(first.RecieveTime, vaccineList.First().RecieveTime);
-            Assert.Equal(first.Name, vaccineList.First().Name);
+            var firstVaccine = vaccineList.OrderByDescending(x => x.Id).Skip(1).FirstOrDefault();
+            Assert.Equal(first.RecieveTime, firstVaccine?.RecieveTime);
+            Assert.Equal(first.Name, firstVaccine?.Name);
 
             Assert.Equal(second.RecieveTime, vaccineList.Last().RecieveTime);
             Assert.Equal(second.Name, vaccineList.Last().Name);

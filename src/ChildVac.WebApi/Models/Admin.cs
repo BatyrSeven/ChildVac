@@ -7,6 +7,5 @@ namespace ChildVac.WebApi.Models
 {
     public class Admin : User
     {
-        public override string Role => "Admin";
     }
 }
