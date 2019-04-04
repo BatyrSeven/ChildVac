@@ -1,6 +1,8 @@
-﻿using ChildVac.WebApi.Models;
+﻿using System;
+using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Configuration;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {
@@ -16,6 +18,18 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .IsRequired();
 
             builder.HasBaseType<User>();
+
+            builder.HasData(new Child
+            {
+                Id = 2,
+                Login = "Child",
+                Password = "123456",
+                FirstName = "Child",
+                LastName = "Test User",
+                Iin = "980215300739",
+                DateOfBirth = DateTime.Now,
+                RoleId = 2
+            });
         }
     }
 }

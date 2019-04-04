@@ -9,6 +9,19 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Admin> builder)
         {
             builder.HasBaseType<User>();
+
+            //if (_configuration.GetValue<bool>("AppConfiguration:UseTestData"))
+
+            builder.HasData(new Admin
+            {
+                Id = 1,
+                Login = "Admin",
+                Password = "123456",
+                FirstName = "Admin",
+                LastName = "Superuser",
+                RoleId = 1
+            });
+
         }
     }
 }

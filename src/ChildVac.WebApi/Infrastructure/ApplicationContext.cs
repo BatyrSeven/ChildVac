@@ -1,6 +1,7 @@
 ﻿using ChildVac.WebApi.Infrastructure.Configurations;
 using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ChildVac.WebApi.Infrastructure
 {
@@ -13,11 +14,12 @@ namespace ChildVac.WebApi.Infrastructure
 
         public ApplicationContext(DbContextOptions options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.ApplyConfiguration(new AdminDbConfiguration());
             modelBuilder.ApplyConfiguration(new ChildDbConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorDbConfiguration());
@@ -29,25 +31,6 @@ namespace ChildVac.WebApi.Infrastructure
             modelBuilder.ApplyConfiguration(new UserDbConfiguration());
             modelBuilder.ApplyConfiguration(new VaccinationDbConfiguration());
             modelBuilder.ApplyConfiguration(new VaccineDbConfiguration());
-
-            // adding roles
-            //var adminRole = new Role { Id = 1, Name = "admin" };
-            //var childRole = new Role { Id = 2, Name = "child" };
-            //var doctorRole = new Role { Id = 3, Name = "doctor" };
-            //var parentRole = new Role { Id = 4, Name = "parent" };
-
-            //modelBuilder.Entity<Role>().HasData(adminRole, childRole, doctorRole, parentRole);
-
-            //var adminUser = new Admin
-            //{
-            //    Id = 1,
-            //    Login = "admin",
-            //    Password = "123456",
-            //    FirstName = "Admin Name",
-            //    LastName = "Admin Surname",
-            //    RoleId = adminRole.Id
-            //};
-            //modelBuilder.Entity<Admin>().HasData(adminUser);
         }
 
         public DbSet<Admin> Admins { get; set; }

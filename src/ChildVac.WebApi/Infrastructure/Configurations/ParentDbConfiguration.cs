@@ -1,6 +1,9 @@
-﻿using ChildVac.WebApi.Models;
+﻿using System.IO;
+using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {
@@ -13,6 +16,17 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .HasMaxLength(100);
 
             builder.HasBaseType<User>();
+
+            builder.HasData(new Parent
+            {
+                Id = 4,
+                Login = "Parent",
+                Password = "123456",
+                FirstName = "Parent",
+                LastName = "Test User",
+                Address = "Test Address",
+                RoleId = 4
+            });
         }
     }
 }

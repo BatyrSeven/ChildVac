@@ -14,6 +14,13 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.Address)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasData(new Hospital
+            {
+                Id = 1,
+                Address = "Test Hostpital Address",
+                Name = "Test Hostpital Name"
+            });
         }
     }
 }

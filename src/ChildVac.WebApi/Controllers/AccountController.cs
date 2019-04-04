@@ -93,9 +93,7 @@ namespace ChildVac.WebApi.Controllers
         private ClaimsIdentity GetIdentity(Token token, out string errorMessage)
         {
             errorMessage = null;
-            User user = null;
-
-            user = _context.Users
+            User user = _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefault(x => x.Login == token.Login);
 

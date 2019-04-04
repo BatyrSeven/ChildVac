@@ -1,12 +1,8 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using ChildVac.WebApi;
-using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -22,10 +18,10 @@ namespace ChildVac.Test.ApiTests
         protected override string Resource => "/api/Account";
 
         [Theory]
-        [InlineData("admin_login", "12345", "Admin")]
-        [InlineData("child_login", "12345", "Child")]
-        [InlineData("doctor_login", "12345", "Doctor")]
-        [InlineData("parent_login", "12345", "Parent")]
+        [InlineData("Admin", "123456", "Admin")]
+        [InlineData("Child", "123456", "Child")]
+        [InlineData("Doctor", "123456", "Doctor")]
+        [InlineData("Parent", "123456", "Parent")]
         public async Task ShouldReturnTokenWhenPostValid(string login, string password, string expectedRole)
         {
             // Arrange

@@ -9,12 +9,12 @@ namespace ChildVac.Test
     {
         public static void InitializeDbForTests(ApplicationContext context)
         {
-            AddRoles(context);
+            //AddRoles(context);
 
-            AddAdminUser(context);
-            AddParentUser(context);
-            AddChildUser(context);
-            AddDoctorUser(context);
+            //AddAdminUser(context);
+            //AddParentUser(context);
+            //AddChildUser(context);
+            //AddDoctorUser(context);
         }
 
         public static void AddRoles(ApplicationContext context)

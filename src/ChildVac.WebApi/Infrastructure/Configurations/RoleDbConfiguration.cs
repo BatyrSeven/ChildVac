@@ -11,6 +11,13 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "Child" },
+                new Role { Id = 3, Name = "Doctor" },
+                new Role { Id = 4, Name = "Parent" }
+            );
         }
     }
 }
