@@ -1,43 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная страница";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div id="app"></div>
 
-<div class="text-center">
-    <h2>JWT в ASP.NET Core Web API</h2>
-</div>
-
-<div id="userInfo" style="@(User.Identity.IsAuthenticated ? "" : "display:none;")">
-    <div class="mb-2">
-        <p>Вы вошли как: <span id="userName">@User.Identity.Name</span></p>
-        <input type="button" class="btn btn-danger" value="Выйти" id="logOut" />
-    </div>
-
-    <div class="mb-2">
-        <input type="submit" class="btn btn-primary" id="getDataByLogin" value="Данные по логину" />
-    </div>
-
-    <div class="mb-2">
-        <input type="submit" class="btn btn-info" id="getDataByRole" value="Данные по роли" />
-    </div>
-</div>
-
-<form id="loginForm" style="@(User.Identity.IsAuthenticated ? "display:none;" : "")">
-    <h3 class="mb-3">Вход на сайт</h3>
-
-    <div id="loginError" class="alert alert-danger mb-2" role="alert" hidden></div>
-
-    <div class="form-group mb-2">
-        <input type="text" id="login" class="form-control" placeholder="Логин" />
-    </div>
-
-    <div class="form-group mb-2">
-        <input type="password" id="password" class="form-control" placeholder="Пароль">
-    </div>
-
-    <input type="submit" class="btn btn-success" id="submitLogin" value="Вход" />
-</form>
+<script src="/dist/main.js" asp-append-version="true"></script>
