@@ -22,6 +22,19 @@ namespace ChildVac.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vaccines",
                 columns: table => new
                 {
@@ -45,6 +58,7 @@ namespace ChildVac.WebApi.Migrations
                     Password = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    RoleId = table.Column<int>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
                     Iin = table.Column<string>(maxLength: 12, nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: true),
@@ -67,6 +81,12 @@ namespace ChildVac.WebApi.Migrations
                         principalTable: "Hospitals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,6 +166,51 @@ namespace ChildVac.WebApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Hospitals",
+                columns: new[] { "Id", "Address", "Name" },
+                values: new object[] { 1, "Test Hostpital Address", "Test Hostpital Name" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 2, "Child" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 3, "Doctor" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 4, "Parent" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId" },
+                values: new object[] { 1, "Admin", "Admin", "Superuser", "Admin", "123456", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "DateOfBirth", "Iin", "ParentId" },
+                values: new object[] { 2, "Child", "Child", "Test User", "Child", "123456", 2, new DateTime(2019, 4, 4, 18, 9, 26, 165, DateTimeKind.Local).AddTicks(4557), "980215300739", null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "HospitalId" },
+                values: new object[] { 3, "Doctor", "Doctor", "Test User", "Doctor", "123456", 3, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "Address" },
+                values: new object[] { 4, "Parent", "Parent", "Test User", "Parent", "123456", 4, "Test Address" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_TicketId",
                 table: "Prescriptions",
@@ -170,6 +235,11 @@ namespace ChildVac.WebApi.Migrations
                 name: "IX_Users_HospitalId",
                 table: "Users",
                 column: "HospitalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vaccinations_TicketId",
@@ -201,6 +271,9 @@ namespace ChildVac.WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Hospitals");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChildVac.WebApi.Controllers
@@ -34,6 +35,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // POST: api/Hospital
+        [Authorize]
         [HttpPost]
         public void Post([FromBody] Hospital hospital)
         {
@@ -44,6 +46,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // PUT: api/Hospital/5
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Hospital hospital)
         {
@@ -54,6 +57,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // DELETE: api/Hospital/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

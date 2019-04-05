@@ -36,12 +36,12 @@ namespace ChildVac.Test
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<ApplicationContext>();
-                    var logger = scopedServices
-                        .GetRequiredService<ILogger<ApiWebApplicationFactory<TStartup>>>();
+                    var context = scopedServices.GetRequiredService<ApplicationContext>();
 
                     // Ensure the database is created.
-                    db.Database.EnsureCreated();
+                    context.Database.EnsureCreated();
+
+                    Utilities.InitializeDbForTests(context);
                 }
             });
         }
