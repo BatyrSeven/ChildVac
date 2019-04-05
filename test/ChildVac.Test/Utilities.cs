@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ChildVac.Test.Extensions;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
 
@@ -9,12 +10,15 @@ namespace ChildVac.Test
     {
         public static void InitializeDbForTests(ApplicationContext context)
         {
-            //AddRoles(context);
+            context.ResetValueGenerators();
+            context.Database.EnsureDeleted();
 
-            //AddAdminUser(context);
-            //AddParentUser(context);
-            //AddChildUser(context);
-            //AddDoctorUser(context);
+            AddRoles(context);
+
+            AddAdminUser(context);
+            AddParentUser(context);
+            AddChildUser(context);
+            AddDoctorUser(context);
         }
 
         public static void AddRoles(ApplicationContext context)
@@ -30,8 +34,8 @@ namespace ChildVac.Test
         {
             context.Parents.Add(new Parent
             {
-                Login = "parent_login",
-                Password = "12345",
+                Login = "Parent",
+                Password = "123456",
                 FirstName = "Parent Name",
                 LastName = "Parent Surname",
                 Address = "test address",
@@ -44,8 +48,8 @@ namespace ChildVac.Test
         {
             context.Doctors.Add(new Doctor
             {
-                Login = "doctor_login",
-                Password = "12345",
+                Login = "Doctor",
+                Password = "123456",
                 FirstName = "Doctor Name",
                 LastName = "Doctor Surname",
                 Role = context.Roles.FirstOrDefault(x => x.Name.Equals("Doctor"))
@@ -57,8 +61,8 @@ namespace ChildVac.Test
         {
             context.Children.Add(new Child
             {
-                Login = "child_login",
-                Password = "12345",
+                Login = "Child",
+                Password = "123456",
                 FirstName = "Child Name",
                 LastName = "Child Surname",
                 Iin = "990724300739",
@@ -72,8 +76,8 @@ namespace ChildVac.Test
         {
             context.Admins.Add(new Admin
             {
-                Login = "admin_login",
-                Password = "12345",
+                Login = "Admin",
+                Password = "123456",
                 FirstName = "Admin Name",
                 LastName = "Admin Surname",
                 Role = context.Roles.FirstOrDefault(x => x.Name.Equals("Admin"))

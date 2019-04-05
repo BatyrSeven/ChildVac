@@ -170,6 +170,7 @@ namespace ChildVac.Test.ApiTests
             using (var scope = ScopeFactory.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<ApplicationContext>();
+                context.Database.EnsureCreated();
                 context.Hospitals.Add(first);
                 context.Hospitals.Add(second);
                 context.SaveChanges();

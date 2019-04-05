@@ -18,18 +18,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .IsRequired();
 
             builder.HasBaseType<User>();
-
-            builder.HasData(new Child
-            {
-                Id = 2,
-                Login = "Child",
-                Password = "123456",
-                FirstName = "Child",
-                LastName = "Test User",
-                Iin = "980215300739",
-                DateOfBirth = DateTime.Now,
-                RoleId = 2
-            });
         }
     }
 }

@@ -20,4 +20,11 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="childvac.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

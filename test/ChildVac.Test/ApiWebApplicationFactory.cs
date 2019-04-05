@@ -41,7 +41,7 @@ namespace ChildVac.Test
                     // Ensure the database is created.
                     context.Database.EnsureCreated();
 
-                    //Utilities.InitializeDbForTests(context);
+                    Utilities.InitializeDbForTests(context);
                 }
             });
         }
