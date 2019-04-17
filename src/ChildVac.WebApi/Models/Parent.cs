@@ -9,5 +9,6 @@ namespace ChildVac.WebApi.Models
     {
         public List<Child> Children { get; set; }
         public string Address { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

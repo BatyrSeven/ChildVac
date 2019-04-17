@@ -4,6 +4,7 @@ project.lock.json
 .DS_Store
 *.pyc
 nupkg/
+node_modules/
 
 # Visual Studio Code
 .vscode
@@ -32,3 +33,4 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+src/ChildVac\.WebApi/wwwroot/dist/

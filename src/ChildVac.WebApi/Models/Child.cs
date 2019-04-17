@@ -7,7 +7,7 @@ namespace ChildVac.WebApi.Models
 {
     public class Child : User
     {
-        public string Iin { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public int ParentId { get; set; }
+        public Parent Parent { get; set; }
     }
 }

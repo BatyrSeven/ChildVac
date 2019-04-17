@@ -10,12 +10,10 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
         {
             builder.HasBaseType<User>();
 
-            //if (_configuration.GetValue<bool>("AppConfiguration:UseTestData"))
-
             builder.HasData(new Admin
             {
                 Id = 1,
-                Login = "Admin",
+                Iin = "123456789012",
                 Password = "123456",
                 FirstName = "Admin",
                 LastName = "Superuser",

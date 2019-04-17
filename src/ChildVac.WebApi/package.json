@@ -1,0 +1,37 @@
+{
+    "name": "asp.net",
+    "private": true,
+    "version": "0.0.0",
+    "dependencies": {
+        "bootstrap": "^4.3.1",
+        "bootstrap-vue": "^2.0.0-rc.16",
+        "jquery": "^3.3.1",
+        "popper.js": "^1.15.0",
+        "promise-polyfill": "8.1.0",
+        "vue": "^2.6.10",
+        "vue-router": "^3.0.2",
+        "whatwg-fetch": "^3.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.4.3",
+        "@babel/preset-env": "^7.4.3",
+        "aspnet-webpack": "^3.0.0",
+        "babel-loader": "^8.0.5",
+        "css-loader": "^2.1.1",
+        "vue-loader": "^15.7.0",
+        "vue-style-loader": "^4.1.2",
+        "vue-template-compiler": "^2.6.10",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0",
+        "webpack-dev-middleware": "^3.6.2",
+        "webpack-hot-middleware": "^2.24.3"
+    },
+    "scripts": {
+        "build": "webpack --config webpack.config.js"
+    },
+    "-vs-binding": {
+        "BeforeBuild": [
+            "build"
+        ]
+    }
+}
