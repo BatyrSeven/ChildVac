@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,10 +39,11 @@ namespace ChildVac.WebApi.Controllers
         [HttpPost]
         public void Post([FromBody] Hospital hospital)
         {
-            if (hospital == null) return;
-
-            _context.Hospitals.Add(hospital);
-            _context.SaveChanges();
+            if(ModelState.IsValid)
+            {
+                _context.Hospitals.Add(hospital);
+                _context.SaveChanges();
+            }
         }
 
         // PUT: api/Hospital/5

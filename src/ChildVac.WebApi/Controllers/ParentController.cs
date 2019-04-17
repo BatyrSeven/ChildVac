@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Http;

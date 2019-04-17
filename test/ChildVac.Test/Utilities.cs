@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ChildVac.Test.Extensions;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
 
@@ -34,7 +35,6 @@ namespace ChildVac.Test
         {
             context.Parents.Add(new Parent
             {
-                Login = "Parent",
                 Password = "123456",
                 FirstName = "Parent Name",
                 LastName = "Parent Surname",
@@ -48,7 +48,6 @@ namespace ChildVac.Test
         {
             context.Doctors.Add(new Doctor
             {
-                Login = "Doctor",
                 Password = "123456",
                 FirstName = "Doctor Name",
                 LastName = "Doctor Surname",
@@ -61,12 +60,10 @@ namespace ChildVac.Test
         {
             context.Children.Add(new Child
             {
-                Login = "Child",
                 Password = "123456",
                 FirstName = "Child Name",
                 LastName = "Child Surname",
                 Iin = "990724300739",
-                DateOfBirth = Convert.ToDateTime("1999, 07, 24"),
                 Role = context.Roles.FirstOrDefault(x => x.Name.Equals("Child"))
             });
             context.SaveChanges();
@@ -76,7 +73,6 @@ namespace ChildVac.Test
         {
             context.Admins.Add(new Admin
             {
-                Login = "Admin",
                 Password = "123456",
                 FirstName = "Admin Name",
                 LastName = "Admin Surname",

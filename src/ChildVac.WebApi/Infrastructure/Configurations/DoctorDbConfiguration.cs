@@ -1,4 +1,5 @@
-﻿using ChildVac.WebApi.Models;
+﻿using ChildVac.WebApi.Domain.Entities;
+using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;

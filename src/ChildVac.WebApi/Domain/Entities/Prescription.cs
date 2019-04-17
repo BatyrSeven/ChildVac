@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ChildVac.WebApi.Models;
 
-namespace ChildVac.WebApi.Models
+namespace ChildVac.WebApi.Domain.Entities
 {
     public class Prescription
     {

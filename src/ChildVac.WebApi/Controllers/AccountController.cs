@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
