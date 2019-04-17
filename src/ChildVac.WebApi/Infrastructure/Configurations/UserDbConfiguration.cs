@@ -29,6 +29,9 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
 
             builder.Property(x => x.Gender)
                 .IsRequired();
+
+            builder.HasIndex(x => x.Iin)
+                .IsUnique();
         }
     }
 }

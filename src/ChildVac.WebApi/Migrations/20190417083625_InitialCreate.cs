@@ -219,6 +219,12 @@ namespace ChildVac.WebApi.Migrations
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Iin",
+                table: "Users",
+                column: "Iin",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");

@@ -34,17 +34,26 @@
             this.parents = [];
 
             if (newValue !== 0) {
-                window.fetch('/api/parent/' + newValue, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
+                window.fetch('/api/parent/' + newValue,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => {
                     return response.text();
                 }).then(result => {
                     var parent = JSON.parse(result);
-                    this.parent = "<strong>" + parent.iin + "</strong> - " + parent.lastName + " " + parent.firstName + " " + parent.patronim;
+                    this.parent =
+                        "<strong>" +
+                        parent.iin +
+                        "</strong> - " +
+                        parent.lastName +
+                        " " +
+                        parent.firstName +
+                        " " +
+                        parent.patronim;
                 });
             }
         }
@@ -57,14 +66,15 @@
             let data = JSON.stringify(this.form);
             console.log("data: " + data);
 
-            window.fetch('/api/child', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                },
-                body: data
-            }).then(response => {
+            window.fetch('/api/child',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: data
+                }).then(response => {
                 if (response.status >= 200 && response.status < 300) {
                     t.alert.show = true;
                     t.alert.className = "alert-success";
@@ -81,6 +91,7 @@
             evt.preventDefault();
 
             this.reset();
+            this.resetAlert();
         },
         reset() {
             this.form.firstName = '';
@@ -92,15 +103,16 @@
 
             this.resetSearchParentSuggestions();
 
-            this.alert.show = false;
-            this.alert.className = "";
-            this.alert.text = "";
-
             // Trick to reset/clear native browser form validation state
             this.show = false;
             this.$nextTick(() => {
                 this.show = true;
             });
+        },
+        resetAlert() {
+            this.alert.show = false;
+            this.alert.className = "";
+            this.alert.text = "";
         },
         findParentByIin(iin) {
             window.fetch('/api/parent/iin/' + iin, {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190417054621_InitialCreate")]
+    [Migration("20190417083625_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,9 @@ namespace ChildVac.WebApi.Migrations
                     b.Property<int?>("RoleId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Iin")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 

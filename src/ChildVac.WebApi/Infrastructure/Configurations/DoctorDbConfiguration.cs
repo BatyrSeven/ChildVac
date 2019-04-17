@@ -13,10 +13,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(10);
 
-            builder.Property(x => x.Iin)
-                .IsRequired(false)
-                .HasMaxLength(12);
-
             builder.HasBaseType<User>();
         }
     }

@@ -144,6 +144,9 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Iin")
+                        .IsUnique();
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");

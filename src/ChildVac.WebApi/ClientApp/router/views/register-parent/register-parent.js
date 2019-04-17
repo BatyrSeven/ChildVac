@@ -37,6 +37,7 @@
                     t.alert.show = true;
                     t.alert.className = "alert-success";
                     t.alert.text = "Регистрация прошла успешно!";
+                    this.reset();
                 } else {
                     t.alert.show = true;
                     t.alert.className = "alert-danger";
@@ -47,22 +48,28 @@
         onReset(evt) {
             evt.preventDefault();
 
+            this.reset();
+            this.resetAlert();
+        },
+        reset() {
             // Reset our form values
-            this.form.login= "";
-            this.form.firstName= "";
-            this.form.lastName= "";
-            this.form.dateOfBirth= "";
+            this.form.firstName = "";
+            this.form.lastName = "";
+            this.form.patronim = "";
             this.form.iin = "";
-
-            this.alert.show = false;
-            this.alert.className = "";
-            this.alert.text = "";
+            this.form.address = "";
+            this.form.gender = 0;
 
             // Trick to reset/clear native browser form validation state
             this.show = false;
             this.$nextTick(() => {
                 this.show = true;
             });
+        },
+        resetAlert() {
+            this.alert.show = false;
+            this.alert.className = "";
+            this.alert.text = "";
         }
     }
 }
