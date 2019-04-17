@@ -8,9 +8,9 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(x => x.Login)
+            builder.Property(x => x.Iin)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(12);
 
             builder.Property(x => x.Password)
                 .IsRequired()
@@ -23,6 +23,12 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.Property(x => x.Patronim)
+                .HasMaxLength(50);
+
+            builder.Property(x => x.Gender)
+                .IsRequired();
         }
     }
 }

@@ -19,34 +19,40 @@
                               placeholder="Введите фамилию"></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-date-of-birth" label="Дата рождения:" label-for="input-date-of-birth">
-                <b-form-input id="input-date-of-birth"
-                              type="date"
-                              v-model="form.dateOfBirth"
-                              required
-                              placeholder="Введите дату рождения"></b-form-input>
+            <b-form-group id="input-group-patronim" label="Отчество:" label-for="input-patronim">
+                <b-form-input id="input-patronim"
+                              v-model="form.patronim"
+                              placeholder="Введите отчество"></b-form-input>
             </b-form-group>
 
-            <!--<b-form-group label="Укажите пол:">
-            <b-form-radio-group id="input-group-gender" v-model="form.gender" required>
-                <b-form-radio value="male">Мужской</b-form-radio>
-                <b-form-radio value="female">Женский</b-form-radio>
-            </b-form-radio-group>
-        </b-form-group>-->
-
-            <b-form-group id="input-group-iin" label="ИИН, если есть:" label-for="input-iin">
+            <b-form-group id="input-group-iin" label="ИИН:" label-for="input-iin">
                 <b-form-input id="input-iin"
                               type="number"
                               v-model="form.iin"
+                              required
                               placeholder="Введите ИИН"></b-form-input>
             </b-form-group>
 
-            <!--<b-form-group id="input-group-parent-iin" label="ИИН родителя, можно указать позже:" label-for="input-parent-iin">
-            <b-form-input id="input-parent-iin"
-                          type="number"
-                          v-model="form.parentIin"
-                          placeholder="Введите ИИН родителя"></b-form-input>
-        </b-form-group>-->
+            <b-form-group label="Укажите пол:">
+                <b-form-radio-group id="input-group-gender" v-model="form.gender" required>
+                    <b-form-radio value="1">Мужской</b-form-radio>
+                    <b-form-radio value="2">Женский</b-form-radio>
+                </b-form-radio-group>
+            </b-form-group>
+
+            <b-form-group v-show="!parentId" id="input-group-parent-iin" label="ИИН родителя:" label-for="input-parent-iin">
+                <b-form-input id="input-parent-iin"
+                              type="text"
+                              v-model="searchParentIin"
+                              placeholder="Начните вводить ИИН родителя"></b-form-input>
+                <b-form-select v-show="parents.length" v-model="parentId" :options="parents" :select-size="parents.length + 1"></b-form-select>
+            </b-form-group>
+
+            <div class="mb-3" v-show="parentId">
+                <p class="mb-1">Родитель:</p>
+                <div class="mb-1" v-html="parent"></div>
+                <b-button variant="primary" @click="resetSearchParentSuggestions">Изменить</b-button>
+            </div>
 
             <b-button type="submit" variant="primary">Зарегистрировать</b-button>
             <b-button type="reset" variant="danger">Сбросить</b-button>

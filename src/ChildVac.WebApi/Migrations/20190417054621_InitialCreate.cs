@@ -54,17 +54,19 @@ namespace ChildVac.WebApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Login = table.Column<string>(maxLength: 50, nullable: false),
+                    Iin = table.Column<string>(maxLength: 12, nullable: false),
                     Password = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    Patronim = table.Column<string>(maxLength: 50, nullable: true),
+                    Gender = table.Column<int>(nullable: false),
                     RoleId = table.Column<int>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
-                    Iin = table.Column<string>(maxLength: 12, nullable: true),
-                    DateOfBirth = table.Column<DateTime>(nullable: true),
                     ParentId = table.Column<int>(nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
                     HospitalId = table.Column<int>(nullable: true),
-                    Address = table.Column<string>(maxLength: 100, nullable: true)
+                    Address = table.Column<string>(maxLength: 100, nullable: true),
+                    Parent_PhoneNumber = table.Column<string>(maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,7 +76,7 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.ParentId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Users_Hospitals_HospitalId",
                         column: x => x.HospitalId,
@@ -167,11 +169,6 @@ namespace ChildVac.WebApi.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Hospitals",
-                columns: new[] { "Id", "Address", "Name" },
-                values: new object[] { 1, "Test Hostpital Address", "Test Hostpital Name" });
-
-            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "Admin" });
@@ -193,23 +190,8 @@ namespace ChildVac.WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId" },
-                values: new object[] { 1, "Admin", "Admin", "Superuser", "Admin", "123456", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "DateOfBirth", "Iin", "ParentId" },
-                values: new object[] { 2, "Child", "Child", "Test User", "Child", "123456", 2, new DateTime(2019, 4, 4, 18, 9, 26, 165, DateTimeKind.Local).AddTicks(4557), "980215300739", null });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "HospitalId" },
-                values: new object[] { 3, "Doctor", "Doctor", "Test User", "Doctor", "123456", 3, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Discriminator", "FirstName", "LastName", "Login", "Password", "RoleId", "Address" },
-                values: new object[] { 4, "Parent", "Parent", "Test User", "Parent", "123456", 4, "Test Address" });
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId" },
+                values: new object[] { 1, "Admin", "Admin", 0, "123456789012", "Superuser", "123456", null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_TicketId",

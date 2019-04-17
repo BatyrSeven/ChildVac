@@ -1,41 +1,54 @@
 ﻿<template>
     <div>
         <h1>Регистрация родителя</h1>
+
+        <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-text="alert.text"></div>
+
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-            <b-form-group id="input-group-1"
-                          label="Email address:"
-                          label-for="input-1"
-                          description="We'll never share your email with anyone else.">
-                <b-form-input id="input-1"
-                              v-model="form.email"
-                              type="email"
+            <b-form-group id="input-group-first-name" label="Имя:" label-for="input-first-name">
+                <b-form-input id="input-first-name"
+                              v-model="form.firstName"
                               required
-                              placeholder="Enter email"></b-form-input>
+                              placeholder="Введите имя"></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-                <b-form-input id="input-2"
-                              v-model="form.name"
+            <b-form-group id="input-group-last-name" label="Фамилия:" label-for="input-last-name">
+                <b-form-input id="input-last-name"
+                              v-model="form.lastName"
                               required
-                              placeholder="Enter name"></b-form-input>
+                              placeholder="Введите фамилию"></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-3" label="Food:" label-for="input-3">
-                <b-form-select id="input-3"
-                               v-model="form.food"
-                               :options="foods"
-                               required></b-form-select>
+            <b-form-group id="input-group-patronim" label="Отчество:" label-for="input-patronim">
+                <b-form-input id="input-patronim"
+                              v-model="form.patronim"
+                              placeholder="Введите отчество"></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-4">
-                <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-                    <b-form-checkbox value="me">Check me out</b-form-checkbox>
-                    <b-form-checkbox value="that">Check that out</b-form-checkbox>
-                </b-form-checkbox-group>
+            <b-form-group id="input-group-iin" label="ИИН:" label-for="input-iin">
+                <b-form-input id="input-iin"
+                              type="number"
+                              v-model="form.iin"
+                              required
+                              placeholder="Введите ИИН"></b-form-input>
             </b-form-group>
 
-            <b-button type="submit" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
+            <b-form-group label="Укажите пол:">
+                <b-form-radio-group id="input-group-gender" v-model="form.gender" required>
+                    <b-form-radio value="male">Мужской</b-form-radio>
+                    <b-form-radio value="female">Женский</b-form-radio>
+                </b-form-radio-group>
+            </b-form-group>
+
+            <b-form-group id="input-group-address" label="Адрес проживания:" label-for="input-address">
+                <b-form-input id="input-address"
+                              type="text"
+                              v-model="form.address"
+                              placeholder="Введите текущий адрес проживания"></b-form-input>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary">Зарегистрировать</b-button>
+            <b-button type="reset" variant="danger">Сбросить</b-button>
         </b-form>
     </div>
 </template>

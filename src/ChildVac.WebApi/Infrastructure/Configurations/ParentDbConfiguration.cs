@@ -1,9 +1,6 @@
-﻿using System.IO;
-using ChildVac.WebApi.Models;
+﻿using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {
@@ -14,6 +11,14 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.Address)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.Property(x => x.Iin)
+                .IsRequired()
+                .HasMaxLength(12);
+
+            builder.Property(x => x.PhoneNumber)
+                .IsRequired()
+                .HasMaxLength(10);
 
             builder.HasBaseType<User>();
         }

@@ -9,6 +9,14 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
+            builder.Property(x => x.PhoneNumber)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            builder.Property(x => x.Iin)
+                .IsRequired(false)
+                .HasMaxLength(12);
+
             builder.HasBaseType<User>();
         }
     }

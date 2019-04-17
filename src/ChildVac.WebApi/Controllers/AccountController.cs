@@ -95,7 +95,7 @@ namespace ChildVac.WebApi.Controllers
             errorMessage = null;
             User user = _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(x => x.Login == token.Login);
+                .FirstOrDefault(x => x.Iin == token.Login);
 
             if (user == null)
             {
@@ -111,7 +111,7 @@ namespace ChildVac.WebApi.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Iin),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
 
