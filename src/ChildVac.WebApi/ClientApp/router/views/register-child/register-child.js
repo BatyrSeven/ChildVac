@@ -2,46 +2,60 @@
     data() {
         return {
             form: {
+                login: '',
                 firstName: '',
                 lastName: '',
                 dateOfBirth: '',
-                gender: '',
-                iin: '',
-                parentIin: '',
+                iin: ''
             },
-            show: true
+            show: true,
+            alert: {
+                show: false,
+                className: "",
+                text: ""
+            }
         }
     },
     methods: {
         onSubmit(evt) {
             evt.preventDefault();
-            console.log(this.form);
-            fetch('/api/child', {
+            var t = this;
+
+            let data = JSON.stringify(this.form);
+            console.log("data: " + data);
+
+            window.fetch('/api/child', {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'application/json'
                 },
-                body: this.form
-            }).then(function (response) {
-                if (response.status !== 200)
-                    Promise.reject();
-                return response.json();
-            }).then(function (json) {
-                console.log('parsed json', json);
-            }).catch(function (ex) {
-                console.log('parsing failed', ex);
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 300) {
+                    t.alert.show = true;
+                    t.alert.className = "alert-success";
+                    t.alert.text = "Регистрация прошла успешно!";
+                } else {
+                    t.alert.show = true;
+                    t.alert.className = "alert-danger";
+                    t.alert.text = "Не удалось провести регистрацию. Проверьте правильность введеных данных.";
+                }
             });
         },
         onReset(evt) {
             evt.preventDefault();
 
             // Reset our form values
-            this.form.name = '';
-            this.form.surname = '';
-            this.form.dateOfBirth = '';
-            this.form.gender = '';
-            this.form.iin = '';
-            this.form.parentIin = '';
+            this.form.login= "";
+            this.form.firstName= "";
+            this.form.lastName= "";
+            this.form.dateOfBirth= "";
+            this.form.iin = "";
+
+            this.alert.show = false;
+            this.alert.className = "";
+            this.alert.text = "";
 
             // Trick to reset/clear native browser form validation state
             this.show = false;
