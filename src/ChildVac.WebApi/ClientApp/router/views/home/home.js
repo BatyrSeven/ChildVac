@@ -6,7 +6,12 @@
             iinState: null,
             password: '',
             passwordState: null,
-            show: true
+            show: true,
+            alert: {
+                show: false,
+                className: '',
+                text: ''
+            }
         }
     },
     computed: {
@@ -47,23 +52,36 @@
             if (this.isValid) {
                 var formData = JSON.stringify({
                     iin: this.iin,
-                    password: this.password
+                    password: this.password,
+                    role: "doctor"
                 });
-                alert(formData);
+
+                window.fetch('/api/account',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        },
+                        body: formData
+                    }).then(response => {
+                        try {
+                            return response.json();
+                        } catch (e) {
+                            console.log("ERROR: " + e);
+                        }
+                    }).then(response => {
+                        console.log(response);
+                        if (response.result) {
+                            this.$store.commit("SET_USER_INFO", response.result);
+                            this.alert.show = false;
+                        } else {
+                            this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
+                            this.alert.className = "alert-danger";
+                            this.alert.show = true;
+                        }
+                    });
             }
-        },
-        onReset(evt) {
-            evt.preventDefault();
-
-            this.form.email = '';
-            this.form.name = '';
-            this.form.food = null;
-            this.form.checked = [];
-
-            this.show = false;
-            this.$nextTick(() => {
-                this.show = true;
-            });
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ChildVac.WebApi.Models;
 
 namespace ChildVac.WebApi.Domain.Entities
 {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ChildVac.WebApi.Domain.Entities;
+﻿using ChildVac.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

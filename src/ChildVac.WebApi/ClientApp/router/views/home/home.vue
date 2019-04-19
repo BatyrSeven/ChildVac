@@ -2,10 +2,13 @@
     <div>
         <!--<h2>Добро пожаловать!</h2>-->
 
-        <h4 class="text-center mb-2">Авторизация для врачей</h4>
+        <h4 class="text-center mb-3">Авторизация для врачей</h4>
 
         <div class="home__formWrapper mb-4">
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+
+            <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-html="alert.text"></div>
+
+            <b-form @submit="onSubmit" v-if="show">
                 <b-form-group id="input-group-1"
                               label="Ваш ИИН:"
                               label-for="input-1">
@@ -15,7 +18,7 @@
                                   :state="iinState"
                                   aria-describedby="iin-minlength-feedback"
                                   placeholder="Введите ИИН"></b-form-input>
-                    
+
                     <b-form-invalid-feedback id="iin-minlength-feedback">
                         ИИН состоит из 12 символов
                     </b-form-invalid-feedback>
@@ -28,14 +31,14 @@
                                   :state="passwordState"
                                   aria-describedby="password-minlength-feedback"
                                   placeholder="Введите пароль"></b-form-input>
-                    
+
                     <b-form-invalid-feedback id="password-minlength-feedback">
                         Введите пароль
                     </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-button class="mr-3" type="submit" variant="primary">Войти</b-button>
-                <b-button to="forgot-password" variant="danger">Забыли пароль?</b-button>
+                <b-button to="forgot-password" variant="outline-danger">Забыли пароль?</b-button>
             </b-form>
         </div>
 

@@ -6,8 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
-using Microsoft.AspNetCore.Authorization;
+using ChildVac.WebApi.Application.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,70 +28,48 @@ namespace ChildVac.WebApi.Controllers
 
         // GET: api/Account
         [HttpGet]
-        public async Task Get()
+        public ActionResult Get()
         {
-            Response.StatusCode = 404;
-            await Response.WriteAsync("Please, use POST request to authenticate.");
+            return NotFound(new ErrorResponseModel
+            {
+                MessageTitle = "По запросу ничего не найдено.",
+                MessageText = "Для авторизации используйте метод POST."
+            });
         }
 
         // POST: api/Account
         [HttpPost]
-        public async Task Post([FromBody] Token token)
+        public ActionResult<ResponseBaseModel<TokenResponseModel>> Post([FromBody] TokenRequestModel request)
         {
-            var identity = GetIdentity(token, out var errorMessage);
-            if (identity == null)
-            {
-                Response.StatusCode = 400;
-                await Response.WriteAsync(errorMessage);
-                return;
-            }
-
-            var now = DateTime.UtcNow;
-
-            // create JWT-token
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromDays(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var response = new
-            {
-                token = encodedJwt,
-                login = identity.Name,
-                role = identity.Claims
-                    .Where(c => c.Type == ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .FirstOrDefault()
-            };
-
-            // serialize response
-            Response.ContentType = "application/json";
-            await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        [NonAction]
-        private ClaimsIdentity GetIdentity(Token token, out string errorMessage)
-        {
-            errorMessage = null;
             User user = _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(x => x.Iin == token.Login);
+                .FirstOrDefault(x => x.Iin == request.Iin);
 
             if (user == null)
             {
-                errorMessage = "User not found";
-                return null;
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageTitle = "Пользователь не найден.",
+                    MessageText = "Проверьте введенные данные и попробуйте снова."
+                });
             }
 
-            if (user.Password != token.Password)
+            if (user.Password != request.Password)
             {
-                errorMessage = "Invalid login or password";
-                return null;
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageTitle = "Пароль введен неверно.",
+                    MessageText = "Проверьте введенные данные и попробуйте снова."
+                });
+            }
+
+            if (!user.Role.Name.Equals(request.Role, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageTitle = "Пользователь не имеет доступа к системе.",
+                    MessageText = "Проверьте введенные данные и попробуйте снова."
+                });
             }
 
             var claims = new List<Claim>
@@ -101,11 +78,55 @@ namespace ChildVac.WebApi.Controllers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
 
-            var claimsIdentity =
+            var identity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
 
-            return claimsIdentity;
+            if (identity == null)
+            {
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageTitle = "Извините, произошла ошибка при авторизации.",
+                    MessageText = "Попробуйте снова."
+                });
+            }
+
+            var iin = identity.Name;
+            var token = GetJwt(identity);
+            var role = identity.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .FirstOrDefault();
+
+            return Ok(new ResponseBaseModel<TokenResponseModel> {
+                Result = new TokenResponseModel()
+                {
+                    Iin = iin,
+                    Token = token,
+                    Role = role
+                }
+            });
+        }
+
+        [NonAction]
+        private string GetJwt(ClaimsIdentity identity)
+        {
+            var now = DateTime.UtcNow;
+
+            // create JWT-token
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                notBefore: now,
+                claims: identity.Claims,
+                expires: now.Add(TimeSpan.FromDays(AuthOptions.LIFETIME)),
+                signingCredentials:
+                    new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
+                        SecurityAlgorithms.HmacSha256));
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return encodedJwt;
         }
     }
 }

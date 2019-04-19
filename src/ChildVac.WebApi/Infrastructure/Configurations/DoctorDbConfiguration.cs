@@ -1,8 +1,6 @@
 ﻿using ChildVac.WebApi.Domain.Entities;
-using ChildVac.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {

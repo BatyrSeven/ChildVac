@@ -3,10 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChildVac.WebApi.Controllers

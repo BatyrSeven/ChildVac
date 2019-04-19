@@ -1,7 +1,8 @@
-﻿using ChildVac.WebApi.Domain.Entities;
+﻿using ChildVac.WebApi.Application.Models;
+using ChildVac.WebApi.Application.Validators;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Domain.Validators;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -93,6 +94,7 @@ namespace ChildVac.WebApi
             services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<IValidator<Hospital>, HospitalValidator>();
+            services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
