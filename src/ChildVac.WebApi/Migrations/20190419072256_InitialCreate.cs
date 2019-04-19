@@ -41,7 +41,8 @@ namespace ChildVac.WebApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    RecieveTime = table.Column<TimeSpan>(nullable: false)
+                    RecieveMonth = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,6 +188,81 @@ namespace ChildVac.WebApi.Migrations
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 4, "Parent" });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 13, "Против кори, краснухи и эпидемического паротита.", "ККП", 72 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 12, "Против кори, краснухи и эпидемического паротита.", "ККП", 12 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 11, "Полио - против полиомиелита - оральная.", "ОПВ", 12 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 10, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 18 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 9, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 3 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 8, "Против пневмококковой инфекции", "Пневмо", 12 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 6, "Против пневмококковой инфекции", "Пневмо", 2 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 4, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 2 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 3, "Вакцина против вирусного гепатита В.", "ВГВ", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 2, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 72 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 1, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 7, "Против пневмококковой инфекции", "Пневмо", 4 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 15, "Против дифтерии и столбняка.", "АДС-М", 192 });
 
             migrationBuilder.InsertData(
                 table: "Users",

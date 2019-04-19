@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ChildVac.WebApi.Domain.Entities
 {
@@ -6,6 +7,7 @@ namespace ChildVac.WebApi.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public TimeSpan RecieveTime { get; set; }
+        public int RecieveMonth { get; set; }
+        public string Description { get; set; }
     }
 }

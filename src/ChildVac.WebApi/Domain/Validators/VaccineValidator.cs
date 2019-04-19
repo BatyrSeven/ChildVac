@@ -10,8 +10,11 @@ namespace ChildVac.WebApi.Domain.Validators
             RuleFor(x => x.Name)
                 .NotEmpty();
 
-            RuleFor(x => x.RecieveTime)
+            RuleFor(x => x.RecieveMonth)
                 .NotNull();
+
+            RuleFor(x => x.Description)
+                .NotEmpty();
         }
     }
 }
