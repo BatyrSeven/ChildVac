@@ -35,21 +35,6 @@ namespace ChildVac.WebApi.Controllers
             await Response.WriteAsync("Please, use POST request to authenticate.");
         }
 
-        [HttpGet]
-        [Route("getlogin")]
-        public IActionResult GetLogin()
-        {
-            return Ok($"Ваш логин: {User.Identity.Name}");
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpGet]
-        [Route("getrole")]
-        public IActionResult GetRole()
-        {
-            return Ok("Ваша роль: администратор");
-        }
-
         // POST: api/Account
         [HttpPost]
         public async Task Post([FromBody] Token token)

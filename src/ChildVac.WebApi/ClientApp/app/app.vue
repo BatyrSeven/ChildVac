@@ -4,7 +4,7 @@
         <b-container fluid>
             <div class="row">
                 <nav-menu></nav-menu>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3">
 
                     <router-view></router-view>
 

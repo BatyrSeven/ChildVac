@@ -4,6 +4,7 @@
     },
     data() {
         return {
+            isAuthenticated: this.$store.state.user.isAuthenticated
         }
     },
     computed: {
