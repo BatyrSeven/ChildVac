@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +46,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // POST api/<controller>
-        //[Authorize(Roles = "Admin, Doctor")]
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
         public async Task Post([FromBody]Parent parent)
         {
@@ -62,6 +63,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // PUT api/<controller>/5
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody]Parent newParent)
         {
@@ -80,6 +82,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // DELETE api/<controller>/5
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {

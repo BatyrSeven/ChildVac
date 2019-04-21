@@ -4,11 +4,13 @@
     },
     data() {
         return {
-            isAuthenticated: !!this.$store.state.user.iin
+            
         }
     },
     computed: {
-
+        isAuthenticated() {
+            return this.$store.getters.isAuthenticated;
+        }
     },
     methods: {
 

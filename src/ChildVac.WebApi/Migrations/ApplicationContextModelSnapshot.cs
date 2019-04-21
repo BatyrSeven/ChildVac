@@ -31,6 +31,14 @@ namespace ChildVac.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hospitals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Address of test Hostpital",
+                            Name = "Test Hostpital"
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Prescription", b =>
@@ -344,6 +352,21 @@ namespace ChildVac.WebApi.Migrations
                     b.HasIndex("HospitalId");
 
                     b.HasDiscriminator().HasValue("Doctor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Test",
+                            Gender = 1,
+                            Iin = "970812300739",
+                            LastName = "Doctor",
+                            Password = "test",
+                            Patronim = "Testovich",
+                            RoleId = 3,
+                            HospitalId = 1,
+                            PhoneNumber = "7087260265"
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Parent", b =>

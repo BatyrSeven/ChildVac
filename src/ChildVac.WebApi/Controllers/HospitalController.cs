@@ -35,7 +35,7 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // POST: api/Hospital
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public void Post([FromBody] Hospital hospital)
         {

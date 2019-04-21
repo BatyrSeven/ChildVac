@@ -1,8 +1,20 @@
 ﻿export default {
-    SET_USER_INFO(state, value) {
-        state.user = value;
+    AUTH_REQUEST: state => {
+        state.status = 'loading';
     },
-    SET_TOKEN(state, value) {
-        state.token = value;
+    AUTH_SUCCESS: (state, value) => {
+        state.status = 'success';
+        state.user = value.user;
+        state.token = value.token;
+    },
+    AUTH_ERROR: state => {
+        state.status = 'error';
+    },
+    AUTH_LOGOUT: state => {
+        state.user = null;
+        state.token = null;
+    },
+    USER_SUCCESS: (state, value) => {
+        state.user = value;
     }
 }

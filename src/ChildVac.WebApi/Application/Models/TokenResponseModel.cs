@@ -2,8 +2,7 @@
 {
     public class TokenResponseModel
     {
-        public string Iin { get; set; }
+        public UserModel User { get; set; }
         public string Token { get; set; }
-        public string Role { get; set; }
     }
 }

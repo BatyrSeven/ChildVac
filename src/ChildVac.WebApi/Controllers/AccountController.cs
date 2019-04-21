@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Application.Models;
-using Microsoft.AspNetCore.Http;
+using ChildVac.WebApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -28,8 +25,31 @@ namespace ChildVac.WebApi.Controllers
 
         // GET: api/Account
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult<ResponseBaseModel<UserModel>> Get()
         {
+            var iin = User?.Identity?.Name;
+
+            if (!string.IsNullOrWhiteSpace(iin))
+            {
+                var user = _context.Users
+                    .Include(u => u.Role)
+                    .FirstOrDefault(u => u.Iin == iin);
+
+                if (user != null)
+                {
+                    return Ok(new ResponseBaseModel<UserModel>
+                    {
+                        Result = new UserModel
+                        {
+                            Iin = user.Iin,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Role = user.Role.Name
+                        }
+                    });
+                }
+            }
+
             return NotFound(new ErrorResponseModel
             {
                 MessageTitle = "По запросу ничего не найдено.",
@@ -41,7 +61,7 @@ namespace ChildVac.WebApi.Controllers
         [HttpPost]
         public ActionResult<ResponseBaseModel<TokenResponseModel>> Post([FromBody] TokenRequestModel request)
         {
-            User user = _context.Users
+            var user = _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefault(x => x.Iin == request.Iin);
 
@@ -82,28 +102,19 @@ namespace ChildVac.WebApi.Controllers
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
 
-            if (identity == null)
-            {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageTitle = "Извините, произошла ошибка при авторизации.",
-                    MessageText = "Попробуйте снова."
-                });
-            }
-
-            var iin = identity.Name;
             var token = GetJwt(identity);
-            var role = identity.Claims
-                    .Where(c => c.Type == ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .FirstOrDefault();
 
             return Ok(new ResponseBaseModel<TokenResponseModel> {
-                Result = new TokenResponseModel()
+                Result = new TokenResponseModel
                 {
-                    Iin = iin,
-                    Token = token,
-                    Role = role
+                    User = new UserModel
+                    {
+                        Iin = user.Iin,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Role = user.Role.Name
+                    },
+                    Token = token
                 }
             });
         }

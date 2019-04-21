@@ -24,7 +24,9 @@
                     </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-form-group id="input-group-2" label="Пароль:" label-for="input-2">
+                <b-form-group id="input-group-2"
+                              label="Пароль:"
+                              label-for="input-2">
                     <b-form-input id="input-2"
                                   v-model="password"
                                   type="password"

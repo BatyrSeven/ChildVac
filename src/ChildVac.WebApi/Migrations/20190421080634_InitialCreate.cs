@@ -170,6 +170,11 @@ namespace ChildVac.WebApi.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Hospitals",
+                columns: new[] { "Id", "Address", "Name" },
+                values: new object[] { 1, "Address of test Hostpital", "Test Hostpital" });
+
+            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "Admin" });
@@ -222,17 +227,17 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
+                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
                 values: new object[] { 6, "Против пневмококковой инфекции", "Пневмо", 2 });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
                 values: new object[] { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
@@ -268,6 +273,11 @@ namespace ChildVac.WebApi.Migrations
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId" },
                 values: new object[] { 1, "Admin", "Admin", 0, "123456789012", "Superuser", "123456", null, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "HospitalId", "PhoneNumber" },
+                values: new object[] { 2, "Doctor", "Test", 1, "970812300739", "Doctor", "test", "Testovich", 3, 1, "7087260265" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_TicketId",
