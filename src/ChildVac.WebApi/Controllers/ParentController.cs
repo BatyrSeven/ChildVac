@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChildVac.WebApi.Application.Models;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,82 +23,143 @@ namespace ChildVac.WebApi.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public async Task<IEnumerable<Parent>> Get()
+        public async Task<ActionResult<ResponseBaseModel<IEnumerable<Parent>>>> Get()
         {
-            return await _context.Parents.ToListAsync();
+            try
+            {
+                return Ok(new ResponseBaseModel<IEnumerable<Parent>>
+                {
+                    Result = await _context.Parents.ToListAsync()
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new ErrorResponseModel());
+            }
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<Parent> Get(int id)
+        public async Task<ActionResult<ResponseBaseModel<Parent>>> Get(int id)
         {
-            return await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                return Ok(new ResponseBaseModel<Parent>
+                {
+                    Result = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id)
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new ErrorResponseModel());
+            }
         }
 
         [HttpGet("iin/{iin}")]
-        public IEnumerable<Parent> FindByIin(string iin)
+        public ActionResult<ResponseBaseModel<IEnumerable<Parent>>> FindByIin(string iin)
         {
             if (string.IsNullOrWhiteSpace(iin) || iin.Length < 4)
             {
-                return null;
+                return StatusCode(500, new ErrorResponseModel()
+                {
+                    MessageTitle = "Недостаточно символов для поиска.",
+                    MessageText = "Для поиска по ИИН введите минимум 4 символа."
+                });
             }
 
-            return _context.Parents.Where(x => x.Iin.Contains(iin)).Take(10);
+            try
+            {
+                return Ok(new ResponseBaseModel<IEnumerable<Parent>>
+                {
+                    Result = _context.Parents.Where(x => x.Iin.Contains(iin)).Take(10).ToList()
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new ErrorResponseModel());
+            }
         }
 
         // POST api/<controller>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
-        public async Task Post([FromBody]Parent parent)
+        public async Task<ActionResult<SuccessResponseModel>> Post([FromBody]Parent parent)
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = 500;
-                await Response.WriteAsync("Passed model is invalid");
+                return StatusCode(500, new ErrorResponseModel());
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Iin.Equals(parent.Iin));
+            if (user != null)
+            {
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageText = "Пользователь с данным ИИН уже зарегистрирован.",
+                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
+                });
             }
 
             parent.Password = "123456";
 
             _context.Parents.Add(parent);
             await _context.SaveChangesAsync();
+
+            return Ok(new SuccessResponseModel
+            {
+                MessageTitle = "Регистрация прошла успешно!",
+                MessageText = "Временный пароль для входа в систему: " + parent.Password
+            });
         }
 
         // PUT api/<controller>/5
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]Parent newParent)
+        public async Task<ActionResult<SuccessResponseModel>> Put(int id, [FromBody]Parent newParent)
         {
-            var parent = await Get(id);
+            var parent = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
 
             if (parent == null)
             {
-                // TODO: return business error
-                Response.StatusCode = 204;
-                await Response.WriteAsync("ChiParentld not found");
-                return;
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageText = "Пользователь с данным ID не найден.",
+                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
+                });
             }
 
-            _context.Parents.Update(parent);
+            _context.Parents.Update(newParent);
             await _context.SaveChangesAsync();
+
+            return Ok(new SuccessResponseModel
+            {
+                MessageTitle = "Данные были успешно обновлены."
+            });
         }
 
         // DELETE api/<controller>/5
         [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<ActionResult<SuccessResponseModel>> Delete(int id)
         {
-            var parent = await Get(id);
+            var parent = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
 
             if (parent == null)
             {
-                // TODO: return business error
-                Response.StatusCode = 204;
-                await Response.WriteAsync("Parent not found");
-                return;
+                return BadRequest(new ErrorResponseModel
+                {
+                    MessageText = "Пользователь с данным ID не найден.",
+                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
+                });
             }
 
             _context.Parents.Remove(parent);
             await _context.SaveChangesAsync();
+
+            return Ok(new SuccessResponseModel
+            {
+                MessageTitle = "Пользователь был успешно удален."
+            });
         }
     }
 }

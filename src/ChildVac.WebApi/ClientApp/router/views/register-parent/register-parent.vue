@@ -2,7 +2,7 @@
     <div>
         <h1>Регистрация родителя</h1>
 
-        <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-text="alert.text"></div>
+        <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-html="alert.text"></div>
 
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group id="input-group-first-name" label="Имя:" label-for="input-first-name">

@@ -22,6 +22,7 @@
             evt.preventDefault();
             var t = this;
 
+            var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify(this.form);
             console.log("data: " + data);
 
@@ -29,19 +30,23 @@
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': authHeader
                 },
                 body: data
             }).then(response => {
-                if (response.status >= 200 && response.status < 300) {
+                return response.json();
+            }).then(response => {
+                console.log(response);
+                if (response.result) {
                     t.alert.show = true;
                     t.alert.className = "alert-success";
                     t.alert.text = "Регистрация прошла успешно!";
                     this.reset();
                 } else {
-                    t.alert.show = true;
-                    t.alert.className = "alert-danger";
-                    t.alert.text = "Не удалось провести регистрацию. Проверьте правильность введеных данных.";
+                    this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
+                    this.alert.className = "alert-danger";
+                    this.alert.show = true;
                 }
             });
         },
