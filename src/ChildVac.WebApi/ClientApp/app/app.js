@@ -8,6 +8,18 @@ export default {
     },
     data() {
         return {
+            alerts: [
+                { 
+                    className: "alert-danger",
+                    title: "Title",
+                    text: "Text"
+                },
+                { 
+                    className: "alert-success",
+                    title: "Title",
+                    text: "Text"
+                }
+            ]
         }
     },
     computed: {

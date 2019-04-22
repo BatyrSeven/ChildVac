@@ -9,12 +9,7 @@
                 address: '',
                 gender: 0
             },
-            show: true,
-            alert: {
-                show: false,
-                className: "",
-                text: ""
-            }
+            show: true
         }
     },
     methods: {
@@ -38,15 +33,15 @@
                 return response.json();
             }).then(response => {
                 console.log(response);
+
+                this.alert.show = true;
+                this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
+
                 if (response.result) {
-                    t.alert.show = true;
                     t.alert.className = "alert-success";
-                    t.alert.text = "Регистрация прошла успешно!";
                     this.reset();
                 } else {
-                    this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
                     this.alert.className = "alert-danger";
-                    this.alert.show = true;
                 }
             });
         },
@@ -54,7 +49,6 @@
             evt.preventDefault();
 
             this.reset();
-            this.resetAlert();
         },
         reset() {
             // Reset our form values
@@ -70,11 +64,6 @@
             this.$nextTick(() => {
                 this.show = true;
             });
-        },
-        resetAlert() {
-            this.alert.show = false;
-            this.alert.className = "";
-            this.alert.text = "";
         }
     }
 }

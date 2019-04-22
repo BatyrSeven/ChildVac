@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Application.Models;
-using ChildVac.WebApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -50,11 +49,10 @@ namespace ChildVac.WebApi.Controllers
                 }
             }
 
-            return NotFound(new ErrorResponseModel
-            {
-                MessageTitle = "По запросу ничего не найдено.",
-                MessageText = "Для авторизации используйте метод POST."
-            });
+            return NotFound(
+                new MessageResponseModel(false,
+                    new MessageModel("По запросу ничего не найдено.",
+                        "Для авторизации используйте метод POST.")));
         }
 
         // POST: api/Account
@@ -67,29 +65,26 @@ namespace ChildVac.WebApi.Controllers
 
             if (user == null)
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageTitle = "Пользователь не найден.",
-                    MessageText = "Проверьте введенные данные и попробуйте снова."
-                });
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь не найден.",
+                            "Проверьте введенные данные и попробуйте снова.")));
             }
 
             if (user.Password != request.Password)
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageTitle = "Пароль введен неверно.",
-                    MessageText = "Проверьте введенные данные и попробуйте снова."
-                });
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пароль введен неверно.",
+                            "Проверьте введенные данные и попробуйте снова.")));
             }
 
             if (!user.Role.Name.Equals(request.Role, StringComparison.InvariantCultureIgnoreCase))
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageTitle = "Пользователь не имеет доступа к системе.",
-                    MessageText = "Проверьте введенные данные и попробуйте снова."
-                });
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь не имеет доступа к системе.",
+                            "Проверьте введенные данные и попробуйте снова.")));
             }
 
             var claims = new List<Claim>
@@ -104,7 +99,8 @@ namespace ChildVac.WebApi.Controllers
 
             var token = GetJwt(identity);
 
-            return Ok(new ResponseBaseModel<TokenResponseModel> {
+            return Ok(new ResponseBaseModel<TokenResponseModel>
+            {
                 Result = new TokenResponseModel
                 {
                     User = new UserModel

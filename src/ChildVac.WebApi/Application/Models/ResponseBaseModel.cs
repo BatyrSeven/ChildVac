@@ -2,6 +2,6 @@
 {
     public class ResponseBaseModel<T>
     {
-        public virtual T Result { get; set; }
+        public T Result { get; set; }
     }
 }

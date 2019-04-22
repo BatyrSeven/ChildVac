@@ -2,7 +2,7 @@
     <div>
         <h1>Регистрация ребенка</h1>
 
-        <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-text="alert.text"></div>
+        <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-html="alert.text"></div>
 
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group id="input-group-first-name" label="Имя:" label-for="input-first-name">
@@ -31,6 +31,14 @@
                               v-model="form.iin"
                               required
                               placeholder="Введите ИИН"></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-group-date-of-birth" label="Дата рождения:" label-for="input-date-of-birth">
+                <b-form-input id="input-date-of-birth"
+                              type="date"
+                              v-model="form.dateOfBirth"
+                              required
+                              placeholder="Введите дату рождения"></b-form-input>
             </b-form-group>
 
             <b-form-group label="Укажите пол:">

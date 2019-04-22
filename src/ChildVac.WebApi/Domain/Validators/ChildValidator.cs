@@ -1,4 +1,5 @@
-﻿using ChildVac.WebApi.Domain.Entities;
+﻿using System;
+using ChildVac.WebApi.Domain.Entities;
 using FluentValidation;
 
 namespace ChildVac.WebApi.Domain.Validators
@@ -21,6 +22,11 @@ namespace ChildVac.WebApi.Domain.Validators
 
             RuleFor(x => x.Patronim)
                 .Length(0, 50);
+
+            RuleFor(x => x.DateOfBirth)
+                .NotNull()
+                .LessThan(DateTime.Now.AddDays(1))
+                .GreaterThan(DateTime.MinValue);
 
             RuleFor(x => x.Gender)
                 .NotNull()

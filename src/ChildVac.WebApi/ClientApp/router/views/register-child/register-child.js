@@ -6,6 +6,7 @@
                 lastName: '',
                 patronim: '',
                 iin: '',
+                dateOfBirth: null,
                 gender: 0,
                 parentId: 0
             },
@@ -42,19 +43,19 @@
                             'Content-Type': 'application/json'
                         }
                     }).then(response => {
-                    return response.text();
-                }).then(result => {
-                    var parent = JSON.parse(result);
-                    this.parent =
-                        "<strong>" +
-                        parent.iin +
-                        "</strong> - " +
-                        parent.lastName +
-                        " " +
-                        parent.firstName +
-                        " " +
-                        parent.patronim;
-                });
+                        return response.json();
+                    }).then(response => {
+                    var parent = response.result;
+                        this.parent =
+                            "<strong>" +
+                            parent.iin +
+                            "</strong> - " +
+                            parent.lastName +
+                            " " +
+                            parent.firstName +
+                            " " +
+                            parent.patronim;
+                    });
             }
         }
     },
@@ -63,6 +64,7 @@
             evt.preventDefault();
             var t = this;
 
+            var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify(this.form);
             console.log("data: " + data);
 
@@ -71,21 +73,25 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
                     },
                     body: data
                 }).then(response => {
-                if (response.status >= 200 && response.status < 300) {
+                    return response.json();
+                }).then(response => {
+                    console.log(response);
+
                     t.alert.show = true;
-                    t.alert.className = "alert-success";
-                    t.alert.text = "Регистрация прошла успешно!";
-                    this.reset();
-                } else {
-                    t.alert.show = true;
-                    t.alert.className = "alert-danger";
-                    t.alert.text = "Не удалось провести регистрацию. Проверьте правильность введеных данных.";
-                }
-            });
+                    this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
+
+                    if (response.result) {
+                        t.alert.className = "alert-success";
+                        this.reset();
+                    } else {
+                        this.alert.className = "alert-danger";
+                    }
+                });
         },
         onReset(evt) {
             evt.preventDefault();
@@ -122,11 +128,11 @@
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                return response.text();
-            }).then(result => {
+                return response.json();
+            }).then(response => {
+                console.log(response);
                 var parents = [];
-                var parentsJson = JSON.parse(result);
-
+                var parentsJson = response.result;
                 parentsJson.forEach(parent => {
                     parents.push({ value: parent.id, text: parent.iin + " - " + parent.firstName + " " + parent.lastName + " " + parent.patronim });
                 });

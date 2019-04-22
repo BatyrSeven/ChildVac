@@ -34,13 +34,15 @@ namespace ChildVac.WebApi.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new ErrorResponseModel());
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
             }
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseBaseModel<Parent>>> Get(int id)
+        public async Task<ActionResult<ResponseBaseModel<Parent>>> GetById(int id)
         {
             try
             {
@@ -51,7 +53,9 @@ namespace ChildVac.WebApi.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new ErrorResponseModel());
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
             }
         }
 
@@ -60,11 +64,9 @@ namespace ChildVac.WebApi.Controllers
         {
             if (string.IsNullOrWhiteSpace(iin) || iin.Length < 4)
             {
-                return StatusCode(500, new ErrorResponseModel()
-                {
-                    MessageTitle = "Недостаточно символов для поиска.",
-                    MessageText = "Для поиска по ИИН введите минимум 4 символа."
-                });
+                return NotFound(new MessageResponseModel(false,
+                    new MessageModel("Недостаточно символов для поиска.",
+                        "Для поиска по ИИН введите минимум 4 символа.")));
             }
 
             try
@@ -76,28 +78,30 @@ namespace ChildVac.WebApi.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new ErrorResponseModel());
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
             }
         }
 
         // POST api/<controller>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
-        public async Task<ActionResult<SuccessResponseModel>> Post([FromBody]Parent parent)
+        public async Task<ActionResult<MessageResponseModel>> Post([FromBody]Parent parent)
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(500, new ErrorResponseModel());
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Iin.Equals(parent.Iin));
             if (user != null)
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageText = "Пользователь с данным ИИН уже зарегистрирован.",
-                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
-                });
+                return BadRequest(new MessageResponseModel(false,
+                    new MessageModel("Пользователь с данным ИИН уже зарегистрирован.",
+                        "Проверьте правильность данных и попробуйте снова.")));
             }
 
             parent.Password = "123456";
@@ -105,61 +109,56 @@ namespace ChildVac.WebApi.Controllers
             _context.Parents.Add(parent);
             await _context.SaveChangesAsync();
 
-            return Ok(new SuccessResponseModel
-            {
-                MessageTitle = "Регистрация прошла успешно!",
-                MessageText = "Временный пароль для входа в систему: " + parent.Password
-            });
+            return CreatedAtAction(nameof(GetById), new { id = parent.Id },
+                new MessageResponseModel(true,
+                    new MessageModel("Регистрация прошла успешно!",
+                        "Временный пароль для входа в систему: " + parent.Password)));
         }
 
         // PUT api/<controller>/5
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<SuccessResponseModel>> Put(int id, [FromBody]Parent newParent)
+        public async Task<ActionResult<MessageResponseModel>> Put(int id, [FromBody]Parent newParent)
         {
             var parent = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
 
             if (parent == null)
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageText = "Пользователь с данным ID не найден.",
-                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
-                });
+                return NotFound(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь с данным ID не найден.",
+                            "Проверьте правильность данных и попробуйте снова.")));
             }
 
             _context.Parents.Update(newParent);
             await _context.SaveChangesAsync();
 
-            return Ok(new SuccessResponseModel
-            {
-                MessageTitle = "Данные были успешно обновлены."
-            });
+            return Ok(
+                new MessageResponseModel(true,
+                    new MessageModel("Данные были успешно обновлены.")));
         }
 
         // DELETE api/<controller>/5
         [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<SuccessResponseModel>> Delete(int id)
+        public async Task<ActionResult<MessageResponseModel>> Delete(int id)
         {
             var parent = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
 
             if (parent == null)
             {
-                return BadRequest(new ErrorResponseModel
-                {
-                    MessageText = "Пользователь с данным ID не найден.",
-                    MessageTitle = "Проверьте правильность данных и попробуйте снова."
-                });
+                return NotFound(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь с данным ID не найден.",
+                            "Проверьте правильность данных и попробуйте снова.")));
             }
 
             _context.Parents.Remove(parent);
             await _context.SaveChangesAsync();
 
-            return Ok(new SuccessResponseModel
-            {
-                MessageTitle = "Пользователь был успешно удален."
-            });
+            return Ok(
+                new MessageResponseModel(true,
+                    new MessageModel("Пользователь был успешно удален.")));
         }
     }
 }

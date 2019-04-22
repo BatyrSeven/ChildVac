@@ -8,6 +8,9 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Child> builder)
         {
+            builder.Property(x => x.DateOfBirth)
+                .IsRequired();
+
             builder.HasBaseType<User>();
         }
     }

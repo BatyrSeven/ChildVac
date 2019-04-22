@@ -9,7 +9,6 @@ using ChildVac.Test.Helpers;
 using ChildVac.WebApi;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
