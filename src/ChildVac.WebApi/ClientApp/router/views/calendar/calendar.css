@@ -1,1 +1,18 @@
-﻿
+﻿.calendar_title-wrapper {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.calendar_title {
+    color: #323232;
+    font-size: 16px;
+}
+
+.calendar_datetime {
+    color: #9b9b9b;
+    font-size: 14px;
+}
+
+.calendar_desc {
+    color: #9b9b9b;
+    font-size: 14px;
+}

@@ -40,6 +40,7 @@ namespace ChildVac.WebApi.Controllers
                     {
                         Result = new UserModel
                         {
+                            Id = user.Id,
                             Iin = user.Iin,
                             FirstName = user.FirstName,
                             LastName = user.LastName,
@@ -105,6 +106,7 @@ namespace ChildVac.WebApi.Controllers
                 {
                     User = new UserModel
                     {
+                        Id = user.Id,
                         Iin = user.Iin,
                         FirstName = user.FirstName,
                         LastName = user.LastName,

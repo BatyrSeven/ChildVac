@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         token: localStorage.getItem('user-token') || '',
+        userId: localStorage.getItem('user-id') || '',
         user: null,
         status: null
     },

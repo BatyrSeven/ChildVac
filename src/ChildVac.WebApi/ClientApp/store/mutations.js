@@ -5,6 +5,7 @@
     AUTH_SUCCESS: (state, value) => {
         state.status = 'success';
         state.user = value.user;
+        state.userId = value.user.id;
         state.token = value.token;
     },
     AUTH_ERROR: state => {
@@ -12,6 +13,7 @@
     },
     AUTH_LOGOUT: state => {
         state.user = null;
+        state.userId = null;
         state.token = null;
     },
     USER_SUCCESS: (state, value) => {

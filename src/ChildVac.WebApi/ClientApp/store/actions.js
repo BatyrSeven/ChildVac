@@ -20,13 +20,16 @@
                     console.log(response);
                     if (response.result) {
                         const token = response.result.token;
+                        const userId = response.result.user.id;
                         localStorage.setItem('user-token', token);
+                        localStorage.setItem('user-id', userId);
                         commit("AUTH_SUCCESS", response.result);
                     }
                     resolve(response);
                 }).catch(error => {
                     commit("AUTH_ERROR", error);
                     localStorage.removeItem('user-token');
+                    localStorage.removeItem('user-id');
                     reject(error);
                 });
         });
@@ -35,6 +38,7 @@
         return new Promise((resolve, reject) => {
             commit("AUTH_LOGOUT");
             localStorage.removeItem('user-token');
+            localStorage.removeItem('user-id');
             resolve();
         });
     },
@@ -62,10 +66,12 @@
                         commit("USER_SUCCESS", response.result);
                     } else {
                         localStorage.removeItem('user-token');
+                        localStorage.removeItem('user-id');
                     }
                     resolve(response);
                 }).catch(error => {
                     localStorage.removeItem('user-token');
+                    localStorage.removeItem('user-id');
                     reject(error);
                 });
         });

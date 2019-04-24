@@ -39,18 +39,23 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // GET: api/Ticket/doctor/5
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpGet("doctor/{doctorId}")]
-        public ActionResult<ResponseBaseModel<IEnumerable<Ticket>>> GetByDoctorId(int doctorId)
+        public ActionResult<ResponseBaseModel<IEnumerable<TicketResponseModel>>> GetByDoctorId(int doctorId)
         {
             try
             {
                 var tickets = _context.Tickets
                     .Where(x => x.DoctorId == doctorId)
-                    .OrderBy(x => x.Id);
+                    .Include(x => x.Child);
 
-                return Ok(new ResponseBaseModel<IEnumerable<Ticket>>
+                var result = tickets.Select(x => new TicketResponseModel(x))
+                    .OrderBy(x => x.Date)
+                    .ThenBy(x => x.Time);
+
+                return Ok(new ResponseBaseModel<IEnumerable<TicketResponseModel>>
                 {
-                    Result = tickets
+                    Result = result
                 });
             }
             catch (Exception)

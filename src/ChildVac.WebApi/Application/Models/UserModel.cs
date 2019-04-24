@@ -7,6 +7,7 @@ namespace ChildVac.WebApi.Application.Models
 {
     public class UserModel
     {
+        public int Id { get; set; }
         public string Iin { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
