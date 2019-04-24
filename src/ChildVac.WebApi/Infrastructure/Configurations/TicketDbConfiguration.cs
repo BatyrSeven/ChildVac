@@ -1,4 +1,4 @@
-﻿using ChildVac.WebApi.Models;
+﻿using ChildVac.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,9 +9,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Ticket> builder)
         {
             builder.Property(x => x.StartDateTime)
-                .IsRequired();
-
-            builder.Property(x => x.EndDateTime)
                 .IsRequired();
         }
     }

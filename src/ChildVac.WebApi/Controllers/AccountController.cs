@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using ChildVac.WebApi.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -28,85 +24,68 @@ namespace ChildVac.WebApi.Controllers
 
         // GET: api/Account
         [HttpGet]
-        public async Task Get()
+        public ActionResult<ResponseBaseModel<UserModel>> Get()
         {
-            Response.StatusCode = 404;
-            await Response.WriteAsync("Please, use POST request to authenticate.");
-        }
+            var iin = User?.Identity?.Name;
 
-        [HttpGet]
-        [Route("getlogin")]
-        public IActionResult GetLogin()
-        {
-            return Ok($"Ваш логин: {User.Identity.Name}");
-        }
+            if (!string.IsNullOrWhiteSpace(iin))
+            {
+                var user = _context.Users
+                    .Include(u => u.Role)
+                    .FirstOrDefault(u => u.Iin == iin);
 
-        [Authorize(Roles = "admin")]
-        [HttpGet]
-        [Route("getrole")]
-        public IActionResult GetRole()
-        {
-            return Ok("Ваша роль: администратор");
+                if (user != null)
+                {
+                    return Ok(new ResponseBaseModel<UserModel>
+                    {
+                        Result = new UserModel
+                        {
+                            Id = user.Id,
+                            Iin = user.Iin,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Role = user.Role.Name
+                        }
+                    });
+                }
+            }
+
+            return NotFound(
+                new MessageResponseModel(false,
+                    new MessageModel("По запросу ничего не найдено.",
+                        "Для авторизации используйте метод POST.")));
         }
 
         // POST: api/Account
         [HttpPost]
-        public async Task Post([FromBody] Token token)
+        public ActionResult<ResponseBaseModel<TokenResponseModel>> Post([FromBody] TokenRequestModel request)
         {
-            var identity = GetIdentity(token, out var errorMessage);
-            if (identity == null)
-            {
-                Response.StatusCode = 400;
-                await Response.WriteAsync(errorMessage);
-                return;
-            }
-
-            var now = DateTime.UtcNow;
-
-            // create JWT-token
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromDays(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var response = new
-            {
-                token = encodedJwt,
-                login = identity.Name,
-                role = identity.Claims
-                    .Where(c => c.Type == ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .FirstOrDefault()
-            };
-
-            // serialize response
-            Response.ContentType = "application/json";
-            await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-        }
-
-        [NonAction]
-        private ClaimsIdentity GetIdentity(Token token, out string errorMessage)
-        {
-            errorMessage = null;
-            User user = _context.Users
+            var user = _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(x => x.Iin == token.Login);
+                .FirstOrDefault(x => x.Iin == request.Iin);
 
             if (user == null)
             {
-                errorMessage = "User not found";
-                return null;
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь не найден.",
+                            "Проверьте введенные данные и попробуйте снова.")));
             }
 
-            if (user.Password != token.Password)
+            if (user.Password != request.Password)
             {
-                errorMessage = "Invalid login or password";
-                return null;
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пароль введен неверно.",
+                            "Проверьте введенные данные и попробуйте снова.")));
+            }
+
+            if (!user.Role.Name.Equals(request.Role, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return BadRequest(
+                    new MessageResponseModel(false,
+                        new MessageModel("Пользователь не имеет доступа к системе.",
+                            "Проверьте введенные данные и попробуйте снова.")));
             }
 
             var claims = new List<Claim>
@@ -115,11 +94,48 @@ namespace ChildVac.WebApi.Controllers
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
 
-            var claimsIdentity =
+            var identity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
 
-            return claimsIdentity;
+            var token = GetJwt(identity);
+
+            return Ok(new ResponseBaseModel<TokenResponseModel>
+            {
+                Result = new TokenResponseModel
+                {
+                    User = new UserModel
+                    {
+                        Id = user.Id,
+                        Iin = user.Iin,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Role = user.Role.Name
+                    },
+                    Token = token
+                }
+            });
+        }
+
+        [NonAction]
+        private string GetJwt(ClaimsIdentity identity)
+        {
+            var now = DateTime.UtcNow;
+
+            // create JWT-token
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                notBefore: now,
+                claims: identity.Claims,
+                expires: now.Add(TimeSpan.FromDays(AuthOptions.LIFETIME)),
+                signingCredentials:
+                    new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
+                        SecurityAlgorithms.HmacSha256));
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return encodedJwt;
         }
     }
 }

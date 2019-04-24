@@ -1,4 +1,4 @@
-﻿using ChildVac.WebApi.Models;
+﻿using ChildVac.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +14,14 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.Property(x => x.Address)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasData(
+                new Hospital
+                {
+                    Id = 1,
+                    Name = "Test Hostpital",
+                    Address = "Address of test Hostpital"
+                });
         }
     }
 }

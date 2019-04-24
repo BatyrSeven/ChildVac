@@ -8,6 +8,7 @@ export default {
     },
     data() {
         return {
+            
         }
     },
     computed: {
@@ -15,5 +16,13 @@ export default {
     },
     methods: {
 
+    },
+    mounted() {
+        if (this.$store.getters.isAuthenticated && !this.$store.getters.userName) {
+            this.$store.dispatch("USER_REQUEST").catch(err => {
+                this.$store.dispatch("AUTH_LOGOUT");
+                this.$router.push("/");
+            });
+        }
     }
 }

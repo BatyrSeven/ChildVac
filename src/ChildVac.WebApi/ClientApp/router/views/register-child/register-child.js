@@ -6,6 +6,7 @@
                 lastName: '',
                 patronim: '',
                 iin: '',
+                dateOfBirth: null,
                 gender: 0,
                 parentId: 0
             },
@@ -14,11 +15,8 @@
             parentId: 0,
             parent: "",
             show: true,
-            alert: {
-                show: false,
-                className: '',
-                text: ''
-            }
+            alerts: [],
+            submited: false
         }
     },
     watch: {
@@ -42,27 +40,29 @@
                             'Content-Type': 'application/json'
                         }
                     }).then(response => {
-                    return response.text();
-                }).then(result => {
-                    var parent = JSON.parse(result);
-                    this.parent =
-                        "<strong>" +
-                        parent.iin +
-                        "</strong> - " +
-                        parent.lastName +
-                        " " +
-                        parent.firstName +
-                        " " +
-                        parent.patronim;
-                });
+                        return response.json();
+                    }).then(response => {
+                        var parent = response.result;
+                        this.parent =
+                            "<strong>" +
+                            parent.iin +
+                            "</strong> - " +
+                            parent.lastName +
+                            " " +
+                            parent.firstName +
+                            " " +
+                            parent.patronim;
+                    });
             }
         }
     },
     methods: {
         onSubmit(evt) {
             evt.preventDefault();
-            var t = this;
+            this.alerts = [];
+            this.submited = true;
 
+            var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify(this.form);
             console.log("data: " + data);
 
@@ -71,48 +71,24 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
                     },
                     body: data
                 }).then(response => {
-                if (response.status >= 200 && response.status < 300) {
-                    t.alert.show = true;
-                    t.alert.className = "alert-success";
-                    t.alert.text = "Регистрация прошла успешно!";
-                    this.reset();
-                } else {
-                    t.alert.show = true;
-                    t.alert.className = "alert-danger";
-                    t.alert.text = "Не удалось провести регистрацию. Проверьте правильность введеных данных.";
-                }
-            });
-        },
-        onReset(evt) {
-            evt.preventDefault();
+                    return response.json();
+                }).then(response => {
+                    this.submited = false;
+                    console.log(response);
 
-            this.reset();
-            this.resetAlert();
-        },
-        reset() {
-            this.form.firstName = '';
-            this.form.lastName = '';
-            this.form.patronim = '';
-            this.form.iin = '';
-            this.form.gender = 0;
-            this.form.parentId = 0;
-
-            this.resetSearchParentSuggestions();
-
-            // Trick to reset/clear native browser form validation state
-            this.show = false;
-            this.$nextTick(() => {
-                this.show = true;
-            });
-        },
-        resetAlert() {
-            this.alert.show = false;
-            this.alert.className = "";
-            this.alert.text = "";
+                    response.messages.forEach(m => {
+                        this.alerts.push({
+                            title: m.title,
+                            text: m.text,
+                            variant: response.result ? "success" : "danger"
+                        });
+                    });
+                });
         },
         findParentByIin(iin) {
             window.fetch('/api/parent/iin/' + iin, {
@@ -122,11 +98,11 @@
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                return response.text();
-            }).then(result => {
+                return response.json();
+            }).then(response => {
+                console.log(response);
                 var parents = [];
-                var parentsJson = JSON.parse(result);
-
+                var parentsJson = response.result;
                 parentsJson.forEach(parent => {
                     parents.push({ value: parent.id, text: parent.iin + " - " + parent.firstName + " " + parent.lastName + " " + parent.patronim });
                 });

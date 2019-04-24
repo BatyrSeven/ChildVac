@@ -1,7 +1,6 @@
-﻿using ChildVac.WebApi.Models;
+﻿using ChildVac.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {
@@ -14,6 +13,20 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .HasMaxLength(10);
 
             builder.HasBaseType<User>();
+
+            builder.HasData(new Doctor
+            {
+                Id = 2,
+                FirstName = "Test",
+                LastName = "Doctor",
+                Patronim = "Testovich",
+                Gender = Gender.Male,
+                Iin = "970812300739",
+                Password = "test",
+                PhoneNumber = "7087260265",
+                RoleId = 3,
+                HospitalId = 1
+            });
         }
     }
 }

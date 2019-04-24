@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ChildVac.Test.Helpers;
 using ChildVac.WebApi;
+using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
-using ChildVac.WebApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Xunit;
@@ -30,7 +29,7 @@ namespace ChildVac.Test.ApiTests
         {
             // Arrange
             var name = "test vaccine";
-            var recieveTime = TimeSpan.FromDays(1);
+            var recieveTime = 1;
             var vaccine = new JObject
             {
                 ["name"] = name,
@@ -58,7 +57,7 @@ namespace ChildVac.Test.ApiTests
 
                 var actualVaccine = context.Vaccines.First();
                 Assert.Equal(name, actualVaccine.Name);
-                Assert.Equal(recieveTime, actualVaccine.RecieveTime);
+                Assert.Equal(recieveTime, actualVaccine.RecieveMonth);
 
                 context.Vaccines.Remove(actualVaccine);
                 context.SaveChanges();
@@ -72,12 +71,12 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveTime = TimeSpan.FromDays(1)
+                RecieveMonth = 1
             };
             var second = new Vaccine
             {
                 Name = "test name 2",
-                RecieveTime = TimeSpan.FromDays(2)
+                RecieveMonth = 2
             };
 
             using (var scope = ScopeFactory.CreateScope())
@@ -97,10 +96,10 @@ namespace ChildVac.Test.ApiTests
             Assert.True(vaccineList.Count >= 2);
 
             var firstVaccine = vaccineList.OrderByDescending(x => x.Id).Skip(1).FirstOrDefault();
-            Assert.Equal(first.RecieveTime, firstVaccine?.RecieveTime);
+            Assert.Equal(first.RecieveMonth, firstVaccine?.RecieveMonth);
             Assert.Equal(first.Name, firstVaccine?.Name);
 
-            Assert.Equal(second.RecieveTime, vaccineList.Last().RecieveTime);
+            Assert.Equal(second.RecieveMonth, vaccineList.Last().RecieveMonth);
             Assert.Equal(second.Name, vaccineList.Last().Name);
 
             using (var scope = ScopeFactory.CreateScope())
@@ -118,12 +117,12 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveTime = TimeSpan.FromDays(1)
+                RecieveMonth = 1
             };
             var second = new Vaccine
             {
                 Name = "test name",
-                RecieveTime = TimeSpan.FromDays(2)
+                RecieveMonth = 2
             };
 
             using (var scope = ScopeFactory.CreateScope())
@@ -140,7 +139,7 @@ namespace ChildVac.Test.ApiTests
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(first.RecieveTime, vaccine.RecieveTime);
+            Assert.Equal(first.RecieveMonth, vaccine.RecieveMonth);
             Assert.Equal(first.Name, vaccine.Name);
 
             using (var scope = ScopeFactory.CreateScope())
@@ -158,15 +157,15 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveTime = TimeSpan.FromDays(1)
+                RecieveMonth = 1
             };
             var second = new Vaccine
             {
                 Name = "test name 2",
-                RecieveTime = TimeSpan.FromDays(2)
+                RecieveMonth = 2
             };
             var updatedName = "updated name";
-            var updatedRecieveTime = TimeSpan.FromDays(3);
+            var updatedRecieveTime = 3;
 
             using (var scope = ScopeFactory.CreateScope())
             {
@@ -203,10 +202,10 @@ namespace ChildVac.Test.ApiTests
                 var actual = context.Vaccines.First(x => x.Id == first.Id);
                 var last = context.Vaccines.Last();
 
-                Assert.Equal(updatedRecieveTime, actual.RecieveTime);
+                Assert.Equal(updatedRecieveTime, actual.RecieveMonth);
                 Assert.Equal(updatedName, actual.Name);
 
-                Assert.NotEqual(updatedRecieveTime, last.RecieveTime);
+                Assert.NotEqual(updatedRecieveTime, last.RecieveMonth);
                 Assert.NotEqual(updatedName, last.Name);
 
                 context.Vaccines.RemoveRange(context.Vaccines);
@@ -221,12 +220,12 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveTime = TimeSpan.FromDays(1)
+                RecieveMonth = 1
             };
             var second = new Vaccine
             {
                 Name = "test name 2",
-                RecieveTime = TimeSpan.FromDays(2)
+                RecieveMonth = 2
             };
 
             using (var scope = ScopeFactory.CreateScope())
@@ -253,7 +252,7 @@ namespace ChildVac.Test.ApiTests
 
                 var last = context.Vaccines.Last();
 
-                Assert.Equal(second.RecieveTime, last.RecieveTime);
+                Assert.Equal(second.RecieveMonth, last.RecieveMonth);
                 Assert.Equal(second.Name, last.Name);
 
                 context.Vaccines.RemoveRange(context.Vaccines);
