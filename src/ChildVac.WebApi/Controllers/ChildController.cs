@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Application.Models;
 using ChildVac.WebApi.Domain.Entities;
@@ -48,6 +49,31 @@ namespace ChildVac.WebApi.Controllers
                 return Ok(new ResponseBaseModel<Child>
                 {
                     Result = await _context.Children.FirstOrDefaultAsync(x => x.Id == id)
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
+        }
+
+        [HttpGet("iin/{iin}")]
+        public ActionResult<ResponseBaseModel<IEnumerable<Child>>> FindByIin(string iin)
+        {
+            if (string.IsNullOrWhiteSpace(iin) || iin.Length < 4)
+            {
+                return NotFound(new MessageResponseModel(false,
+                    new MessageModel("Недостаточно символов для поиска.",
+                        "Для поиска по ИИН введите минимум 4 символа.")));
+            }
+
+            try
+            {
+                return Ok(new ResponseBaseModel<IEnumerable<Child>>
+                {
+                    Result = _context.Children.Where(x => x.Iin.Contains(iin)).Take(10).ToList()
                 });
             }
             catch (Exception)

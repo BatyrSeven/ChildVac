@@ -10,9 +10,6 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
         {
             builder.Property(x => x.StartDateTime)
                 .IsRequired();
-
-            builder.Property(x => x.EndDateTime)
-                .IsRequired();
         }
     }
 }

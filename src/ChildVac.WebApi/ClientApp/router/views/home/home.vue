@@ -6,7 +6,11 @@
 
         <div class="home__formWrapper mb-4">
 
-            <div v-show="alert.show" :class="alert.className" class="alert" role="alert" v-html="alert.text"></div>
+            <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+                <strong>{{alert.title}}</strong>
+                <br />
+                <span>{{alert.text}}</span>
+            </b-alert>
 
             <b-form @submit="onSubmit" v-if="show">
                 <b-form-group id="input-group-1"
@@ -39,12 +43,20 @@
                     </b-form-invalid-feedback>
                 </b-form-group>
 
-                <b-button class="mr-3" type="submit" variant="primary">Войти</b-button>
+                <b-button class="mr-3" type="submit" variant="primary" :disabled="submited">
+                    <span v-if="submited">
+                        <b-spinner small type="grow"></b-spinner>
+                        Загрузка...
+                    </span>
+                    <span v-else>
+                        Войти
+                    </span>
+                </b-button>
                 <b-button to="forgot-password" variant="outline-danger">Забыли пароль?</b-button>
             </b-form>
         </div>
 
-        <h4 class="text-center  mb-2">Мобильное приложение ChildVac для родителей</h4>
+        <h4 class="text-center mb-2">Мобильное приложение ChildVac для родителей</h4>
 
         <p class="text-center">
             Установите мобильное приложение ChildVac и следите расписанием прививок ваших детей.

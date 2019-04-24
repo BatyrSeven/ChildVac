@@ -63,6 +63,7 @@ namespace ChildVac.WebApi.Migrations
                     Gender = table.Column<int>(nullable: false),
                     RoleId = table.Column<int>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
+                    DateOfBirth = table.Column<DateTime>(nullable: true),
                     ParentId = table.Column<int>(nullable: true),
                     PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
                     HospitalId = table.Column<int>(nullable: true),
@@ -98,10 +99,9 @@ namespace ChildVac.WebApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ChildId = table.Column<int>(nullable: true),
-                    DoctorId = table.Column<int>(nullable: true),
                     StartDateTime = table.Column<DateTime>(nullable: false),
-                    EndDateTime = table.Column<DateTime>(nullable: false)
+                    ChildId = table.Column<int>(nullable: false),
+                    DoctorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,13 +111,13 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.ChildId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tickets_Users_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

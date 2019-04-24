@@ -7,11 +7,8 @@
             password: '',
             passwordState: null,
             show: true,
-            alert: {
-                show: false,
-                className: '',
-                text: ''
-            }
+            alerts: [],
+            submited: false
         }
     },
     computed: {
@@ -50,6 +47,9 @@
             evt.preventDefault();
 
             if (this.isValid) {
+                this.submited = true;
+                this.alerts = [];
+
                 var formData = JSON.stringify({
                     iin: this.iin,
                     password: this.password,
@@ -57,18 +57,26 @@
                 });
 
                 this.$store.dispatch("AUTH_REQUEST", formData).then((response) => {
+                    this.submited = false;
                     if (response.result) {
-                        this.alert.show = false;
+                        this.alerts = [];
                         this.$router.push("/calendar");
                     } else {
-                        this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
-                        this.alert.className = "alert-danger";
-                        this.alert.show = true;
+                        response.messages.forEach(m => {
+                            this.alerts.push({
+                                title: m.title,
+                                text: m.text,
+                                variant: "danger"
+                            });
+                        });
                     }
                 }).catch(error => {
-                    this.alert.text = "<strong>Что-то пошло не так..</strong><br />Попробуйте повторить чуть позже.";
-                    this.alert.className = "alert-danger";
-                    this.alert.show = true;
+                    console.log(error);
+                    this.alerts.push({
+                        title: "Что-то пошло не так...",
+                        text: "Попробуйте повторить чуть позже.",
+                        variant: "danger"
+                    });
                 });
             }
         }

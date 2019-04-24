@@ -9,13 +9,17 @@
                 address: '',
                 gender: 0
             },
-            show: true
+            show: true,
+            alerts: [],
+            submited: false
+
         }
     },
     methods: {
         onSubmit(evt) {
             evt.preventDefault();
-            var t = this;
+            this.alerts = [];
+            this.submited = true;
 
             var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify(this.form);
@@ -32,37 +36,16 @@
             }).then(response => {
                 return response.json();
             }).then(response => {
+                this.submited = false;
                 console.log(response);
 
-                this.alert.show = true;
-                this.alert.text = "<strong>" + response.messageTitle + "</strong><br />" + response.messageText;
-
-                if (response.result) {
-                    t.alert.className = "alert-success";
-                    this.reset();
-                } else {
-                    this.alert.className = "alert-danger";
-                }
-            });
-        },
-        onReset(evt) {
-            evt.preventDefault();
-
-            this.reset();
-        },
-        reset() {
-            // Reset our form values
-            this.form.firstName = "";
-            this.form.lastName = "";
-            this.form.patronim = "";
-            this.form.iin = "";
-            this.form.address = "";
-            this.form.gender = 0;
-
-            // Trick to reset/clear native browser form validation state
-            this.show = false;
-            this.$nextTick(() => {
-                this.show = true;
+                response.messages.forEach(m => {
+                    this.alerts.push({
+                        title: m.title,
+                        text: m.text,
+                        variant: response.result ? "success" : "danger"
+                    });
+                });
             });
         }
     }

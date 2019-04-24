@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ChildVac.WebApi.Application.Models;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -18,55 +22,108 @@ namespace ChildVac.WebApi.Controllers
             _context = context;
         }
 
-        // GET: api/Vaccine
+        // GET: api/Ticket
         [HttpGet]
-        public IEnumerable<Vaccine> Get()
+        public ActionResult<IEnumerable<Ticket>> Get()
         {
-            return _context.Vaccines
-                .OrderBy(x => x.Id);
+            return Ok(_context.Tickets
+                .OrderBy(x => x.Id));
         }
 
-        // GET: api/Vaccine/5
+        // GET: api/Ticket/5
         [HttpGet("{id}")]
-        public Vaccine GetById(int id)
+        public ActionResult<Ticket> GetById(int id)
         {
-            return _context.Vaccines
+            return _context.Tickets
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        // POST: api/Vaccine
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public void Post([FromBody] Vaccine hospital)
+        // GET: api/Ticket/doctor/5
+        [HttpGet("doctor/{doctorId}")]
+        public ActionResult<ResponseBaseModel<IEnumerable<Ticket>>> GetByDoctorId(int doctorId)
         {
-            if (hospital == null) return;
+            try
+            {
+                var tickets = _context.Tickets
+                    .Where(x => x.DoctorId == doctorId)
+                    .OrderBy(x => x.Id);
 
-            _context.Vaccines.Add(hospital);
-            _context.SaveChanges();
+                return Ok(new ResponseBaseModel<IEnumerable<Ticket>>
+                {
+                    Result = tickets
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
         }
 
-        // PUT: api/Vaccine/5
+        // POST: api/Ticket
+        [Authorize(Roles = "Doctor, Admin")]
+        [HttpPost]
+        public async Task<ActionResult<MessageResponseModel>> Post([FromBody] Ticket ticket)
+        {
+            try
+            {
+                var doctorIin = User?.Identity?.Name;
+
+                if (!string.IsNullOrWhiteSpace(doctorIin))
+                {
+                    var user = _context.Users
+                        .Include(u => u.Role)
+                        .FirstOrDefault(u => u.Iin == doctorIin);
+
+                    if (user != null)
+                    {
+                        ticket.DoctorId = user.Id;
+                        _context.Tickets.Add(ticket);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
+
+            return CreatedAtAction(nameof(GetById), new { id = ticket.Id },
+                new MessageResponseModel(true,
+                    new MessageModel("Запись на прием была успешно сохранена.")));
+        }
+
+        // PUT: api/Ticket/5
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Vaccine hospital)
+        public async Task<ActionResult> Put(int id, [FromBody] Ticket hospital)
         {
-            if (hospital == null) return;
-            
-            _context.Vaccines.Update(hospital);
-            _context.SaveChanges();
+            if (hospital == null)
+                return NotFound();
+
+            _context.Tickets.Update(hospital);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
-        // DELETE: api/Vaccine/5
+        // DELETE: api/Ticket/5
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var hospital = GetById(id);
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (hospital == null) return;
+            if (ticket == null)
+                return NotFound();
 
-            _context.Vaccines.Remove(hospital);
-            _context.SaveChanges();
+            _context.Tickets.Remove(ticket);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

@@ -102,11 +102,9 @@ namespace ChildVac.WebApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ChildId");
+                    b.Property<int>("ChildId");
 
-                    b.Property<int?>("DoctorId");
-
-                    b.Property<DateTime>("EndDateTime");
+                    b.Property<int>("DoctorId");
 
                     b.Property<DateTime>("StartDateTime");
 
@@ -398,11 +396,13 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Child", "Child")
                         .WithMany()
-                        .HasForeignKey("ChildId");
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Doctor", "Doctor")
                         .WithMany()
-                        .HasForeignKey("DoctorId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.User", b =>
