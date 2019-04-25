@@ -94,7 +94,6 @@ namespace ChildVac.WebApi
             services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // TODO: вытащить в extension
-            services.AddTransient<IValidator<Hospital>, HospitalValidator>();
             services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
         }
 
