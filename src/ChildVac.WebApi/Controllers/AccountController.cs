@@ -7,6 +7,7 @@ using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ChildVac.WebApi.Controllers
@@ -16,10 +17,12 @@ namespace ChildVac.WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(ApplicationContext context)
+        public AccountController(ApplicationContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Account
