@@ -105,6 +105,9 @@ namespace ChildVac.WebApi.Controllers
             }
 
             child.Password = "123456";
+            child.Role = _context.Roles.FirstOrDefault(
+                x => x.Name.Equals("Child",
+                StringComparison.InvariantCultureIgnoreCase));
 
             _context.Children.Add(child);
             await _context.SaveChangesAsync();

@@ -83,7 +83,8 @@ namespace ChildVac.WebApi.Controllers
                             "Проверьте введенные данные и попробуйте снова.")));
             }
 
-            if (!user.Role.Name.Equals(request.Role, StringComparison.InvariantCultureIgnoreCase))
+            if (user.Role == null || 
+                !user.Role.Name.Equals(request.Role, StringComparison.InvariantCultureIgnoreCase))
             {
                 return BadRequest(
                     new MessageResponseModel(false,
