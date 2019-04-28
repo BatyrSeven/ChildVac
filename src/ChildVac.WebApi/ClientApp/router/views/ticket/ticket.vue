@@ -1,6 +1,7 @@
 ﻿<template>
     <div>
-        <h1 class="mb-4">Запись на прием</h1>
+        <h1 class="mb-4" v-if="ticket_id">Изменение записи на прием</h1>
+        <h1 class="mb-4" v-else>Создание записи на прием</h1>
 
         <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>
@@ -10,20 +11,31 @@
 
         <b-form @submit="onSubmit" v-if="show">
 
-            <b-form-group v-show="!childId" id="input-group-child-iin" label="ИИН ребёнка:" label-for="input-child-iin" label-cols-md="2" label-align-md="right">
-                <b-form-input id="input-child-iin"
-                              type="text"
-                              v-model="searchChildIin"
-                              placeholder="Начните вводить ИИН ребёнка"></b-form-input>
-                <b-form-select v-show="children.length" v-model="childId" :options="children" :select-size="children.length + 1"></b-form-select>
-            </b-form-group>
+            <b-row v-if="ticket_id" class="mb-3">
+                <b-col sm="2" class="text-md-right">
+                    <span>Пациент:</span>
+                </b-col>
+                <b-col sm="10">
+                    <strong>{{child}}</strong>
+                </b-col>
+            </b-row>
 
-            <div class="mb-3" v-show="childId">
-                <div class="row">
-                    <div class="col-md-2 text-md-right pr-0">Ребёнок:</div>
-                    <div class="col">
-                        <div class="mb-1" v-html="child"></div>
-                        <b-button variant="outline-primary" @click="resetSearchChildSuggestions">Изменить</b-button>
+            <div v-else>
+                <b-form-group v-show="!childId" id="input-group-child-iin" label="ИИН ребёнка:" label-for="input-child-iin" label-cols-md="2" label-align-md="right">
+                    <b-form-input id="input-child-iin"
+                                  type="text"
+                                  v-model="searchChildIin"
+                                  placeholder="Начните вводить ИИН ребёнка"></b-form-input>
+                    <b-form-select v-show="children.length" v-model="childId" :options="children" :select-size="children.length + 1"></b-form-select>
+                </b-form-group>
+
+                <div class="mb-3" v-show="childId">
+                    <div class="row">
+                        <div class="col-md-2 text-md-right pr-0">Ребёнок:</div>
+                        <div class="col">
+                            <div class="mb-1" v-html="child"></div>
+                            <b-button variant="outline-primary" @click="resetSearchChildSuggestions">Изменить</b-button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,5 +72,5 @@
     </div>
 </template>
 
-<script src="./tiket.js"></script>
-<style src="./tiket.css"></style>
+<script src="./ticket.js"></script>
+<style src="./ticket.css"></style>

@@ -12,15 +12,21 @@
         meta: { requiresAuth: true }
     },
     {
-        path: "/create-prescription/:ticket_id", 
-        name: "create-prescription",
-        component: require("./views/create-prescription/create-prescription.vue").default,
+        path: "/ticket", 
+        name: "create-ticket",
+        component: require("./views/ticket/ticket.vue").default,
         meta: { requiresAuth: true }
     },
     {
-        path: "/tiket", 
-        name: "tiket",
-        component: require("./views/tiket/tiket.vue").default,
+        path: "/ticket/:id", 
+        name: "edit-ticket",
+        component: require("./views/ticket/ticket.vue").default,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: "/create-prescription/:ticket_id", 
+        name: "create-prescription",
+        component: require("./views/create-prescription/create-prescription.vue").default,
         meta: { requiresAuth: true }
     },
     {

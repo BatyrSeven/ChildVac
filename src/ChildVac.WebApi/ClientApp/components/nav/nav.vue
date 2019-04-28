@@ -5,7 +5,7 @@
                 <b-nav-item to="/calendar">
                     Календарь
                 </b-nav-item>
-                <b-nav-item to="/tiket">
+                <b-nav-item to="/ticket">
                     Запись на прием
                 </b-nav-item>
             </ul>

@@ -103,33 +103,61 @@ namespace ChildVac.WebApi.Controllers
         }
 
         // PUT: api/Ticket/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Ticket hospital)
+        public async Task<ActionResult<MessageResponseModel>> Put(int id, [FromBody] Ticket ticket)
         {
-            if (hospital == null)
-                return NotFound();
+            try
+            {
+                if (ticket == null)
+                    return NotFound();
 
-            _context.Tickets.Update(hospital);
-            await _context.SaveChangesAsync();
+                _context.Tickets.Update(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
 
-            return Ok();
+            return Ok(new MessageResponseModel(true,
+                new MessageModel("Данные успешно обновлены")));
         }
 
         // DELETE: api/Ticket/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<MessageResponseModel>> Delete(int id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (ticket == null)
-                return NotFound();
+                if (ticket == null)
+                    return NotFound();
 
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+                var prescriptions = _context.Prescriptions
+                    .Where(x => x.TicketId == id);
 
-            return Ok();
+                foreach (var prescription in prescriptions)
+                {
+                    _context.Prescriptions.Remove(prescription);
+                }
+
+                _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
+
+            return Ok(new MessageResponseModel(true,
+                new MessageModel("Запись на прием была успешно удалена")));
         }
     }
 }

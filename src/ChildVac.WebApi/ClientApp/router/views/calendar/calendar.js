@@ -1,25 +1,39 @@
 ﻿export default {
     data() {
         return {
-            events: [
-                {
-                    date: '2019/04/25', // Required
-                    time: '12:00',
-                    title: 'Foo' // Required
-                },
-                {
-                    date: '2019/04/25',
-                    time: '13:00',
-                    title: 'Bar',
-                    desc: 'description',
-                    customClass: 'disabled highlight'
-                }
-            ]
+            modalDeleteShow: false,
+            deleteTicketId: 0,
+            events: [],
+            alerts: []
         }
     },
     methods: {
         handleDayChange() {
             console.log("handleDayChange");
+        },
+        onDeleteTicket(id) {
+            this.modalDeleteShow = true;
+            this.deleteTicketId = id;
+        },
+        deleteTicket() {
+            this.modalDeleteShow = false;
+
+            var authHeader = 'Bearer ' + this.$store.state.token;
+            window.fetch('/api/ticket/' + this.deleteTicketId,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    }
+                }).then(response => {
+                return response.json();
+            }).then(response => {
+                console.log(response);
+
+                this.getTickets();
+            });
         },
         getTickets() {
             var authHeader = 'Bearer ' + this.$store.state.token;

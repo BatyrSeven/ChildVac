@@ -1,8 +1,10 @@
 ﻿export default {
     data() {
         return {
+            ticket_id: this.$route.params.id,
             form: {
                 childId: 0,
+                doctorId: 0,
                 date: null,
                 time: null
             },
@@ -55,6 +57,13 @@
     methods: {
         onSubmit(evt) {
             evt.preventDefault();
+            if (this.ticket_id) {
+                this.updateTicket();
+            } else {
+                this.addTicket();
+            }
+        },
+        addTicket() {
             this.alerts = [];
             this.submited = true;
 
@@ -75,19 +84,87 @@
                     },
                     body: data
                 }).then(response => {
-                    return response.json();
-                }).then(response => {
-                    this.submited = false;
-                    console.log(response);
+                return response.json();
+            }).then(response => {
+                this.submited = false;
+                console.log(response);
 
-                    response.messages.forEach(m => {
-                        this.alerts.push({
-                            title: m.title,
-                            text: m.text,
-                            variant: response.result ? "success" : "danger"
-                        });
+                response.messages.forEach(m => {
+                    this.alerts.push({
+                        title: m.title,
+                        text: m.text,
+                        variant: response.result ? "success" : "danger"
                     });
                 });
+            });
+        },
+        updateTicket() {
+            var authHeader = 'Bearer ' + this.$store.state.token;
+            let data = JSON.stringify({
+                id: this.ticket_id,
+                startDateTime: this.form.date + " " + this.form.time,
+                childId: this.form.childId,
+                doctorId: this.form.doctorId
+
+            });
+
+            window.fetch('/api/ticket/' + this.ticket_id,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
+                    body: data
+                }).then(response => {
+                return response.json();
+            }).then(response => {
+                this.submited = false;
+                console.log(response);
+
+                response.messages.forEach(m => {
+                    this.alerts.push({
+                        title: m.title,
+                        text: m.text,
+                        variant: response.result ? "success" : "danger"
+                    });
+                });
+            });
+        },
+        getTicket() {
+            var authHeader = 'Bearer ' + this.$store.state.token;
+            window.fetch('/api/ticket/' + this.ticket_id,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    }
+                }).then(response => {
+                return response.json();
+            }).then(response => {
+                console.log(response);
+                this.submited = false;
+
+                if (response.child) {
+                    this.setChild(response.child);
+                }
+
+                if (response.startDateTime) {
+                    this.form.date = response.startDateTime.substr(0, 10);
+                    this.form.time = response.startDateTime.substr(11, 5);
+                }
+
+                if (response.doctorId) {
+                    this.form.doctorId = response.doctorId;
+                }
+            });
+        },
+        setChild(child) {
+            this.child = child.lastName + " " + child.firstName + " "  + child.patronim;
+            this.form.childId = child.id;
         },
         findChildByIin(iin) {
             window.fetch('/api/child/iin/' + iin, {
@@ -114,6 +191,11 @@
             this.childId = 0;
             this.searchChildIin = "";
             this.child = "";
+        }
+    },
+    mounted() {
+        if (this.ticket_id) {
+            this.getTicket();
         }
     }
 }
