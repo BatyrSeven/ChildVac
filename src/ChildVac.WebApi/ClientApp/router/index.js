@@ -19,7 +19,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next();
         }
-    } else {
+    } else if (to.matched.some(record => record.meta.requiresUnauth)) {
         if (isAuthenticated) {
             next({
                 path: '/calendar'
@@ -27,6 +27,9 @@ router.beforeEach((to, from, next) => {
         } else {
             next();
         }
+    } else
+    {
+        next();
     }
 });
 

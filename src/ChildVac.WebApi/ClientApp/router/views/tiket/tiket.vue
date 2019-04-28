@@ -60,5 +60,5 @@
     </div>
 </template>
 
-<script src="./create-tiket.js"></script>
-<style src="./create-tiket.css"></style>
+<script src="./tiket.js"></script>
+<style src="./tiket.css"></style>

@@ -35,6 +35,7 @@ namespace ChildVac.WebApi.Controllers
         public ActionResult<Ticket> GetById(int id)
         {
             return _context.Tickets
+                .Include(x => x.Child)
                 .FirstOrDefault(x => x.Id == id);
         }
 

@@ -5,11 +5,8 @@
                 <b-nav-item to="/calendar">
                     Календарь
                 </b-nav-item>
-                <b-nav-item to="/create-tiket">
+                <b-nav-item to="/tiket">
                     Запись на прием
-                </b-nav-item>
-                <b-nav-item to="/create-prescription">
-                    Выписать назначение
                 </b-nav-item>
             </ul>
 

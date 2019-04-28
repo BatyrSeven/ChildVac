@@ -3,7 +3,7 @@
         path: "/", 
         name: "home",
         component: require("./views/home/home.vue").default,
-        meta: { requiresAuth: false }
+        meta: { requiresUnauth: true }
     },
     {
         path: "/calendar", 
@@ -12,15 +12,15 @@
         meta: { requiresAuth: true }
     },
     {
-        path: "/create-prescription", 
+        path: "/create-prescription/:ticket_id", 
         name: "create-prescription",
         component: require("./views/create-prescription/create-prescription.vue").default,
         meta: { requiresAuth: true }
     },
     {
-        path: "/create-tiket", 
-        name: "create-tiket",
-        component: require("./views/create-tiket/create-tiket.vue").default,
+        path: "/tiket", 
+        name: "tiket",
+        component: require("./views/tiket/tiket.vue").default,
         meta: { requiresAuth: true }
     },
     {
@@ -34,5 +34,10 @@
         name: "register-parent",
         component: require("./views/register-parent/register-parent.vue").default,
         meta: { requiresAuth: true }
+    },
+    {
+        path: "*",
+        name: "not-found",
+        component: require("./views/not-found/not-found.vue").default
     }
 ]
