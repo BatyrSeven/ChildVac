@@ -99,7 +99,11 @@ namespace ChildVac.WebApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(nullable: true),
+                    Text = table.Column<string>(nullable: true),
+                    Room = table.Column<string>(nullable: true),
                     StartDateTime = table.Column<DateTime>(nullable: false),
+                    TicketType = table.Column<int>(nullable: false),
                     ChildId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false)
                 },
@@ -126,10 +130,10 @@ namespace ChildVac.WebApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TicketId = table.Column<int>(nullable: true),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Diagnosis = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    TicketId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -139,7 +143,7 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

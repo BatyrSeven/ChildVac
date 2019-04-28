@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190424100026_InitialCreate")]
+    [Migration("20190428162946_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Hospital", b =>
                 {
@@ -54,7 +54,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Diagnosis");
 
-                    b.Property<int?>("TicketId");
+                    b.Property<int>("TicketId");
 
                     b.HasKey("Id");
 
@@ -108,7 +108,15 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<int>("DoctorId");
 
+                    b.Property<string>("Room");
+
                     b.Property<DateTime>("StartDateTime");
+
+                    b.Property<string>("Text");
+
+                    b.Property<int>("TicketType");
+
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -391,7 +399,8 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Ticket", "Ticket")
                         .WithMany()
-                        .HasForeignKey("TicketId");
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Ticket", b =>

@@ -53,13 +53,6 @@
 
 
   <ItemGroup>
-    <None Update="childvac.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-
-  <ItemGroup>
     <Folder Include="wwwroot\swagger\ui\" />
   </ItemGroup>
 

@@ -14,7 +14,7 @@ namespace ChildVac.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Hospital", b =>
                 {
@@ -52,7 +52,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Diagnosis");
 
-                    b.Property<int?>("TicketId");
+                    b.Property<int>("TicketId");
 
                     b.HasKey("Id");
 
@@ -106,7 +106,15 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<int>("DoctorId");
 
+                    b.Property<string>("Room");
+
                     b.Property<DateTime>("StartDateTime");
+
+                    b.Property<string>("Text");
+
+                    b.Property<int>("TicketType");
+
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -389,7 +397,8 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Ticket", "Ticket")
                         .WithMany()
-                        .HasForeignKey("TicketId");
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Ticket", b =>

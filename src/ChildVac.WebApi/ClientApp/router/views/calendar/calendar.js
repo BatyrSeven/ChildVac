@@ -60,8 +60,18 @@
                 }).then(response => {
                 return response.json();
             }).then(response => {
-                console.log(response);
-                this.events = response.result;
+                var events = [];
+
+                if (response.result) {
+                    response.result.forEach(ticket => {
+                        ticket.date = ticket.startDateTime.substr(0, 10).replace(/-/g, "/");
+                        ticket.time = ticket.startDateTime.substr(11, 5);
+                        ticket.title = ticket.title || "";
+                        events.push(ticket);
+                    })
+                }
+                console.log(events);
+                this.events = events;
             });
         }
     },

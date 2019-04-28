@@ -12,18 +12,19 @@
                             @dayChanged="handleDayChange">
             <template scope="props">
                 <div v-for="event in props.showEvents" :key="event.id" class="event-item">
-
                     <div class="wrapper">
                         <div class="row pt-2">
                             <div class="col-8 calendar_title">
-                                <h6>{{event.childName}}</h6>
+                                <h6 class="mb-0">{{event.child.lastName}}</h6>
+                                <p>{{event.child.firstName}} {{event.child.patronim}}</p>
                             </div>
                             <div class="col-4 text-right calendar_datetime">
-                                <span>{{event.date}} {{event.time}}</span>
+                                <div>{{event.date}}</div>
+                                <div>{{event.time}}</div>
                             </div>
                         </div>
                         <div class="pb-1 mb-2 calendar_title-wrapper">
-                            <span class="calendar_desc">ИИН: {{event.childIin}}</span>
+                            <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
                         <div>
                             <b-button class="mr-1 mb-1" variant="success" size="sm" :to="'/create-prescription/' + event.id">Назначение</b-button>

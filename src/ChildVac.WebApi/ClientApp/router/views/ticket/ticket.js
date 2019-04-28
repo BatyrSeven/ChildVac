@@ -6,7 +6,11 @@
                 childId: 0,
                 doctorId: 0,
                 date: null,
-                time: null
+                time: null,
+                title: "",
+                text: "",
+                room: "",
+                ticketType: 0
             },
             searchChildIin: '',
             children: [],
@@ -70,7 +74,11 @@
             var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify({
                 startDateTime: this.form.date + " " + this.form.time,
-                childId: this.form.childId
+                childId: this.form.childId,
+                room: this.form.room,
+                title: this.form.title,
+                text: this.form.text,
+                ticketType: this.form.ticketType
             });
             console.log("data: " + data);
 
@@ -104,8 +112,11 @@
                 id: this.ticket_id,
                 startDateTime: this.form.date + " " + this.form.time,
                 childId: this.form.childId,
-                doctorId: this.form.doctorId
-
+                doctorId: this.form.doctorId,
+                room: this.form.room,
+                title: this.form.title,
+                text: this.form.text,
+                ticketType: this.form.ticketType
             });
 
             window.fetch('/api/ticket/' + this.ticket_id,
@@ -160,6 +171,11 @@
                 if (response.doctorId) {
                     this.form.doctorId = response.doctorId;
                 }
+
+                this.form.room = response.room;
+                this.form.title = response.title;
+                this.form.text = response.text;
+                this.form.ticketType = response.ticketType;
             });
         },
         setChild(child) {

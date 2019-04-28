@@ -59,6 +59,52 @@
                 </div>
             </b-form-group>
 
+            <b-form-group label="Укажите тип приема:" label-for="input-group-ticket-type" label-cols-md="2" label-align-md="right">
+                <b-form-radio-group id="input-group-ticket-type" class="pt-2" v-model="form.ticketType" required>
+                    <b-form-radio value="1">Консультация</b-form-radio>
+                    <b-form-radio value="2">Вакцинация</b-form-radio>
+                </b-form-radio-group>
+            </b-form-group>
+
+            <b-form-group id="input-group-room" label="Кабинет:" label-for="input-room"
+                          label-cols-md="2" label-align-md="right">
+                <b-form-input id="input-room"
+                              v-model="form.room"
+                              type="number"
+                              required
+                              placeholder="Введите номер кабинета"></b-form-input>
+            </b-form-group>
+
+            <b-row>
+                <b-col sm="2" class="text-md-right">
+                    <label for="textarea-title">Заголовок:</label>
+                </b-col>
+                <b-col sm="10">
+                    <b-form-textarea id="textarea-title"
+                                     class="mb-2"
+                                     v-model="form.title"
+                                     placeholder=""
+                                     rows="2"
+                                     required
+                                     max-rows="10"></b-form-textarea>
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col sm="2" class="text-md-right">
+                    <label for="textarea-text">Текст:</label>
+                </b-col>
+                <b-col sm="10">
+                    <b-form-textarea id="textarea-text"
+                                     class="mb-2"
+                                     v-model="form.text"
+                                     placeholder=""
+                                     rows="2"
+                                     required
+                                     max-rows="10"></b-form-textarea>
+                </b-col>
+            </b-row>
+
             <b-button class="offset-md-2 mr-3" type="submit" variant="primary" :disabled="submited">
                 <span v-if="submited">
                     <b-spinner small type="grow"></b-spinner>
