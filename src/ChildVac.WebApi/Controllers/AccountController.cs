@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using ChildVac.WebApi.Infrastructure;
 using ChildVac.WebApi.Application.Models;
+using ChildVac.WebApi.Application.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ChildVac.WebApi.Controllers
 {
+    /// <summary>
+    ///     Used for authentication
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -19,38 +23,40 @@ namespace ChildVac.WebApi.Controllers
         private readonly ApplicationContext _context;
         private readonly ILogger<AccountController> _logger;
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="context">Application Database Context</param>
+        /// <param name="logger">NLong logger</param>
         public AccountController(ApplicationContext context, ILogger<AccountController> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        // GET: api/Account
+        /// <summary>
+        ///     Returns the information of User by token
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<ResponseBaseModel<UserModel>> Get()
         {
             var iin = User?.Identity?.Name;
+            var user = AccountHelper.GetUserByIin(_context, iin);
 
-            if (!string.IsNullOrWhiteSpace(iin))
+            if (user != null)
             {
-                var user = _context.Users
-                    .Include(u => u.Role)
-                    .FirstOrDefault(u => u.Iin == iin);
-
-                if (user != null)
+                return Ok(new ResponseBaseModel<UserModel>
                 {
-                    return Ok(new ResponseBaseModel<UserModel>
+                    Result = new UserModel
                     {
-                        Result = new UserModel
-                        {
-                            Id = user.Id,
-                            Iin = user.Iin,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Role = user.Role.Name
-                        }
-                    });
-                }
+                        Id = user.Id,
+                        Iin = user.Iin,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Role = user.Role.Name
+                    }
+                });
             }
 
             return NotFound(
@@ -59,9 +65,14 @@ namespace ChildVac.WebApi.Controllers
                         "Для авторизации используйте метод POST.")));
         }
 
-        // POST: api/Account
+        /// <summary>
+        ///     Generates the JWT for authorization
+        /// </summary>
+        /// <param name="request">TokenRequestModel with authorizaion data</param>
+        /// <returns>TokenResponseModel with generated JWT</returns>
         [HttpPost]
-        public ActionResult<ResponseBaseModel<TokenResponseModel>> Post([FromBody] TokenRequestModel request)
+        public ActionResult<ResponseBaseModel<TokenResponseModel>> Post(
+            [FromBody] TokenRequestModel request)
         {
             var user = _context.Users
                 .Include(u => u.Role)
