@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="pb-3">
         <navbar></navbar>
-        <b-container fluid>
+        <b-container>
             <nav-menu></nav-menu>
             <main role="main" class="pt-3">
                 <router-view></router-view>
