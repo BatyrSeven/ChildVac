@@ -23,12 +23,12 @@
         isValid() {
             var result = true;
 
-            if (this.firstName.length === 0) {
+            if (this.form.firstName.length === 0) {
                 result = false;
                 this.iinState = false;
             }
 
-            if (this.password.length === 0) {
+            if (this.form.lastName.length === 0) {
                 result = false;
                 this.passwordState = false;
             }

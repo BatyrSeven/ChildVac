@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
-        <h1 class="mb-4" v-if="ticket_id">Изменение записи на прием</h1>
-        <h1 class="mb-4" v-else>Создание записи на прием</h1>
+        <h3 class="mb-4 text-center" v-if="ticket_id">Изменение записи на прием</h3>
+        <h3 class="mb-4 text-center" v-else>Создание записи на прием</h3>
 
         <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>

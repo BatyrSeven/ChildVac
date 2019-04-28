@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <h1 class="mb-4">Регистрация родителя</h1>
+        <h3 class="mb-4 text-center">Регистрация родителя</h3>
 
         <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>

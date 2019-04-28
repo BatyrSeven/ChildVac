@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <h1 class="mb-4">Календарь</h1>
+        <h3 class="mb-4 text-center">Календарь</h3>
 
         <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>

@@ -17,6 +17,7 @@
         },
         deleteTicket() {
             this.modalDeleteShow = false;
+            this.alerts = [];
 
             var authHeader = 'Bearer ' + this.$store.state.token;
             window.fetch('/api/ticket/' + this.deleteTicketId,
@@ -31,6 +32,16 @@
                 return response.json();
             }).then(response => {
                 console.log(response);
+
+                if (response.messages) {
+                    response.messages.forEach(m => {
+                        this.alerts.push({
+                            title: m.title,
+                            text: m.text,
+                            variant: response.result ? "success" : "danger"
+                        });
+                    });
+                }
 
                 this.getTickets();
             });
