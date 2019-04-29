@@ -91,7 +91,12 @@ namespace ChildVac.WebApi
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services
+                .AddMvc()
+                .AddFluentValidation()
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // TODO: вытащить в extension
             services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
