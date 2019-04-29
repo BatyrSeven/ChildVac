@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ChildVac.WebApi.Domain.Entities
 {
@@ -56,5 +57,10 @@ namespace ChildVac.WebApi.Domain.Entities
         ///     Doctor
         /// </summary>
         public Doctor Doctor { get; set; }
+
+        /// <summary>
+        ///     List of binded prescriptions
+        /// </summary>
+        public List<Prescription> Prescriptions { get; set; }
     }
 }

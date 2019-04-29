@@ -75,6 +75,7 @@ namespace ChildVac.WebApi.Controllers
                 var tickets = _context.Tickets
                     .Where(x => x.DoctorId == doctorId)
                     .Include(x => x.Child)
+                    .Include(x => x.Prescriptions)
                     .OrderBy(x => x.StartDateTime);
 
                 return Ok(new ResponseBaseModel<IEnumerable<Ticket>>

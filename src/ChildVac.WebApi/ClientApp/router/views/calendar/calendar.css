@@ -16,3 +16,17 @@
     color: #9b9b9b;
     font-size: 14px;
 }
+
+.calendar_prescription {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.calendar_prescription-title {
+    color: #323232;
+    font-size: 16px;
+}
+
+.calendar_prescription-text {
+    color: #9b9b9b;
+    font-size: 14px;
+}

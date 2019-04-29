@@ -26,6 +26,10 @@
                         <div class="pb-1 mb-2 calendar_title-wrapper">
                             <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
+                        <div v-for="prescription in event.prescriptions" :key="prescription.id" class="calendar_prescription mb-2 pb-1">
+                            <p class="calendar_prescription-title">Диагноз: {{prescription.diagnosis}}</p>
+                            <p class="calendar_prescription-text">Примечания: {{prescription.description}}</p>
+                        </div>
                         <div>
                             <b-button class="mr-1 mb-1" variant="success" size="sm" :to="'/create-prescription/' + event.id">Назначение</b-button>
                             <b-button class="mr-1 mb-1" variant="primary" size="sm" :to="'/ticket/' + event.id">Изменить</b-button>

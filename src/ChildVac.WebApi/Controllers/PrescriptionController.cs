@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Application.Models;
@@ -87,6 +88,7 @@ namespace ChildVac.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<MessageResponseModel>> Post([FromBody] Prescription prescription)
         {
+            prescription.DateTime = DateTime.Now;
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
 
