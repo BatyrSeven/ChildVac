@@ -2,7 +2,7 @@
     <div>
         <h3 class="mb-4 text-center">Регистрация родителя</h3>
 
-        <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+        <b-alert v-for="(alert, index) in alerts" :key="index" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>
             <br />
             <span>{{alert.text}}</span>

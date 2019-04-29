@@ -2,7 +2,7 @@
     <div>
         <h3 class="mb-4 text-center">Календарь</h3>
 
-        <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+        <b-alert v-for="(alert, index) in alerts" :key="index" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>
             <br />
             <span>{{alert.text}}</span>
@@ -10,7 +10,7 @@
 
         <vue-event-calendar :events="events"
                             @dayChanged="handleDayChange">
-            <template scope="props">
+            <template slot-scope="props">
                 <div v-for="event in props.showEvents" :key="event.id" class="event-item">
                     <div class="wrapper">
                         <div class="row pt-2">

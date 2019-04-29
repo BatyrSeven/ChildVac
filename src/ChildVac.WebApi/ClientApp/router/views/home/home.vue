@@ -6,7 +6,7 @@
 
         <div class="home__formWrapper mb-4">
 
-            <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+            <b-alert v-for="(alert, index) in alerts" :key="index" :variant="alert.variant" show dismissible>
                 <strong>{{alert.title}}</strong>
                 <br />
                 <span>{{alert.text}}</span>

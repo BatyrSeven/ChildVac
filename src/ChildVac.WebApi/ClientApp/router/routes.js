@@ -45,5 +45,10 @@
         path: "*",
         name: "not-found",
         component: require("./views/not-found/not-found.vue").default
-    }
+    },
+    {
+        path: "/feedback", 
+        name: "feedback",
+        component: require("./views/feedback/feedback.vue").default
+    },
 ]
