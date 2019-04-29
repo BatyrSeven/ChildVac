@@ -25,7 +25,17 @@ namespace ChildVac.WebApi.Domain.Entities
         /// <summary>
         ///     Additional notes
         /// </summary>
+        public string Medication { get; set; }
+
+        /// <summary>
+        ///     Additional notes
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        ///     Prescription type
+        /// </summary>
+        public string Type { get; set; }
 
         /// <summary>
         ///     Id of binded Ticket

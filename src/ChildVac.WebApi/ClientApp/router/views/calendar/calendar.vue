@@ -27,8 +27,22 @@
                             <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
                         <div v-for="prescription in event.prescriptions" :key="prescription.id" class="calendar_prescription mb-2 pb-1">
-                            <p class="calendar_prescription-title">Диагноз: {{prescription.diagnosis}}</p>
-                            <p class="calendar_prescription-text">Примечания: {{prescription.description}}</p>
+                            <p v-if="prescription.type"
+                               class="calendar_prescription-title">
+                                {{prescription.type}}
+                            </p>
+                            <p v-if="prescription.diagnosis"
+                               class="calendar_prescription-text">
+                                Диагноз: {{prescription.diagnosis}}
+                            </p>
+                            <p v-if="prescription.medication"
+                               class="calendar_prescription-text">
+                                Лечение: {{prescription.medication}}
+                            </p>
+                            <p v-if="prescription.description"
+                               class="calendar_prescription-text">
+                                Примечания: {{prescription.description}}
+                            </p>
                         </div>
                         <div>
                             <b-button class="mr-1 mb-1" variant="success" size="sm" :to="'/create-prescription/' + event.id">Назначение</b-button>

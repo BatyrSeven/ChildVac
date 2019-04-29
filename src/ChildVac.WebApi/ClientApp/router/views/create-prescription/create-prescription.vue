@@ -28,6 +28,16 @@
                 </b-col>
             </b-row>
 
+            <b-form-group id="input-group-type"
+                          label="Тип приема:"
+                          label-for="input-type"
+                          label-cols-md="2"
+                          label-align-md="right">
+                <b-form-input id="input-type"
+                              v-model="form.type"
+                              placeholder="Укажите тип приема"></b-form-input>
+            </b-form-group>
+
             <b-row>
                 <b-col sm="2" class="text-md-right">
                     <label for="textarea-small">Диагноз:</label>
@@ -36,9 +46,22 @@
                     <b-form-textarea id="textarea"
                                      class="mb-2"
                                      v-model="form.diagnosis"
-                                     placeholder=""
+                                     placeholder="Укажите диагноз"
                                      rows="2"
-                                     required
+                                     max-rows="10"></b-form-textarea>
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col sm="2" class="text-md-right">
+                    <label for="textarea-small">Лечение:</label>
+                </b-col>
+                <b-col sm="10">
+                    <b-form-textarea id="textarea"
+                                     class="mb-2"
+                                     v-model="form.medication"
+                                     placeholder="Выпишите необходимые лекарства"
+                                     rows="2"
                                      max-rows="10"></b-form-textarea>
                 </b-col>
             </b-row>
@@ -51,13 +74,16 @@
                     <b-form-textarea id="textarea"
                                      class="mb-2"
                                      v-model="form.description"
-                                     placeholder=""
+                                     placeholder="Для дополнительной информации"
                                      rows="2"
                                      max-rows="10"></b-form-textarea>
                 </b-col>
             </b-row>
 
-            <b-button class="offset-md-2 mr-3" type="submit" variant="primary" :disabled="submited">
+            <b-button class="offset-md-2 mr-3" 
+                      type="submit" 
+                      variant="primary" 
+                      :disabled="submited">
                 <span v-if="submited">
                     <b-spinner small type="grow"></b-spinner>
                     Загрузка...

@@ -11,7 +11,9 @@
             },
             form: {
                 diagnosis: "",
-                description: ""
+                description: "",
+                type: "",
+                medication: ""
             }
         }
     },
@@ -26,7 +28,9 @@
             let data = JSON.stringify({
                 diagnosis: this.form.diagnosis,
                 description: this.form.description,
-                ticketId: this.ticket_id
+                ticketId: this.ticket_id,
+                medication: this.form.medication,
+                type: this.form.type
             });
             console.log("data: " + data);
 
