@@ -6,6 +6,7 @@
                 lastName: '',
                 patronim: '',
                 iin: '',
+                phoneNumber: '',
                 address: '',
                 gender: 0
             },
