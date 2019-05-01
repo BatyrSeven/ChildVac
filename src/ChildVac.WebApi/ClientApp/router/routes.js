@@ -51,4 +51,19 @@
         name: "feedback",
         component: require("./views/feedback/feedback.vue").default
     },
+    {
+        path: "/complain/:user_id",
+        name: "feedback",
+        component: require("./views/feedback/feedback.vue").default
+    },
+    {
+        path: "/rate/:user_id",
+        name: "feedback",
+        component: require("./views/feedback/feedback.vue").default
+    },
+    {
+        path: "/faq",
+        name: "faq",
+        component: require("./views/faq/faq.vue").default
+    },
 ]

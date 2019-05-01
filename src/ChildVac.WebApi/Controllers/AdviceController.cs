@@ -32,8 +32,18 @@ namespace ChildVac.WebApi.Controllers
         ///     Returns all Advices
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
+        public IEnumerable<Advice> Get()
+        {
+            return _context.Advices;
+        }
+
+        /// <summary>
+        ///     Returns random Advice
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("random")]
-        public Advice Get()
+        public Advice GetRandom()
         {
             var advices = _context.Advices.ToList();
             var length = advices.Count();
