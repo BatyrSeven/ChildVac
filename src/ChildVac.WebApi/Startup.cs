@@ -95,7 +95,11 @@ namespace ChildVac.WebApi
             services
                 .AddMvc()
                 .AddFluentValidation()
-                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddJsonOptions(x =>
+                {
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    x.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss";
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // TODO: вытащить в extension
