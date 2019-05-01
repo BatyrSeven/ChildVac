@@ -20,6 +20,7 @@ namespace ChildVac.WebApi.Infrastructure
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new AdminDbConfiguration());
+            modelBuilder.ApplyConfiguration(new AdviceDbConfiguration());
             modelBuilder.ApplyConfiguration(new ChildDbConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorDbConfiguration());
             modelBuilder.ApplyConfiguration(new FeedbackDbConfiguration());
@@ -33,6 +34,7 @@ namespace ChildVac.WebApi.Infrastructure
         }
 
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Advice> Advices { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }

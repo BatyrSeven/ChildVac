@@ -180,6 +180,7 @@
                 this.form.title = response.title;
                 this.form.text = response.text;
                 this.form.ticketType = response.ticketType;
+                this.form.vaccineId = response.vaccineId;
             });
         },
         setChild(child) {
