@@ -9,7 +9,8 @@
         </b-alert>
 
         <b-form @submit="onSubmit">
-            <b-form-group id="input-group-doctor-name" label="Имя врача:" label-for="input-doctor-name" label-cols-md="2" label-align-md="right">
+            <b-form-group id="input-group-doctor-name" label="Ваш лечащий врач:" label-for="input-doctor-name" 
+                          label-cols-md="2" label-align-md="right">
                 <b-form-input id="input-doctor-name"
                               v-model="form.doctorName"
                               required

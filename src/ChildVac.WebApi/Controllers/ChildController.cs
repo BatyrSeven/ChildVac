@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Application.Models;
+using ChildVac.WebApi.Application.Utils;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -11,25 +12,42 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChildVac.WebApi.Controllers
 {
+    /// <summary>
+    ///     Everything about Child
+    /// </summary>
     [Route("api/[controller]")]
     public class ChildController : Controller
     {
         private readonly ApplicationContext _context;
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="context">Application DB context</param>
         public ChildController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/<controller>
+        /// <summary>
+        ///     Return the list of Parent's children
+        /// </summary>
+        /// <returns>List of Parent's children</returns>
+        [Authorize(Roles="Parent")]
         [HttpGet]
         public async Task<ActionResult<ResponseBaseModel<IEnumerable<Child>>>> Get()
         {
             try
             {
+                var iin = User.Identity.Name;
+                var parent = AccountHelper.GetParentByIin(_context, iin);
+                var children = _context.Children
+                    .Where(x => x.ParentId == parent.Id)
+                    .Include(x => x.Parent);
+
                 return Ok(new ResponseBaseModel<IEnumerable<Child>>
                 {
-                    Result = await _context.Children.ToListAsync()
+                    Result = children
                 });
             }
             catch (Exception)
@@ -40,7 +58,11 @@ namespace ChildVac.WebApi.Controllers
             }
         }
 
-        // GET api/<controller>/5
+        /// <summary>
+        ///     Returns Child by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseBaseModel<Child>>> GetById(int id)
         {
@@ -59,6 +81,11 @@ namespace ChildVac.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        ///     Searches children by IIN (min length = 4)
+        /// </summary>
+        /// <param name="iin">Child IIN</param>
+        /// <returns>List of children that IIN match</returns>
         [HttpGet("iin/{iin}")]
         public ActionResult<ResponseBaseModel<IEnumerable<Child>>> FindByIin(string iin)
         {
@@ -84,7 +111,11 @@ namespace ChildVac.WebApi.Controllers
             }
         }
 
-        // POST api/<controller>
+        /// <summary>
+        ///     Adds new Child
+        /// </summary>
+        /// <param name="child"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
         public async Task<ActionResult<MessageResponseModel>> Post([FromBody]Child child)
@@ -117,7 +148,12 @@ namespace ChildVac.WebApi.Controllers
                     new MessageModel("Регистрация прошла успешно!")));
         }
 
-        // PUT api/<controller>/5
+        /// <summary>
+        ///     Updates Child by ID
+        /// </summary>
+        /// <param name="id">Child Id</param>
+        /// <param name="newChild">New Child entity</param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
         public async Task<ActionResult<MessageResponseModel>> Put(int id, [FromBody]Child newChild)
@@ -140,7 +176,11 @@ namespace ChildVac.WebApi.Controllers
                     new MessageModel("Данные были успешно обновлены.")));
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        ///     Deletes Child by Id
+        /// </summary>
+        /// <param name="id">Child Id</param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<MessageResponseModel>> Delete(int id)

@@ -43,6 +43,7 @@ namespace ChildVac.WebApi.Controllers
         {
             try
             {
+                feedback.DateTime = DateTime.Now;
                 _context.Feedbacks.Add(feedback);
                 await _context.SaveChangesAsync();
             }

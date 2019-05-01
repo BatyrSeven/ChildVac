@@ -9,7 +9,7 @@
                     <font-awesome-icon icon="user-md" size="lg" />
                     <strong>{{userName}}</strong>
                 </template>
-                <b-dropdown-item to="/profile">Профиль</b-dropdown-item>
+                <!--<b-dropdown-item to="/profile">Профиль</b-dropdown-item>-->
                 <b-dropdown-item @click="logout">Выйти</b-dropdown-item>
             </b-nav-item-dropdown>
         </b-navbar-nav>

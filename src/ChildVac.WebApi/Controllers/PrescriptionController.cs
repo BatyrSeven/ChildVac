@@ -44,6 +44,7 @@ namespace ChildVac.WebApi.Controllers
             var childrenIdList = parent.Children.Select(x => x.Id);
             var prescriptions = _context.Prescriptions
                 .Include(x => x.Ticket)
+                    .ThenInclude(x => x.Doctor)
                 .Where(x => childrenIdList.Contains(x.Ticket.ChildId))
                 .OrderBy(x => x.Id);
 

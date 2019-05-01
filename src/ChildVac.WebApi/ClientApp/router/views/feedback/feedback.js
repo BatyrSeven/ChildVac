@@ -2,18 +2,16 @@
     data() {
         return {
             form: {
-                firstName: '',
-                lastName: '',
-                patronim: '',
-                iin: '',
-                address: '',
-                gender: 0
+                doctorName: '',
+                hospital: '',
+                text: '',
+                rate: '',
+                userId: this.$route.params.user_id
             },
             show: true,
             alerts: [],
             submited: false,
             rateOptions: [1, 2, 3, 4, 5]
-
         }
     },
     methods: {
@@ -22,16 +20,14 @@
             this.alerts = [];
             this.submited = true;
 
-            var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify(this.form);
             console.log("data: " + data);
 
-            window.fetch('/api/parent', {
+            window.fetch('/api/feedback', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json',
-                    'Authorization': authHeader
+                    'Content-Type': 'application/json'
                 },
                 body: data
             }).then(response => {

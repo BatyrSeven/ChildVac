@@ -20,7 +20,7 @@
             show: true,
             alerts: [],
             submited: false,
-            vaccines: [1, 2]
+            vaccines: ["Загрузка..."]
         }
     },
     watch: {
