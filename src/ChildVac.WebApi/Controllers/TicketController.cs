@@ -44,6 +44,7 @@ namespace ChildVac.WebApi.Controllers
             var tickets = _context.Tickets
                 .Where(x => childrenIdList.Contains(x.ChildId))
                 .Include(x => x.Doctor)
+                .Include(x => x.Vaccine)
                 .OrderBy(x => x.Id);
 
             return Ok(tickets);

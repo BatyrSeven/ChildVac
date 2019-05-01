@@ -29,7 +29,6 @@ namespace ChildVac.WebApi.Infrastructure
             modelBuilder.ApplyConfiguration(new RoleDbConfiguration());
             modelBuilder.ApplyConfiguration(new TicketDbConfiguration());
             modelBuilder.ApplyConfiguration(new UserDbConfiguration());
-            modelBuilder.ApplyConfiguration(new VaccinationDbConfiguration());
             modelBuilder.ApplyConfiguration(new VaccineDbConfiguration());
         }
 
@@ -43,7 +42,6 @@ namespace ChildVac.WebApi.Infrastructure
         public DbSet<Role> Roles { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Vaccination> Vaccinations { get; set; }
         public DbSet<Vaccine> Vaccines { get; set; }
     }
 }

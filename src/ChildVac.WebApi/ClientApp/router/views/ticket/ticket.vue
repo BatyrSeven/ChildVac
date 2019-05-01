@@ -59,11 +59,19 @@
                 </div>
             </b-form-group>
 
-            <b-form-group label="Укажите тип приема:" label-for="input-group-ticket-type" label-cols-md="2" label-align-md="right">
+            <b-form-group label="Тип приема:" label-for="input-group-ticket-type" label-cols-md="2" label-align-md="right">
                 <b-form-radio-group id="input-group-ticket-type" class="pt-2" v-model="form.ticketType" required>
                     <b-form-radio value="1">Консультация</b-form-radio>
                     <b-form-radio value="2">Вакцинация</b-form-radio>
                 </b-form-radio-group>
+            </b-form-group>
+
+            <b-form-group v-if="form.ticketType == 2" label="Вакцина:" label-for="input-group-vaccine" label-cols-md="2" label-align-md="right">
+                <b-form-select v-model="form.vaccineId" id="input-group-vaccine" :options="vaccines">
+                    <template slot="first">
+                        <option :value="null" disabled>Выберите вакцину</option>
+                    </template>
+                </b-form-select>
             </b-form-group>
 
             <b-form-group id="input-group-room" label="Кабинет:" label-for="input-room"
@@ -100,7 +108,6 @@
                                      v-model="form.text"
                                      placeholder=""
                                      rows="2"
-                                     required
                                      max-rows="10"></b-form-textarea>
                 </b-col>
             </b-row>

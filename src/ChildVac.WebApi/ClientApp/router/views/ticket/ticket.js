@@ -10,7 +10,8 @@
                 title: "",
                 text: "",
                 room: "",
-                ticketType: 0
+                ticketType: 0,
+                vaccineId: null
             },
             searchChildIin: '',
             children: [],
@@ -18,7 +19,8 @@
             child: "",
             show: true,
             alerts: [],
-            submited: false
+            submited: false,
+            vaccines: [1, 2]
         }
     },
     watch: {
@@ -78,7 +80,8 @@
                 room: this.form.room,
                 title: this.form.title,
                 text: this.form.text,
-                ticketType: this.form.ticketType
+                ticketType: this.form.ticketType,
+                vaccineId: this.form.vaccineId
             });
             console.log("data: " + data);
 
@@ -116,7 +119,8 @@
                 room: this.form.room,
                 title: this.form.title,
                 text: this.form.text,
-                ticketType: this.form.ticketType
+                ticketType: this.form.ticketType,
+                vaccineId: this.form.vaccineId
             });
 
             window.fetch('/api/ticket/' + this.ticket_id,
@@ -196,10 +200,30 @@
                 var children = [];
                 var childrenJson = response.result;
                 childrenJson.forEach(child => {
-                    children.push({ value: child.id, text: child.iin + " - " + child.firstName + " " + child.lastName + " " + child.patronim });
+                    children.push({ value: child.id, text: child.iin + " - " + child.lastName + " " + child.firstName + " " + child.patronim });
                 });
 
                 this.children = children;
+            });
+        },
+        getVaccines() {
+            window.fetch('/api/vaccine', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                return response.json();
+            }).then(response => {
+                console.log(response);
+                var vaccines = [];
+                var vaccinesJson = response;
+                vaccinesJson.forEach(vaccine => {
+                    vaccines.push({ value: vaccine.id, text: vaccine.name + " - на " + vaccine.recieveMonth + " месяц" });
+                });
+
+                this.vaccines = vaccines;
             });
         },
         resetSearchChildSuggestions() {
@@ -213,5 +237,7 @@
         if (this.ticket_id) {
             this.getTicket();
         }
+
+        this.getVaccines();
     }
 }

@@ -94,6 +94,28 @@ namespace ChildVac.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    DoctorName = table.Column<string>(nullable: true),
+                    Text = table.Column<string>(maxLength: 10000, nullable: false),
+                    DateTime = table.Column<DateTime>(nullable: false),
+                    Rate = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedbacks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
@@ -104,6 +126,7 @@ namespace ChildVac.WebApi.Migrations
                     Room = table.Column<string>(nullable: true),
                     StartDateTime = table.Column<DateTime>(nullable: false),
                     TicketType = table.Column<int>(nullable: false),
+                    VaccineId = table.Column<int>(nullable: false),
                     ChildId = table.Column<int>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false)
                 },
@@ -122,6 +145,12 @@ namespace ChildVac.WebApi.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Vaccines_VaccineId",
+                        column: x => x.VaccineId,
+                        principalTable: "Vaccines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,7 +161,9 @@ namespace ChildVac.WebApi.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Diagnosis = table.Column<string>(nullable: true),
+                    Medication = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
                     TicketId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -144,33 +175,6 @@ namespace ChildVac.WebApi.Migrations
                         principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vaccinations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    VaccineId = table.Column<int>(nullable: true),
-                    TicketId = table.Column<int>(nullable: true),
-                    DateTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vaccinations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Vaccinations_Tickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Tickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Vaccinations_Vaccines_VaccineId",
-                        column: x => x.VaccineId,
-                        principalTable: "Vaccines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -284,6 +288,11 @@ namespace ChildVac.WebApi.Migrations
                 values: new object[] { 2, "Doctor", "Test", 1, "970812300739", "Doctor", "test", "Testovich", 3, 1, "7087260265" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_UserId",
+                table: "Feedbacks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_TicketId",
                 table: "Prescriptions",
                 column: "TicketId");
@@ -297,6 +306,11 @@ namespace ChildVac.WebApi.Migrations
                 name: "IX_Tickets_DoctorId",
                 table: "Tickets",
                 column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_VaccineId",
+                table: "Tickets",
+                column: "VaccineId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ParentId",
@@ -318,34 +332,24 @@ namespace ChildVac.WebApi.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vaccinations_TicketId",
-                table: "Vaccinations",
-                column: "TicketId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vaccinations_VaccineId",
-                table: "Vaccinations",
-                column: "VaccineId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Prescriptions");
+                name: "Feedbacks");
 
             migrationBuilder.DropTable(
-                name: "Vaccinations");
+                name: "Prescriptions");
 
             migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Vaccines");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Vaccines");
 
             migrationBuilder.DropTable(
                 name: "Hospitals");

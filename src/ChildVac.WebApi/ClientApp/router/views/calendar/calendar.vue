@@ -26,6 +26,9 @@
                         <div class="pb-1 mb-2 calendar_title-wrapper">
                             <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
+                        <div class="pb-1 mb-2">
+                            <span class="calendar_desc">{{event.title}}</span>
+                        </div>
                         <div v-for="prescription in event.prescriptions" :key="prescription.id" class="calendar_prescription mb-2 pb-1">
                             <p v-if="prescription.type"
                                class="calendar_prescription-title">

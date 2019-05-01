@@ -39,6 +39,16 @@ namespace ChildVac.WebApi.Domain.Entities
         public TicketType TicketType {get;set;}
 
         /// <summary>
+        ///     Id of Vaccine type in case if TicketType is Vaccination
+        /// </summary>
+        public int VaccineId { get; set; }
+
+        /// <summary>
+        ///     Vaccine type in case if TicketType is Vaccination
+        /// </summary>
+        public Vaccine Vaccine { get; set; }
+
+        /// <summary>
         ///     Child Id
         /// </summary>
         public int ChildId { get; set; }

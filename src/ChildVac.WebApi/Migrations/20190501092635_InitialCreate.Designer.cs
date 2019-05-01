@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190429131549_Feedback")]
-    partial class Feedback
+    [Migration("20190501092635_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,7 +78,11 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Diagnosis");
 
+                    b.Property<string>("Medication");
+
                     b.Property<int>("TicketId");
+
+                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
@@ -142,11 +146,15 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("VaccineId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChildId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("VaccineId");
 
                     b.ToTable("Tickets");
                 });
@@ -192,26 +200,6 @@ namespace ChildVac.WebApi.Migrations
                     b.ToTable("Users");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
-                });
-
-            modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Vaccination", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateTime");
-
-                    b.Property<int?>("TicketId");
-
-                    b.Property<int?>("VaccineId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TicketId");
-
-                    b.HasIndex("VaccineId");
-
-                    b.ToTable("Vaccinations");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Vaccine", b =>
@@ -446,6 +434,11 @@ namespace ChildVac.WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ChildVac.WebApi.Domain.Entities.Vaccine", "Vaccine")
+                        .WithMany()
+                        .HasForeignKey("VaccineId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.User", b =>
@@ -453,17 +446,6 @@ namespace ChildVac.WebApi.Migrations
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId");
-                });
-
-            modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Vaccination", b =>
-                {
-                    b.HasOne("ChildVac.WebApi.Domain.Entities.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId");
-
-                    b.HasOne("ChildVac.WebApi.Domain.Entities.Vaccine", "Vaccine")
-                        .WithMany()
-                        .HasForeignKey("VaccineId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Child", b =>
