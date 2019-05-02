@@ -106,7 +106,7 @@ namespace ChildVac.WebApi
 
             // TODO: вытащить в extension
             services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
-            services.AddTransient<IValidator<Ticket>, TicketValidator>();
+
 
             services.AddSwaggerGen(c =>
             {

@@ -104,6 +104,13 @@ namespace ChildVac.WebApi.Controllers
         {
             try
             {
+                if (ticket.StartDateTime < DateTime.Now)
+                {
+                    return BadRequest(new MessageResponseModel(false,
+                        new MessageModel("Время приема должно быть позже настоящего времени.",
+                            "Укажите корректное значение")));
+                }
+
                 var iin = User?.Identity?.Name;
                 var user = AccountHelper.GetUserByIin(_context, iin);
                 ticket.DoctorId = user.Id;

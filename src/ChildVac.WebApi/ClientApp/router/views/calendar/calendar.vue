@@ -54,9 +54,26 @@
                             </p>
                         </div>
                         <div>
-                            <b-button class="mr-1 mb-1" variant="success" size="sm" :to="'/create-prescription/' + event.id">Назначение</b-button>
-                            <b-button class="mr-1 mb-1" variant="primary" size="sm" :to="'/ticket/' + event.id">Изменить</b-button>
-                            <b-button class="mb-1" variant="danger" size="sm" @click="onCancelTicket(event.id)">Отменить</b-button>
+                            <b-button v-if="event.status==1"
+                                      class="mr-1 mb-1"
+                                      variant="success"
+                                      size="sm"
+                                      :to="'/create-prescription/' + event.id">
+                                Назначение
+                            </b-button>
+                            <b-button class="mr-1 mb-1"
+                                      variant="primary"
+                                      size="sm"
+                                      :to="'/ticket/' + event.id">
+                                Изменить
+                            </b-button>
+                            <b-button v-if="event.status!=3"
+                                      class="mb-1"
+                                      variant="danger"
+                                      size="sm"
+                                      @click="onCancelTicket(event.id)">
+                                Отменить
+                            </b-button>
                         </div>
                     </div>
                 </div>
