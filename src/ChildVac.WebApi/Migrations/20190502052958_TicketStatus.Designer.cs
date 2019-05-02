@@ -3,14 +3,16 @@ using System;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190502052958_TicketStatus")]
+    partial class TicketStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,7 +191,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int?>("VaccineId");
+                    b.Property<int>("VaccineId");
 
                     b.HasKey("Id");
 
@@ -480,7 +482,8 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Vaccine", "Vaccine")
                         .WithMany()
-                        .HasForeignKey("VaccineId");
+                        .HasForeignKey("VaccineId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.User", b =>

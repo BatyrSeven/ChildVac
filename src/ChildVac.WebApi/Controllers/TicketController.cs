@@ -107,6 +107,8 @@ namespace ChildVac.WebApi.Controllers
                 var iin = User?.Identity?.Name;
                 var user = AccountHelper.GetUserByIin(_context, iin);
                 ticket.DoctorId = user.Id;
+                ticket.Status = TicketStatus.Waiting;
+
                 _context.Tickets.Add(ticket);
                 await _context.SaveChangesAsync();
             }
@@ -126,7 +128,7 @@ namespace ChildVac.WebApi.Controllers
         ///     Updates Ticket by Id
         /// </summary>
         /// <param name="id">Ticket id</param>
-        /// <param name="ticket">new Ticket model</param>
+        /// <param name="ticket">New Ticket model</param>
         /// <returns>Response with message of request status</returns>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
@@ -137,6 +139,7 @@ namespace ChildVac.WebApi.Controllers
                 if (ticket == null)
                     return NotFound();
 
+                ticket.Status = TicketStatus.Waiting;
                 _context.Tickets.Update(ticket);
                 await _context.SaveChangesAsync();
             }
@@ -149,6 +152,37 @@ namespace ChildVac.WebApi.Controllers
 
             return Ok(new MessageResponseModel(true,
                 new MessageModel("Данные успешно обновлены")));
+        }
+
+        /// <summary>
+        ///     Updates the status of Ticket by Id
+        /// </summary>
+        /// <param name="id">Ticket id</param>
+        /// <param name="ticketWithNewStatus">Ticket with new status</param>
+        /// <returns>Response with message of request status</returns>
+        [Authorize]
+        [HttpPatch("{id}/status")]
+        public async Task<ActionResult<MessageResponseModel>> PatchStatus(int id, [FromBody] Ticket ticketWithNewStatus)
+        {
+            try
+            {
+                var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
+                if (ticket == null)
+                    return NotFound();
+
+                ticket.Status = ticketWithNewStatus.Status;
+                _context.Tickets.Update(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
+
+            return Ok(new MessageResponseModel(true,
+                new MessageModel("Статус был успешно обновлен.")));
         }
 
         /// <summary>
