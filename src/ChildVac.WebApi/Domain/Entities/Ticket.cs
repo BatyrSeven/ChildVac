@@ -72,5 +72,14 @@ namespace ChildVac.WebApi.Domain.Entities
         ///     List of binded prescriptions
         /// </summary>
         public List<Prescription> Prescriptions { get; set; }
+
+        /// <summary>
+        ///     Ticket status:
+        ///     0 - Undefined,
+        ///     1 - Waiting,
+        ///     2 - Closed,
+        ///     3 - Canceled
+        /// </summary>
+        public TicketStatus Status { get; set; }
     }
 }
