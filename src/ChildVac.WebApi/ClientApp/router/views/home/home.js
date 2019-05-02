@@ -93,7 +93,7 @@
                     }
                 }).catch(error => {
                     console.log(error);
-
+                    this.submited = false;
                     this.alerts.push({
                         title: "Что-то пошло не так...",
                         text: "Попробуйте повторить чуть позже.",

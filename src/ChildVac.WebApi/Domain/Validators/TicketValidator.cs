@@ -1,5 +1,6 @@
 ﻿using ChildVac.WebApi.Domain.Entities;
 using FluentValidation;
+using System;
 
 namespace ChildVac.WebApi.Domain.Validators
 {
@@ -7,11 +8,9 @@ namespace ChildVac.WebApi.Domain.Validators
     {
         public TicketValidator()
         {
-            RuleFor(x => x.Child)
-                .NotNull();
-
-            RuleFor(x => x.Doctor)
-                .NotNull();
+            RuleFor(x => x.StartDateTime)
+                .GreaterThan(DateTime.Now)
+                .WithMessage("Время приема должно быть позже настоящего времени.");
         }
     }
 }
