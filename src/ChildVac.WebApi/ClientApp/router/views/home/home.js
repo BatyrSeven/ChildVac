@@ -61,7 +61,7 @@
                     if (response.result) {
                         this.alerts = [];
                         this.$router.push("/calendar");
-                    } else {
+                    } else if (response.messages) {
                         response.messages.forEach(m => {
                             this.alerts.push({
                                 title: m.title,
@@ -69,9 +69,31 @@
                                 variant: "danger"
                             });
                         });
+                    } else if (response.errors) {
+
+                        var errors = response.errors;
+                        var keys = Object.keys(errors);
+                        console.log(keys);
+
+                        keys.forEach(key => {
+                            errors[key].forEach(error => {
+                                this.alerts.push({
+                                    title: error,
+                                    text: "",
+                                    variant: "danger"
+                                });
+                            });
+                        });
+                    } else {
+                        this.alerts.push({
+                            title: "Что-то пошло не так...",
+                            text: "Попробуйте повторить чуть позже.",
+                            variant: "danger"
+                        });
                     }
                 }).catch(error => {
                     console.log(error);
+
                     this.alerts.push({
                         title: "Что-то пошло не так...",
                         text: "Попробуйте повторить чуть позже.",

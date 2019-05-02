@@ -19,6 +19,23 @@
             submited: false
         }
     },
+    computed: {
+        isValid() {
+            var result = true;
+
+            if (this.form.firstName.length === 0) {
+                result = false;
+                this.iinState = false;
+            }
+
+            if (this.form.lastName.length === 0) {
+                result = false;
+                this.passwordState = false;
+            }
+
+            return result;
+        }
+    },
     watch: {
         searchParentIin(newValue) {
             this.parents = [];
@@ -59,6 +76,11 @@
     methods: {
         onSubmit(evt) {
             evt.preventDefault();
+
+            if (!this.isValid) {
+                return;
+            }
+
             this.alerts = [];
             this.submited = true;
 

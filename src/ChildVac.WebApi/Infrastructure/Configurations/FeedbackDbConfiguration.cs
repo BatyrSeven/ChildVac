@@ -4,10 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChildVac.WebApi.Infrastructure.Configurations
 {
-    public class VaccinationDbConfiguration : IEntityTypeConfiguration<Vaccination>
+    public class FeedbackDbConfiguration : IEntityTypeConfiguration<Feedback>
     {
-        public void Configure(EntityTypeBuilder<Vaccination> builder)
+        public void Configure(EntityTypeBuilder<Feedback> builder)
         {
+            builder.Property(x => x.Text)
+                .IsRequired()
+                .HasMaxLength(10000);
+
             builder.Property(x => x.DateTime)
                 .IsRequired();
         }

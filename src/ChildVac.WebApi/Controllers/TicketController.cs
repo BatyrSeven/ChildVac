@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Application.Models;
+using ChildVac.WebApi.Application.Utils;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -11,51 +12,77 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChildVac.WebApi.Controllers
 {
+    /// <summary>
+    ///     Everything with Tickets
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TicketController : ControllerBase
     {
         private readonly ApplicationContext _context;
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="context">Application Database Context</param>
         public TicketController(ApplicationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Ticket
+        /// <summary>
+        ///     Returns all Tickets of parent's child
+        /// </summary>
+        /// <returns>List of tickets</returns>
+        [Authorize(Roles = "Parent")]
         [HttpGet]
         public ActionResult<IEnumerable<Ticket>> Get()
         {
-            return Ok(_context.Tickets
-                .OrderBy(x => x.Id));
+            var iin = User.Identity.Name;
+            var parent = AccountHelper.GetParentByIin(_context, iin);
+            var childrenIdList = parent.Children.Select(x => x.Id);
+            var tickets = _context.Tickets
+                .Where(x => childrenIdList.Contains(x.ChildId))
+                .Include(x => x.Doctor)
+                .Include(x => x.Vaccine)
+                .OrderBy(x => x.Id);
+
+            return Ok(tickets);
         }
 
-        // GET: api/Ticket/5
+        /// <summary>
+        ///     Finds Ticket by Id
+        /// </summary>
+        /// <param name="id">Ticket Id</param>
+        /// <returns>Found ticket</returns>
         [HttpGet("{id}")]
         public ActionResult<Ticket> GetById(int id)
         {
             return _context.Tickets
+                .Include(x => x.Child)
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        // GET: api/Ticket/doctor/5
+        /// <summary>
+        ///     Return the tickets created by the doctor
+        /// </summary>
+        /// <param name="doctorId"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Admin, Doctor")]
         [HttpGet("doctor/{doctorId}")]
-        public ActionResult<ResponseBaseModel<IEnumerable<TicketResponseModel>>> GetByDoctorId(int doctorId)
+        public ActionResult<ResponseBaseModel<IEnumerable<Ticket>>> GetByDoctorId(int doctorId)
         {
             try
             {
                 var tickets = _context.Tickets
                     .Where(x => x.DoctorId == doctorId)
-                    .Include(x => x.Child);
+                    .Include(x => x.Child)
+                    .Include(x => x.Prescriptions)
+                    .OrderBy(x => x.StartDateTime);
 
-                var result = tickets.Select(x => new TicketResponseModel(x))
-                    .OrderBy(x => x.Date)
-                    .ThenBy(x => x.Time);
-
-                return Ok(new ResponseBaseModel<IEnumerable<TicketResponseModel>>
+                return Ok(new ResponseBaseModel<IEnumerable<Ticket>>
                 {
-                    Result = result
+                    Result = tickets
                 });
             }
             catch (Exception)
@@ -66,28 +93,22 @@ namespace ChildVac.WebApi.Controllers
             }
         }
 
-        // POST: api/Ticket
+        /// <summary>
+        ///     Adds new Ticket
+        /// </summary>
+        /// <param name="ticket">New Ticket</param>
+        /// <returns>Response with message of request status</returns>
         [Authorize(Roles = "Doctor, Admin")]
         [HttpPost]
         public async Task<ActionResult<MessageResponseModel>> Post([FromBody] Ticket ticket)
         {
             try
             {
-                var doctorIin = User?.Identity?.Name;
-
-                if (!string.IsNullOrWhiteSpace(doctorIin))
-                {
-                    var user = _context.Users
-                        .Include(u => u.Role)
-                        .FirstOrDefault(u => u.Iin == doctorIin);
-
-                    if (user != null)
-                    {
-                        ticket.DoctorId = user.Id;
-                        _context.Tickets.Add(ticket);
-                        await _context.SaveChangesAsync();
-                    }
-                }
+                var iin = User?.Identity?.Name;
+                var user = AccountHelper.GetUserByIin(_context, iin);
+                ticket.DoctorId = user.Id;
+                _context.Tickets.Add(ticket);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
@@ -101,34 +122,71 @@ namespace ChildVac.WebApi.Controllers
                     new MessageModel("Запись на прием была успешно сохранена.")));
         }
 
-        // PUT: api/Ticket/5
-        [Authorize(Roles = "Admin")]
+        /// <summary>
+        ///     Updates Ticket by Id
+        /// </summary>
+        /// <param name="id">Ticket id</param>
+        /// <param name="ticket">new Ticket model</param>
+        /// <returns>Response with message of request status</returns>
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Ticket hospital)
+        public async Task<ActionResult<MessageResponseModel>> Put(int id, [FromBody] Ticket ticket)
         {
-            if (hospital == null)
-                return NotFound();
+            try
+            {
+                if (ticket == null)
+                    return NotFound();
 
-            _context.Tickets.Update(hospital);
-            await _context.SaveChangesAsync();
+                _context.Tickets.Update(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
 
-            return Ok();
+            return Ok(new MessageResponseModel(true,
+                new MessageModel("Данные успешно обновлены")));
         }
 
-        // DELETE: api/Ticket/5
-        [Authorize(Roles = "Admin")]
+        /// <summary>
+        ///     Deletes the Ticket
+        /// </summary>
+        /// <param name="id">Ticket Id</param>
+        /// <returns>Response with message of request status</returns>
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<MessageResponseModel>> Delete(int id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (ticket == null)
-                return NotFound();
+                if (ticket == null)
+                    return NotFound();
 
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+                var prescriptions = _context.Prescriptions
+                    .Where(x => x.TicketId == id);
 
-            return Ok();
+                foreach (var prescription in prescriptions)
+                {
+                    _context.Prescriptions.Remove(prescription);
+                }
+
+                _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new MessageResponseModel(false,
+                    new MessageModel("Извините, произошла ошибка.",
+                        "Попробуйте снова чуть позже.")));
+            }
+
+            return Ok(new MessageResponseModel(true,
+                new MessageModel("Запись на прием была успешно удалена")));
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿<template>
     <div>
-        <h1 class="mb-4">Регистрация родителя</h1>
+        <h3 class="mb-4 text-center">Регистрация родителя</h3>
 
-        <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+        <b-alert v-for="(alert, index) in alerts" :key="index" :variant="alert.variant" show dismissible>
             <strong>{{alert.title}}</strong>
             <br />
             <span>{{alert.text}}</span>
@@ -42,6 +42,13 @@
                     <b-form-radio value="male">Мужской</b-form-radio>
                     <b-form-radio value="female">Женский</b-form-radio>
                 </b-form-radio-group>
+            </b-form-group>
+
+            <b-form-group id="input-group-phone" label="Телефон:" label-for="input-phone" label-cols-md="2" label-align-md="right">
+                <b-form-input id="input-phone"
+                              type="phone"
+                              v-model="form.phoneNumber"
+                              placeholder="Введите номер телефона"></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-group-address" label="Адрес проживания:" label-for="input-address" label-cols-md="2" label-align-md="right">

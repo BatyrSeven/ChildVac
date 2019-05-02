@@ -23,7 +23,7 @@ namespace ChildVac.WebApi.Controllers
         public IEnumerable<Vaccine> Get()
         {
             return _context.Vaccines
-                .OrderBy(x => x.Id);
+                .OrderBy(x => x.RecieveMonth);
         }
 
         // GET: api/Vaccine/5

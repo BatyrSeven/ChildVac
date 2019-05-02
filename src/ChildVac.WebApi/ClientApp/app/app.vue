@@ -1,13 +1,11 @@
 ﻿<template>
-    <div>
+    <div class="pb-3">
         <navbar></navbar>
-        <b-container fluid>
-            <div class="row">
-                <nav-menu></nav-menu>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3">
-                    <router-view></router-view>
-                </main>
-            </div>
+        <b-container>
+            <nav-menu></nav-menu>
+            <main role="main" class="pt-3">
+                <router-view></router-view>
+            </main>
         </b-container>
     </div>
 </template>

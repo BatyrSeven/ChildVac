@@ -1,7 +1,8 @@
-﻿using ChildVac.WebApi.Application.Models;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using ChildVac.WebApi.Application.Models;
 using ChildVac.WebApi.Application.Validators;
-using ChildVac.WebApi.Domain.Entities;
-using ChildVac.WebApi.Domain.Validators;
 using ChildVac.WebApi.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -16,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ChildVac.WebApi
 {
@@ -90,12 +92,43 @@ namespace ChildVac.WebApi
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc()
+                .AddFluentValidation()
+                .AddJsonOptions(x =>
+                {
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    x.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ss";
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // TODO: вытащить в extension
-            services.AddTransient<IValidator<Hospital>, HospitalValidator>();
             services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "ToDo API",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = "None",
+                    Contact = new Contact
+                    {
+                        Name = "Batyr Seven",
+                        Email = string.Empty
+                    },
+                    License = new License
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://pikabu.ru/"
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,6 +159,14 @@ namespace ChildVac.WebApi
 
             app.UseStaticFiles();
             app.UseAuthentication();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "help";
+            });
 
             app.UseMvc(routes =>
             {

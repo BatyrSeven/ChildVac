@@ -3,61 +3,20 @@ using System;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190501092635_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
-
-            modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Advice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Text")
-                        .HasMaxLength(5000);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Advices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Text = "Вакцина — это лекарство, которое создает у человека устойчивость (иммунитет) к болезни. Слово «вакцинация» происходит от «вакциния» (название вируса коровьей оспы). Этот вирус использовался в первой в истории вакцине(от оспы). Современная медицина создала множество вакцин. Вакцины ПРЕДУПРЕЖДАЮТ вирусные и бактериальные инфекции, которые когда - то приводили к тяжелым болезням и смерти.",
-                            Title = "Что такое вакцина?"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Text = "У маленьких детей иммунитет лучше, чем у взрослых людей и детей постарше.Когда маленькому ребенку одновременно делают несколько прививок, у него формируется хороший иммунитет к нескольким болезням. Даже если ребенку сделать 11 прививок одновременно, его иммунная система потратит на них только 0, 1 % своих возможностей.",
-                            Title = "Не слишком ли часто ребенку делают прививки?"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Text = "Нет! Это распространенное заблуждение. Прививки можно делать, даже если ребенок немножко болен.Переоценить важность своевременных прививок невозможно. Не переносите прививку из-за того, что ребенок немножко сопливый. Прививки можно делать, даже когда ребенка лечат антибиотиками.",
-                            Title = "Мой ребенок простужен. Не отложить ли прививки?"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Text = "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ",
-                            Title = "А можно я все-таки не буду прививать ребенка?"
-                        });
-                });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Feedback", b =>
                 {

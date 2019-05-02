@@ -6,7 +6,7 @@
 
         <div class="home__formWrapper mb-4">
 
-            <b-alert v-for="alert in alerts" :variant="alert.variant" show dismissible>
+            <b-alert v-for="(alert, index) in alerts" :key="index" :variant="alert.variant" show dismissible>
                 <strong>{{alert.title}}</strong>
                 <br />
                 <span>{{alert.text}}</span>
@@ -59,7 +59,7 @@
         <h4 class="text-center mb-2">Мобильное приложение ChildVac для родителей</h4>
 
         <p class="text-center">
-            Установите мобильное приложение ChildVac и следите расписанием прививок ваших детей.
+            Установите мобильное приложение ChildVac и следите за расписанием прививок ваших детей.
         </p>
 
         <div class="home__carouselWrapper mb-3">
