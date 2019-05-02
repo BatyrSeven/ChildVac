@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190501100629_Advices")]
-    partial class Advices
+    [Migration("20190501145614_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,7 +189,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("VaccineId");
+                    b.Property<int?>("VaccineId");
 
                     b.HasKey("Id");
 
@@ -480,8 +480,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Vaccine", "Vaccine")
                         .WithMany()
-                        .HasForeignKey("VaccineId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VaccineId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.User", b =>
