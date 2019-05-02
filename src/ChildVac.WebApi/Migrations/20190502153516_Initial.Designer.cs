@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190501145614_Initial")]
+    [Migration("20190502153516_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace ChildVac.WebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(10000);
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -182,6 +182,8 @@ namespace ChildVac.WebApi.Migrations
                     b.Property<string>("Room");
 
                     b.Property<DateTime>("StartDateTime");
+
+                    b.Property<int>("Status");
 
                     b.Property<string>("Text");
 
@@ -454,8 +456,7 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Prescription", b =>

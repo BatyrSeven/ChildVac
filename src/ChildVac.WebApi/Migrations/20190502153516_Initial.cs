@@ -116,7 +116,7 @@ namespace ChildVac.WebApi.Migrations
                     Text = table.Column<string>(maxLength: 10000, nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Rate = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,7 +126,7 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,7 +142,8 @@ namespace ChildVac.WebApi.Migrations
                     TicketType = table.Column<int>(nullable: false),
                     VaccineId = table.Column<int>(nullable: true),
                     ChildId = table.Column<int>(nullable: false),
-                    DoctorId = table.Column<int>(nullable: false)
+                    DoctorId = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

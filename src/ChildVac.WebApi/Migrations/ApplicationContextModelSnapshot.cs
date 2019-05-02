@@ -74,7 +74,7 @@ namespace ChildVac.WebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(10000);
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -454,8 +454,7 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Prescription", b =>

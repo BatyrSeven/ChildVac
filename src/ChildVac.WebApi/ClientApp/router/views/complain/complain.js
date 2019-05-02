@@ -9,10 +9,7 @@
             },
             show: true,
             alerts: [],
-            submited: false,
-            rateOptions: [1, 2, 3, 4, 5],
-            isComplain: this.$route.path.indexOf("complain") !== -1,
-            isRate: this.$route.path.indexOf("rate") !== -1
+            submited: false
         }
     },
     methods: {
