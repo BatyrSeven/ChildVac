@@ -46,7 +46,7 @@
 
             <b-form-group id="input-group-phone" label="Телефон:" label-for="input-phone" label-cols-md="2" label-align-md="right">
                 <b-form-input id="input-phone"
-                              type="phone"
+                              type="tel"
                               v-model="form.phoneNumber"
                               placeholder="Введите номер телефона"></b-form-input>
             </b-form-group>

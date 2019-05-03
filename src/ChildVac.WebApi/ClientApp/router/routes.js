@@ -47,19 +47,34 @@
         component: require("./views/not-found/not-found.vue").default
     },
     {
-        path: "/feedback/:user_id",
+        path: "/feedback",
         name: "feedback",
         component: require("./views/feedback/feedback.vue").default
+    },
+    {
+        path: "/feedback/:user_id",
+        name: "feedbackUserId",
+        component: require("./views/feedback/feedback.vue").default
+    },
+    {
+        path: "/complain",
+        name: "complain",
+        component: require("./views/complain/complain.vue").default
     },
     {
         path: "/complain/:user_id",
-        name: "feedback",
-        component: require("./views/feedback/feedback.vue").default
+        name: "complainUserId",
+        component: require("./views/complain/complain.vue").default
+    },
+    {
+        path: "/rate",
+        name: "rate",
+        component: require("./views/rate/rate.vue").default
     },
     {
         path: "/rate/:user_id",
-        name: "feedback",
-        component: require("./views/feedback/feedback.vue").default
+        name: "rateUserId",
+        component: require("./views/rate/rate.vue").default
     },
     {
         path: "/faq",

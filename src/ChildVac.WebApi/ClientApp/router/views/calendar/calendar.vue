@@ -26,6 +26,12 @@
                         <div class="pb-1 mb-2 calendar_title-wrapper">
                             <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
+                        <b-alert v-if="event.status==3" variant="danger" show>
+                            Прием был отменен
+                        </b-alert>
+                        <b-alert v-else-if="event.status==2" variant="warning" show>
+                            Пациент не может прийти на прием. Просьба перенести его на другой день.
+                        </b-alert>
                         <div class="pb-1 mb-2">
                             <span class="calendar_desc">{{event.title}}</span>
                         </div>
@@ -48,9 +54,26 @@
                             </p>
                         </div>
                         <div>
-                            <b-button class="mr-1 mb-1" variant="success" size="sm" :to="'/create-prescription/' + event.id">Назначение</b-button>
-                            <b-button class="mr-1 mb-1" variant="primary" size="sm" :to="'/ticket/' + event.id">Изменить</b-button>
-                            <b-button class="mb-1" variant="danger" size="sm" @click="onDeleteTicket(event.id)">Отменить</b-button>
+                            <b-button v-if="event.status==1"
+                                      class="mr-1 mb-1"
+                                      variant="success"
+                                      size="sm"
+                                      :to="'/create-prescription/' + event.id">
+                                Назначение
+                            </b-button>
+                            <b-button class="mr-1 mb-1"
+                                      variant="primary"
+                                      size="sm"
+                                      :to="'/ticket/' + event.id">
+                                Изменить
+                            </b-button>
+                            <b-button v-if="event.status!=3"
+                                      class="mb-1"
+                                      variant="danger"
+                                      size="sm"
+                                      @click="onCancelTicket(event.id)">
+                                Отменить
+                            </b-button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +85,7 @@
 
             <div slot="modal-footer">
                 <b-button variant="primary"
-                          @click="deleteTicket">
+                          @click="cancelTicket">
                     Да
                 </b-button>
                 <b-button variant="danger"

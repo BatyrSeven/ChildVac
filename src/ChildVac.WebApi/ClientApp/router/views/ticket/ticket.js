@@ -95,19 +95,41 @@
                     },
                     body: data
                 }).then(response => {
-                return response.json();
-            }).then(response => {
-                this.submited = false;
-                console.log(response);
+                    return response.json();
+                }).then(response => {
+                    this.submited = false;
+                    console.log(response);
+                    if (response.messages) {
+                        response.messages.forEach(m => {
+                            this.alerts.push({
+                                title: m.title,
+                                text: m.text,
+                                variant: response.result ? "success" : "danger"
+                            });
+                        });
+                    } else if (response.errors) {
 
-                response.messages.forEach(m => {
-                    this.alerts.push({
-                        title: m.title,
-                        text: m.text,
-                        variant: response.result ? "success" : "danger"
-                    });
+                        var errors = response.errors;
+                        var keys = Object.keys(errors);
+                        console.log(keys);
+
+                        keys.forEach(key => {
+                            errors[key].forEach(error => {
+                                this.alerts.push({
+                                    title: error,
+                                    text: "",
+                                    variant: "danger"
+                                });
+                            });
+                        });
+                    } else {
+                        this.alerts.push({
+                            title: "Что-то пошло не так...",
+                            text: "Попробуйте повторить чуть позже.",
+                            variant: "danger"
+                        });
+                    }
                 });
-            });
         },
         updateTicket() {
             var authHeader = 'Bearer ' + this.$store.state.token;
@@ -133,19 +155,19 @@
                     },
                     body: data
                 }).then(response => {
-                return response.json();
-            }).then(response => {
-                this.submited = false;
-                console.log(response);
+                    return response.json();
+                }).then(response => {
+                    this.submited = false;
+                    console.log(response);
 
-                response.messages.forEach(m => {
-                    this.alerts.push({
-                        title: m.title,
-                        text: m.text,
-                        variant: response.result ? "success" : "danger"
+                    response.messages.forEach(m => {
+                        this.alerts.push({
+                            title: m.title,
+                            text: m.text,
+                            variant: response.result ? "success" : "danger"
+                        });
                     });
                 });
-            });
         },
         getTicket() {
             var authHeader = 'Bearer ' + this.$store.state.token;
@@ -158,33 +180,33 @@
                         'Authorization': authHeader
                     }
                 }).then(response => {
-                return response.json();
-            }).then(response => {
-                console.log(response);
-                this.submited = false;
+                    return response.json();
+                }).then(response => {
+                    console.log(response);
+                    this.submited = false;
 
-                if (response.child) {
-                    this.setChild(response.child);
-                }
+                    if (response.child) {
+                        this.setChild(response.child);
+                    }
 
-                if (response.startDateTime) {
-                    this.form.date = response.startDateTime.substr(0, 10);
-                    this.form.time = response.startDateTime.substr(11, 5);
-                }
+                    if (response.startDateTime) {
+                        this.form.date = response.startDateTime.substr(0, 10);
+                        this.form.time = response.startDateTime.substr(11, 5);
+                    }
 
-                if (response.doctorId) {
-                    this.form.doctorId = response.doctorId;
-                }
+                    if (response.doctorId) {
+                        this.form.doctorId = response.doctorId;
+                    }
 
-                this.form.room = response.room;
-                this.form.title = response.title;
-                this.form.text = response.text;
-                this.form.ticketType = response.ticketType;
-                this.form.vaccineId = response.vaccineId;
-            });
+                    this.form.room = response.room;
+                    this.form.title = response.title;
+                    this.form.text = response.text;
+                    this.form.ticketType = response.ticketType;
+                    this.form.vaccineId = response.vaccineId;
+                });
         },
         setChild(child) {
-            this.child = child.lastName + " " + child.firstName + " "  + child.patronim;
+            this.child = child.lastName + " " + child.firstName + " " + child.patronim;
             this.form.childId = child.id;
         },
         findChildByIin(iin) {
@@ -232,6 +254,11 @@
             this.childId = 0;
             this.searchChildIin = "";
             this.child = "";
+        },
+        setCurrentDate() {
+            var date = new Date().toISOString();
+            var currentDate = date.slice(0, 10);
+            this.form.date = currentDate;
         }
     },
     mounted() {
@@ -240,5 +267,6 @@
         }
 
         this.getVaccines();
+        this.setCurrentDate();
     }
 }

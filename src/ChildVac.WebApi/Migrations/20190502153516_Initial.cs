@@ -3,10 +3,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChildVac.WebApi.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Advices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(maxLength: 1000, nullable: false),
+                    Text = table.Column<string>(maxLength: 5000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Advices", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Hospitals",
                 columns: table => new
@@ -102,7 +116,7 @@ namespace ChildVac.WebApi.Migrations
                     Text = table.Column<string>(maxLength: 10000, nullable: false),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Rate = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,7 +126,7 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,9 +140,10 @@ namespace ChildVac.WebApi.Migrations
                     Room = table.Column<string>(nullable: true),
                     StartDateTime = table.Column<DateTime>(nullable: false),
                     TicketType = table.Column<int>(nullable: false),
-                    VaccineId = table.Column<int>(nullable: false),
+                    VaccineId = table.Column<int>(nullable: true),
                     ChildId = table.Column<int>(nullable: false),
-                    DoctorId = table.Column<int>(nullable: false)
+                    DoctorId = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,7 +165,7 @@ namespace ChildVac.WebApi.Migrations
                         column: x => x.VaccineId,
                         principalTable: "Vaccines",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,6 +191,26 @@ namespace ChildVac.WebApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Advices",
+                columns: new[] { "Id", "Text", "Title" },
+                values: new object[] { 1, "Вакцина — это лекарство, которое создает у человека устойчивость (иммунитет) к болезни. Слово «вакцинация» происходит от «вакциния» (название вируса коровьей оспы). Этот вирус использовался в первой в истории вакцине(от оспы). Современная медицина создала множество вакцин. Вакцины ПРЕДУПРЕЖДАЮТ вирусные и бактериальные инфекции, которые когда - то приводили к тяжелым болезням и смерти.", "Что такое вакцина?" });
+
+            migrationBuilder.InsertData(
+                table: "Advices",
+                columns: new[] { "Id", "Text", "Title" },
+                values: new object[] { 2, "У маленьких детей иммунитет лучше, чем у взрослых людей и детей постарше.Когда маленькому ребенку одновременно делают несколько прививок, у него формируется хороший иммунитет к нескольким болезням. Даже если ребенку сделать 11 прививок одновременно, его иммунная система потратит на них только 0, 1 % своих возможностей.", "Не слишком ли часто ребенку делают прививки?" });
+
+            migrationBuilder.InsertData(
+                table: "Advices",
+                columns: new[] { "Id", "Text", "Title" },
+                values: new object[] { 3, "Нет! Это распространенное заблуждение. Прививки можно делать, даже если ребенок немножко болен.Переоценить важность своевременных прививок невозможно. Не переносите прививку из-за того, что ребенок немножко сопливый. Прививки можно делать, даже когда ребенка лечат антибиотиками.", "Мой ребенок простужен. Не отложить ли прививки?" });
+
+            migrationBuilder.InsertData(
+                table: "Advices",
+                columns: new[] { "Id", "Text", "Title" },
+                values: new object[] { 4, "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ", "А можно я все-таки не буду прививать ребенка?" });
 
             migrationBuilder.InsertData(
                 table: "Hospitals",
@@ -235,7 +270,7 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
+                values: new object[] { 3, "Вакцина против вирусного гепатита В.", "ВГВ", 0 });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
@@ -245,7 +280,7 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 });
+                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
@@ -255,7 +290,7 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 3, "Вакцина против вирусного гепатита В.", "ВГВ", 0 });
+                values: new object[] { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
@@ -336,6 +371,9 @@ namespace ChildVac.WebApi.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Advices");
+
             migrationBuilder.DropTable(
                 name: "Feedbacks");
 

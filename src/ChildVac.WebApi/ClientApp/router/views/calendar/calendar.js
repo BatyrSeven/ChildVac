@@ -2,7 +2,7 @@
     data() {
         return {
             modalDeleteShow: false,
-            deleteTicketId: 0,
+            cancelTicketId: 0,
             events: [],
             alerts: []
         }
@@ -11,23 +11,24 @@
         handleDayChange() {
             console.log("handleDayChange");
         },
-        onDeleteTicket(id) {
+        onCancelTicket(id) {
             this.modalDeleteShow = true;
-            this.deleteTicketId = id;
+            this.cancelTicketId = id;
         },
-        deleteTicket() {
+        cancelTicket() {
             this.modalDeleteShow = false;
             this.alerts = [];
 
             var authHeader = 'Bearer ' + this.$store.state.token;
-            window.fetch('/api/ticket/' + this.deleteTicketId,
+            window.fetch('/api/ticket/' + this.cancelTicketId + '/status',
                 {
-                    method: 'DELETE',
+                    method: 'PATCH',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json',
                         'Authorization': authHeader
-                    }
+                    },
+                    body: JSON.stringify({status: 3})
                 }).then(response => {
                 return response.json();
             }).then(response => {

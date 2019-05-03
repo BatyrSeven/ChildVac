@@ -3,6 +3,8 @@ using System.IO;
 using System.Reflection;
 using ChildVac.WebApi.Application.Models;
 using ChildVac.WebApi.Application.Validators;
+using ChildVac.WebApi.Domain.Entities;
+using ChildVac.WebApi.Domain.Validators;
 using ChildVac.WebApi.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -104,6 +106,7 @@ namespace ChildVac.WebApi
 
             // TODO: вытащить в extension
             services.AddTransient<IValidator<TokenRequestModel>, TokenRequestValidator>();
+
 
             services.AddSwaggerGen(c =>
             {

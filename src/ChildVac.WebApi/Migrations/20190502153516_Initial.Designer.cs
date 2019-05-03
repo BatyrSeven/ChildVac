@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190501100629_Advices")]
-    partial class Advices
+    [Migration("20190502153516_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,7 +76,7 @@ namespace ChildVac.WebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(10000);
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -183,13 +183,15 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<DateTime>("StartDateTime");
 
+                    b.Property<int>("Status");
+
                     b.Property<string>("Text");
 
                     b.Property<int>("TicketType");
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("VaccineId");
+                    b.Property<int?>("VaccineId");
 
                     b.HasKey("Id");
 
@@ -454,8 +456,7 @@ namespace ChildVac.WebApi.Migrations
                 {
                     b.HasOne("ChildVac.WebApi.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Prescription", b =>
@@ -480,8 +481,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.HasOne("ChildVac.WebApi.Domain.Entities.Vaccine", "Vaccine")
                         .WithMany()
-                        .HasForeignKey("VaccineId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VaccineId");
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.User", b =>
