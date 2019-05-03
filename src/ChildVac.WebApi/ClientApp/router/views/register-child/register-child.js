@@ -8,11 +8,10 @@
                 iin: '',
                 dateOfBirth: null,
                 gender: 0,
-                parentId: 0
+                parentId: null
             },
             searchParentIin: '',
             parents: [],
-            parentId: 0,
             parent: "",
             show: true,
             alerts: [],
@@ -38,38 +37,8 @@
     },
     watch: {
         searchParentIin(newValue) {
-            this.parents = [];
-            this.parentId = 0;
             if (newValue.length > 3) {
                 this.findParentByIin(newValue);
-            }
-        },
-        parentId(newValue) {
-            this.form.parentId = newValue;
-            this.parents = [];
-
-            if (newValue !== 0) {
-                window.fetch('/api/parent/' + newValue,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(response => {
-                        return response.json();
-                    }).then(response => {
-                        var parent = response.result;
-                        this.parent =
-                            "<strong>" +
-                            parent.iin +
-                            "</strong> - " +
-                            parent.lastName +
-                            " " +
-                            parent.firstName +
-                            " " +
-                            parent.patronim;
-                    });
             }
         }
     },
@@ -126,15 +95,19 @@
                 var parents = [];
                 var parentsJson = response.result;
                 parentsJson.forEach(parent => {
-                    parents.push({ value: parent.id, text: parent.iin + " - " + parent.firstName + " " + parent.lastName + " " + parent.patronim });
+                    parents.push({ value: parent.id, text: parent.iin + " - " + parent.lastName + " " +parent.firstName + " " + parent.patronim });
                 });
 
                 this.parents = parents;
+
+                if (parents.length) {
+                    this.form.parentId = parents[0].value;
+                }
             });
         },
         resetSearchParentSuggestions() {
             this.parents = [];
-            this.parentId = 0;
+            this.form.parentId = 0;
             this.searchParentIin = "";
             this.parent = "";
         }

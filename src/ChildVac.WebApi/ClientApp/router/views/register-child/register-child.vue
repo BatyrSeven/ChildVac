@@ -52,25 +52,19 @@
                 </b-form-radio-group>
             </b-form-group>
 
-            <b-form-group v-show="!parentId" id="input-group-parent-iin" label="ИИН родителя:" label-for="input-parent-iin" label-cols-md="2" label-align-md="right">
+            <b-form-group id="input-group-parent-iin" label="ИИН родителя:" label-for="input-parent-iin" label-cols-md="2" label-align-md="right">
                 <b-form-input id="input-parent-iin"
+                              class="mb-3"
                               type="text"
                               v-model="searchParentIin"
                               placeholder="Начните вводить ИИН родителя"></b-form-input>
-                <b-form-select v-show="parents.length" v-model="parentId" :options="parents" :select-size="parents.length + 1"></b-form-select>
+                <b-form-select v-model="form.parentId"
+                               :options="parents">
+                    <template slot="first">
+                        <option :value="null" disabled>Выберите из поиска</option>
+                    </template>
+                </b-form-select>
             </b-form-group>
-
-            <div class="mb-3" v-show="parentId">
-                <div class="row">
-                    <div class="col-md-2 text-md-right pr-0">
-                        Родитель:
-                    </div>
-                    <div class="col">
-                        <div class="mb-1" v-html="parent"></div>
-                        <b-button variant="outline-primary" @click="resetSearchParentSuggestions">Изменить</b-button>
-                    </div>
-                </div>
-            </div>
 
             <b-button class="offset-md-2 mr-3" type="submit" variant="primary" :disabled="submited">
                 <span v-if="submited">
