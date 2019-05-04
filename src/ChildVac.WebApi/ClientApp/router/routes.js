@@ -80,5 +80,5 @@
         path: "/faq",
         name: "faq",
         component: require("./views/faq/faq.vue").default
-    },
+    }
 ]

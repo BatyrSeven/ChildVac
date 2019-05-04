@@ -60,6 +60,8 @@ namespace ChildVac.WebApi.Controllers
         {
             return _context.Tickets
                 .Include(x => x.Child)
+                .Include(x => x.Doctor)
+                .Include(x => x.Vaccine)
                 .FirstOrDefault(x => x.Id == id);
         }
 

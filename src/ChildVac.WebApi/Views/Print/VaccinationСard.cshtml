@@ -1,0 +1,26 @@
+﻿@model ChildVac.WebApi.Application.Models.VaccinationСardModel
+
+@{
+    ViewData["Title"] = "Ticket";
+}
+
+<h1>Карта</h1>
+<h2>профилактических прививок</h2>
+
+<p>Пациент: @Model.ChildName</p>
+
+<table>
+    <tr>
+        <th>Вакцига</th>
+        <th>Дата</th>
+        <th>Врач</th>
+    </tr>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>@item.VaccineName</td>
+            <td>@item.DateTime.ToString("dd.MM.yyyy")</td>
+            <td>@item.DoctorName</td>
+        </tr>
+    }
+</table>
