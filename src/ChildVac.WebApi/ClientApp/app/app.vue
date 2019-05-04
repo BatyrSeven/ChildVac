@@ -1,8 +1,8 @@
 ﻿<template>
     <div class="pb-3">
         <navbar></navbar>
+        <nav-menu></nav-menu>
         <b-container>
-            <nav-menu></nav-menu>
             <main role="main" class="pt-3">
                 <router-view></router-view>
             </main>
