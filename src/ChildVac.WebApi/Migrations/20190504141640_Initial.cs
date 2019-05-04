@@ -210,7 +210,7 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Advices",
                 columns: new[] { "Id", "Text", "Title" },
-                values: new object[] { 4, "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ", "А можно я все-таки не буду прививать ребенка?" });
+                values: new object[] { 4, "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность заражения серьезными заболеваниями, которые можно было бы предотвратить.", "А можно я все-таки не буду прививать ребенка?" });
 
             migrationBuilder.InsertData(
                 table: "Hospitals",
@@ -321,6 +321,16 @@ namespace ChildVac.WebApi.Migrations
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "HospitalId", "PhoneNumber" },
                 values: new object[] { 2, "Doctor", "Test", 1, "970812300739", "Doctor", "test", "Testovich", 3, 1, "7087260265" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "Address", "Parent_PhoneNumber" },
+                values: new object[] { 3, "Parent", "Арман", 1, "970625350560", "Киалбеков", "123456", "Жылбабылулы", 4, "Костанай", "+77089134584" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "DateOfBirth", "ParentId" },
+                values: new object[] { 4, "Child", "Чойбек", 2, "148814881488", "Чойбек", "123456", "Армановыч", 2, new DateTime(2019, 5, 4, 20, 16, 39, 385, DateTimeKind.Local).AddTicks(6767), 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_UserId",

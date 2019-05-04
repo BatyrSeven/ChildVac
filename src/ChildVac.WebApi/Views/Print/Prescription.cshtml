@@ -1,7 +1,52 @@
-﻿
+﻿@model ChildVac.WebApi.Application.Models.PrintPrescriptionModel
+
 @{
     ViewData["Title"] = "Prescription";
 }
 
-<h1>Prescription</h1>
+<div class="container pt-2">
+    <h2>Назначение</h2>
+    <h4>@Model.Type</h4>
+    <hr />
 
+    <div class="row mb-2">
+        <div class="col-md-2 text-md-right">
+            <strong>Диагноз:</strong>
+        </div>
+        <div class="col-md-10">@Model.Diagnosis</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-2 text-md-right">
+            <strong>Лечение:</strong>
+        </div>
+        <div class="col-md-10">@Model.Medication</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-2 text-md-right">
+            <strong>Примечания:</strong>
+        </div>
+        <div class="col-md-10">@Model.Description</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-2 text-md-right">
+            <strong>Врач:</strong>
+        </div>
+        <div class="col-md-10">@Model.DoctorName</div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-6">@Model.DateTime</div>
+        <div class="col-6">
+            <h3 class="text-right" style="color:#aaa;">ChildVac</h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.print()
+</script>

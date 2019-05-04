@@ -22,7 +22,9 @@ namespace ChildVac.WebApi.Controllers
         [Route("vaccination-card/{childId}")]
         public IActionResult VaccinationСard(int childId)
         {
-            var child = _context.Children.FirstOrDefault(x => x.Id == childId);
+            var child = _context.Children
+                .Include(c => c.Parent)
+                .FirstOrDefault(x => x.Id == childId);
 
             if (ReferenceEquals(child, null))
             {
@@ -33,34 +35,53 @@ namespace ChildVac.WebApi.Controllers
                 .Include(x => x.Child)
                 .Include(x => x.Doctor)
                 .Include(x => x.Vaccine)
-                .Where(x => x.ChildId == childId && 
+                .Where(x => x.ChildId == childId &&
                             x.TicketType == Domain.Entities.TicketType.Vaccination);
 
             var model = new VaccinationСardModel
             {
                 ChildName = $"{child.LastName} {child.FirstName} {child.Patronim}",
+                Address = child.Parent.Address,
+                DateOfBirth = child.DateOfBirth.ToString("dd.MM.yyyy"),
                 Items = tickets.Select(x => new VaccinationСardModel.VaccineCardItem
                 {
                     VaccineName = x.Vaccine.Name,
                     DoctorName = $"{x.Doctor.LastName} {x.Doctor.FirstName} {x.Doctor.Patronim}",
-                    DateTime = x.StartDateTime
+                    DateTime = x.StartDateTime,
+                    AgeInMonth = x.Vaccine.RecieveMonth
                 }).ToList()
             };
 
             return View(model);
         }
 
+        [Route("prescription/{prescriptionId}")]
         public IActionResult Prescription(int prescriptionId)
         {
             var prescription = _context.Prescriptions
+                .Include(p => p.Ticket)
+                    .ThenInclude(t => t.Doctor)
                 .FirstOrDefault(x => x.Id == prescriptionId);
 
             if (ReferenceEquals(prescription, null))
             {
-                return NotFound();
+                return NotFound($"Prescription with id '{prescriptionId}' was not found");
             }
 
-            return View();
+            var doctor = prescription.Ticket.Doctor;
+            var doctorFullName = $"{doctor.LastName} {doctor.FirstName} {doctor.Patronim}";
+
+            var model = new PrintPrescriptionModel
+            {
+                DateTime = prescription.DateTime,
+                Description = prescription.Description,
+                Diagnosis = prescription.Diagnosis,
+                Medication = prescription.Medication,
+                Type = prescription.Type,
+                DoctorName = doctorFullName
+            };
+
+            return View(model);
         }
     }
 }

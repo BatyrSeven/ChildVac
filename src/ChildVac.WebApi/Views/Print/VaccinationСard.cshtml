@@ -2,25 +2,49 @@
 
 @{
     ViewData["Title"] = "Ticket";
+    var rowCounter = 0;
 }
 
-<h1>Карта</h1>
-<h2>профилактических прививок</h2>
+<div class="container pt-2" style="min-width: 600px;">
+    <h2>Карта профилактических прививок</h2>
+    <hr />
+    <p>Пациент: <strong>@Model.ChildName</strong></p>
+    <p>Дата рождения: <strong>@Model.DateOfBirth</strong></p>
+    <p>Домашний адрес: <strong>@Model.Address</strong></p>
 
-<p>Пациент: @Model.ChildName</p>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название вакцины</th>
+                <th scope="col">Дата вакцинации</th>
+                <th scope="col">Возвраст в месяцах</th>
+                <th scope="col">Врач</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                rowCounter++;
+                <tr>
+                    <th scope="row">@rowCounter</th>
+                    <td>@item.VaccineName</td>
+                    <td>@item.DateTime.ToString("dd.MM.yyyy")</td>
+                    <td>@item.AgeInMonth</td>
+                    <td>@item.DoctorName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+    <div class="row" style="color:#aaa;">
+        <div class="col">@DateTime.Now.ToString("dd.MM.yyyy")</div>
+        <div class="col">
+            <h3 class="text-right">ChildVac</h3>
+        </div>
+    </div>
+</div>
 
-<table>
-    <tr>
-        <th>Вакцига</th>
-        <th>Дата</th>
-        <th>Врач</th>
-    </tr>
-    @foreach (var item in Model.Items)
-    {
-        <tr>
-            <td>@item.VaccineName</td>
-            <td>@item.DateTime.ToString("dd.MM.yyyy")</td>
-            <td>@item.DoctorName</td>
-        </tr>
-    }
-</table>
+<script>
+    window.print()
+</script>

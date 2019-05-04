@@ -24,7 +24,7 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
 
             builder.HasData(new Parent
             {
-                Id = 2,
+                Id = 3,
                 Iin = "970625350560",
                 Password = "123456",
                 FirstName = "Арман",

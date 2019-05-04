@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190502153516_Initial")]
+    [Migration("20190504141640_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,7 +56,7 @@ namespace ChildVac.WebApi.Migrations
                         new
                         {
                             Id = 4,
-                            Text = "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ",
+                            Text = "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность заражения серьезными заболеваниями, которые можно было бы предотвратить.",
                             Title = "А можно я все-таки не буду прививать ребенка?"
                         });
                 });
@@ -404,6 +404,21 @@ namespace ChildVac.WebApi.Migrations
                     b.HasIndex("ParentId");
 
                     b.HasDiscriminator().HasValue("Child");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Чойбек",
+                            Gender = 2,
+                            Iin = "148814881488",
+                            LastName = "Чойбек",
+                            Password = "123456",
+                            Patronim = "Армановыч",
+                            RoleId = 2,
+                            DateOfBirth = new DateTime(2019, 5, 4, 20, 16, 39, 385, DateTimeKind.Local).AddTicks(6767),
+                            ParentId = 3
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Doctor", b =>
@@ -450,6 +465,21 @@ namespace ChildVac.WebApi.Migrations
                         .HasMaxLength(10);
 
                     b.HasDiscriminator().HasValue("Parent");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Арман",
+                            Gender = 1,
+                            Iin = "970625350560",
+                            LastName = "Киалбеков",
+                            Password = "123456",
+                            Patronim = "Жылбабылулы",
+                            RoleId = 4,
+                            Address = "Костанай",
+                            PhoneNumber = "+77089134584"
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Feedback", b =>

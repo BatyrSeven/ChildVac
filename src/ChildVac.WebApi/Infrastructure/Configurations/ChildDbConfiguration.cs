@@ -17,16 +17,16 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.HasData(
                 new Child
                 {
-                    Id = 3,
+                    Id = 4,
                     Iin = "148814881488",
                     Password = "123456",
                     FirstName = "Чойбек",
                     LastName = "Чойбек",
                     Patronim = "Армановыч",
                     Gender = Gender.Female,
-                    ParentId = 2,
                     DateOfBirth = DateTime.Now,
-                    RoleId = 2
+                    ParentId = 3,
+                    RoleId = 2,
                 }
             );
         }
