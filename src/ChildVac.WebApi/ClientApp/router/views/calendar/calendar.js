@@ -2,6 +2,7 @@
     data() {
         return {
             modalDeleteShow: false,
+            modalCloseShow: false,
             cancelTicketId: 0,
             events: [],
             alerts: []
@@ -13,6 +14,10 @@
         },
         onCancelTicket(id) {
             this.modalDeleteShow = true;
+            this.cancelTicketId = id;
+        },
+        onCloseTicket(id) {
+            this.modalCloseShow = true;
             this.cancelTicketId = id;
         },
         cancelTicket() {
@@ -46,6 +51,38 @@
 
                 this.getTickets();
             });
+        },
+        closeTicket() {
+            this.modalCloseShow = false;
+            this.alerts = [];
+
+            var authHeader = 'Bearer ' + this.$store.state.token;
+            window.fetch('/api/ticket/' + this.cancelTicketId + '/status',
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
+                    body: JSON.stringify({ status: 2 })
+                }).then(response => {
+                    return response.json();
+                }).then(response => {
+                    console.log(response);
+
+                    if (response.messages) {
+                        response.messages.forEach(m => {
+                            this.alerts.push({
+                                title: m.title,
+                                text: m.text,
+                                variant: response.result ? "success" : "danger"
+                            });
+                        });
+                    }
+
+                    this.getTickets();
+                });
         },
         getTickets() {
             var authHeader = 'Bearer ' + this.$store.state.token;

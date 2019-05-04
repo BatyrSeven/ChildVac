@@ -78,6 +78,12 @@
                                       @click="onCancelTicket(event.id)">
                                 Отменить
                             </b-button>
+                            <b-button v-if="event.status==1"
+                                      class="mb-1"
+                                      size="sm"
+                                      @click="onCloseTicket(event.id)">
+                                Закрыть
+                            </b-button>
                         </div>
                     </div>
                 </div>
@@ -94,6 +100,21 @@
                 </b-button>
                 <b-button variant="danger"
                           @click="modalDeleteShow=false">
+                    Нет
+                </b-button>
+            </div>
+        </b-modal>
+
+        <b-modal v-model="modalCloseShow">
+            <p>Вы уверены, что хотите закрыть данный прием?</p>
+
+            <div slot="modal-footer">
+                <b-button variant="primary"
+                          @click="closeTicket">
+                    Да
+                </b-button>
+                <b-button variant="danger"
+                          @click="modalCloseShow=false">
                     Нет
                 </b-button>
             </div>
