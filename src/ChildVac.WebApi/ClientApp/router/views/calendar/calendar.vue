@@ -26,10 +26,13 @@
                         <div class="pb-1 mb-2 calendar_title-wrapper">
                             <span class="calendar_desc">ИИН: {{event.child.iin}}</span>
                         </div>
-                        <b-alert v-if="event.status==3" variant="danger" show>
+                        <b-alert v-if="event.status==2" variant="success" show>
+                            Прием был завершен
+                        </b-alert>
+                        <b-alert v-else-if="event.status==3" variant="danger" show>
                             Прием был отменен
                         </b-alert>
-                        <b-alert v-else-if="event.status==2" variant="warning" show>
+                        <b-alert v-else-if="event.status==4" variant="warning" show>
                             Пациент не может прийти на прием. Просьба перенести его на другой день.
                         </b-alert>
                         <div class="pb-1 mb-2">
@@ -61,13 +64,14 @@
                                       :to="'/create-prescription/' + event.id">
                                 Назначение
                             </b-button>
-                            <b-button class="mr-1 mb-1"
+                            <b-button v-if="event.status!=2"
+                                      class="mr-1 mb-1"
                                       variant="primary"
                                       size="sm"
                                       :to="'/ticket/' + event.id">
                                 Изменить
                             </b-button>
-                            <b-button v-if="event.status!=3"
+                            <b-button v-if="event.status==1 || event.status==4"
                                       class="mb-1"
                                       variant="danger"
                                       size="sm"
