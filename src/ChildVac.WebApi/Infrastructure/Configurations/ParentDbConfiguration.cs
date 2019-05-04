@@ -21,6 +21,20 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 .HasMaxLength(10);
 
             builder.HasBaseType<User>();
+
+            builder.HasData(new Parent
+            {
+                Id = 2,
+                Iin = "970625350560",
+                Password = "123456",
+                FirstName = "Арман",
+                LastName = "Киалбеков",
+                Patronim = "Жылбабылулы",
+                Gender = Gender.Male,
+                Address = "Костанай",
+                PhoneNumber = "+77089134584",
+                RoleId = 4
+            });
         }
     }
 }
