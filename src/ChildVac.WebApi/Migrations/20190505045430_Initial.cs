@@ -82,7 +82,8 @@ namespace ChildVac.WebApi.Migrations
                     PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
                     HospitalId = table.Column<int>(nullable: true),
                     Address = table.Column<string>(maxLength: 100, nullable: true),
-                    Parent_PhoneNumber = table.Column<string>(maxLength: 10, nullable: true)
+                    Parent_PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -320,17 +321,17 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "HospitalId", "PhoneNumber" },
-                values: new object[] { 2, "Doctor", "Test", 1, "970812300739", "Doctor", "test", "Testovich", 3, 1, "7087260265" });
+                values: new object[] { 2, "Doctor", "Батыржан", 1, "970812300739", "Жетписбаев", "test", "Дулатович", 3, 1, "+77087260265" });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "Address", "Parent_PhoneNumber" },
-                values: new object[] { 3, "Parent", "Арман", 1, "970625350560", "Киалбеков", "123456", "Жылбабылулы", 4, "Костанай", "+77089134584" });
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "Address", "Email", "Parent_PhoneNumber" },
+                values: new object[] { 3, "Parent", "Арман", 1, "970625350560", "Киалбеков", "123456", "Жылдабылович", 4, "ул. Сейфулина, 134А, 33", "arman.kialbekov@gmail.com", "+77089134584" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "DateOfBirth", "ParentId" },
-                values: new object[] { 4, "Child", "Чойбек", 2, "148814881488", "Чойбек", "123456", "Армановыч", 2, new DateTime(2019, 5, 4, 20, 16, 39, 385, DateTimeKind.Local).AddTicks(6767), 3 });
+                values: new object[] { 4, "Child", "Чойбек", 1, "148814881488", "Киалбеков", "123456", "Арманович", 2, new DateTime(2019, 5, 4, 10, 54, 29, 750, DateTimeKind.Local).AddTicks(9233), 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_UserId",

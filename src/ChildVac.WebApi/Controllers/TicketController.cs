@@ -120,6 +120,23 @@ namespace ChildVac.WebApi.Controllers
 
                 _context.Tickets.Add(ticket);
                 await _context.SaveChangesAsync();
+
+                var childId = ticket.ChildId;
+                var child = _context.Children
+                    .Include(x => x.Parent)
+                    .FirstOrDefault(x => x.Id == childId);
+
+                var parent = child.Parent;
+
+                var emailSubject = "Назначен прием к врачу";
+                var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+                emailBody += $"\n\nВашему ребенку была назначена " 
+                    + (ticket.TicketType == TicketType.Consultation ? "консультация" : "вакцинация")
+                    + " в системе ChildVac.";
+                emailBody += $"\nВремя: { ticket.StartDateTime.ToString("dd.MM.yyyy HH:mm")}";
+                emailBody += $"\nКабинет: { ticket.Room}";
+                emailBody += "\n\n С уваженим, администрация ChildVac";
+                GmailServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
             }
             catch (Exception)
             {

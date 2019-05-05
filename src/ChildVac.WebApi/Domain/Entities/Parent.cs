@@ -21,5 +21,10 @@ namespace ChildVac.WebApi.Domain.Entities
         ///     Phone to contact with Parent
         /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        ///     Email of Parent
+        /// </summary>
+        public string Email { get; set; }
     }
 }

@@ -93,6 +93,22 @@ namespace ChildVac.WebApi.Controllers
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
 
+            var ticket = _context.Tickets
+                .Include(x => x.Child)
+                .ThenInclude(x => x.Parent)
+                .FirstOrDefault(x => x.Id == prescription.TicketId);
+
+            var parent = ticket.Child.Parent; 
+
+            var emailSubject = "Врач выписал вам назначение";
+            var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+            emailBody += "\n\nВрач выписал вам назначение в системе ChildVac.";
+            emailBody += $"\nДиагноз: { prescription.Diagnosis}";
+            emailBody += $"\nЛечение: { prescription.Medication}";
+            emailBody += $"\nПримечания: { prescription.Description}";
+            emailBody += "\n\n С уваженим, администрация ChildVac";
+            GmailServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+
             return CreatedAtAction(nameof(GetById), new { id = prescription.Id },
                 new MessageResponseModel(true,
                     new MessageModel("Запись на прием была успешно сохранена.")));

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190504141640_Initial")]
+    [Migration("20190505045430_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -410,13 +410,13 @@ namespace ChildVac.WebApi.Migrations
                         {
                             Id = 4,
                             FirstName = "Чойбек",
-                            Gender = 2,
+                            Gender = 1,
                             Iin = "148814881488",
-                            LastName = "Чойбек",
+                            LastName = "Киалбеков",
                             Password = "123456",
-                            Patronim = "Армановыч",
+                            Patronim = "Арманович",
                             RoleId = 2,
-                            DateOfBirth = new DateTime(2019, 5, 4, 20, 16, 39, 385, DateTimeKind.Local).AddTicks(6767),
+                            DateOfBirth = new DateTime(2019, 5, 4, 10, 54, 29, 750, DateTimeKind.Local).AddTicks(9233),
                             ParentId = 3
                         });
                 });
@@ -439,15 +439,15 @@ namespace ChildVac.WebApi.Migrations
                         new
                         {
                             Id = 2,
-                            FirstName = "Test",
+                            FirstName = "Батыржан",
                             Gender = 1,
                             Iin = "970812300739",
-                            LastName = "Doctor",
+                            LastName = "Жетписбаев",
                             Password = "test",
-                            Patronim = "Testovich",
+                            Patronim = "Дулатович",
                             RoleId = 3,
                             HospitalId = 1,
-                            PhoneNumber = "7087260265"
+                            PhoneNumber = "+77087260265"
                         });
                 });
 
@@ -458,6 +458,8 @@ namespace ChildVac.WebApi.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<string>("Email");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -475,9 +477,10 @@ namespace ChildVac.WebApi.Migrations
                             Iin = "970625350560",
                             LastName = "Киалбеков",
                             Password = "123456",
-                            Patronim = "Жылбабылулы",
+                            Patronim = "Жылдабылович",
                             RoleId = 4,
-                            Address = "Костанай",
+                            Address = "ул. Сейфулина, 134А, 33",
+                            Email = "arman.kialbekov@gmail.com",
                             PhoneNumber = "+77089134584"
                         });
                 });

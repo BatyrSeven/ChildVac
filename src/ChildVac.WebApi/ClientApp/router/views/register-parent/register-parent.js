@@ -8,7 +8,8 @@
                 iin: '',
                 phoneNumber: '',
                 address: '',
-                gender: 0
+                gender: 0,
+                email: ''
             },
             show: true,
             alerts: [],

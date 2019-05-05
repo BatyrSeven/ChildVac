@@ -17,13 +17,13 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
             builder.HasData(new Doctor
             {
                 Id = 2,
-                FirstName = "Test",
-                LastName = "Doctor",
-                Patronim = "Testovich",
+                FirstName = "Батыржан",
+                LastName = "Жетписбаев",
+                Patronim = "Дулатович",
                 Gender = Gender.Male,
                 Iin = "970812300739",
                 Password = "test",
-                PhoneNumber = "7087260265",
+                PhoneNumber = "+77087260265",
                 RoleId = 3,
                 HospitalId = 1
             });

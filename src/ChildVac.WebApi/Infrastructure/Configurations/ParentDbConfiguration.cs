@@ -29,10 +29,11 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
                 Password = "123456",
                 FirstName = "Арман",
                 LastName = "Киалбеков",
-                Patronim = "Жылбабылулы",
+                Patronim = "Жылдабылович",
                 Gender = Gender.Male,
-                Address = "Костанай",
+                Address = "ул. Сейфулина, 134А, 33",
                 PhoneNumber = "+77089134584",
+                Email = "arman.kialbekov@gmail.com",
                 RoleId = 4
             });
         }
