@@ -37,22 +37,22 @@ namespace ChildVac.WebApi.Controllers
         // POST: api/Vaccine
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public void Post([FromBody] Vaccine hospital)
+        public void Post([FromBody] Vaccine vaccine)
         {
-            if (hospital == null) return;
+            if (vaccine == null) return;
 
-            _context.Vaccines.Add(hospital);
+            _context.Vaccines.Add(vaccine);
             _context.SaveChanges();
         }
 
         // PUT: api/Vaccine/5
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Vaccine hospital)
+        public void Put(int id, [FromBody] Vaccine vaccine)
         {
-            if (hospital == null) return;
+            if (vaccine == null) return;
             
-            _context.Vaccines.Update(hospital);
+            _context.Vaccines.Update(vaccine);
             _context.SaveChanges();
         }
 
@@ -61,11 +61,11 @@ namespace ChildVac.WebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var hospital = Get(id);
+            var vaccine = Get(id);
 
-            if (hospital == null) return;
+            if (vaccine == null) return;
 
-            _context.Vaccines.Remove(hospital);
+            _context.Vaccines.Remove(vaccine);
             _context.SaveChanges();
         }
     }

@@ -14,8 +14,9 @@ namespace ChildVac.Test.Helpers
         {
             var data = new JObject
             {
-                ["login"] = "Parent",
-                ["password"] = "123456"
+                ["iin"] = "123456789004",
+                ["password"] = "123456",
+                ["role"] = "parent"
             };
 
             return await RequestToken(client, data);
@@ -25,8 +26,9 @@ namespace ChildVac.Test.Helpers
         {
             var data = new JObject
             {
-                ["login"] = "Admin",
-                ["password"] = "123456"
+                ["iin"] = "123456789001",
+                ["password"] = "123456",
+                ["role"] = "admin"
             };
 
             return await RequestToken(client, data);
@@ -46,7 +48,7 @@ namespace ChildVac.Test.Helpers
 
             var resultContent = await response.Content.ReadAsStringAsync();
 
-            var result = JObject.Parse(resultContent);
+            var result = JObject.Parse(resultContent)?["result"] as JObject;
 
             if (!result.ContainsKey("token")) throw new Exception("Token was not returned");
 

@@ -33,6 +33,7 @@ namespace ChildVac.Test
         {
             context.Parents.Add(new Parent
             {
+                Iin = "123456789004",
                 Password = "123456",
                 FirstName = "Parent Name",
                 LastName = "Parent Surname",
@@ -46,6 +47,7 @@ namespace ChildVac.Test
         {
             context.Doctors.Add(new Doctor
             {
+                Iin = "123456789003",
                 Password = "123456",
                 FirstName = "Doctor Name",
                 LastName = "Doctor Surname",
@@ -58,10 +60,10 @@ namespace ChildVac.Test
         {
             context.Children.Add(new Child
             {
+                Iin = "123456789002",
                 Password = "123456",
                 FirstName = "Child Name",
                 LastName = "Child Surname",
-                Iin = "990724300739",
                 Role = context.Roles.FirstOrDefault(x => x.Name.Equals("Child"))
             });
             context.SaveChanges();
@@ -71,6 +73,7 @@ namespace ChildVac.Test
         {
             context.Admins.Add(new Admin
             {
+                Iin = "123456789001",
                 Password = "123456",
                 FirstName = "Admin Name",
                 LastName = "Admin Surname",

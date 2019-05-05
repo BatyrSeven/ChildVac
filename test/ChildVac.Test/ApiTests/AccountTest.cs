@@ -18,17 +18,18 @@ namespace ChildVac.Test.ApiTests
         protected override string Resource => "/api/Account";
 
         [Theory]
-        [InlineData("Admin", "123456", "Admin")]
-        [InlineData("Child", "123456", "Child")]
-        [InlineData("Doctor", "123456", "Doctor")]
-        [InlineData("Parent", "123456", "Parent")]
-        public async Task ShouldReturnTokenWhenPostValid(string login, string password, string expectedRole)
+        [InlineData("123456789001", "123456", "Admin")]
+        [InlineData("123456789002", "123456", "Child")]
+        [InlineData("123456789003", "123456", "Doctor")]
+        [InlineData("123456789004", "123456", "Parent")]
+        public async Task ShouldReturnTokenWhenPostValid(string iin, string password, string role)
         {
             // Arrange
             var data = new JObject
             {
-                ["login"] = login,
-                ["password"] = password
+                ["iin"] = iin,
+                ["password"] = password,
+                ["role"] = role
             };
 
             var content = new StringContent(data.ToString(),
@@ -42,14 +43,18 @@ namespace ChildVac.Test.ApiTests
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var result = JObject.Parse(resultContent);
+            var parsedContent = JObject.Parse(resultContent);
+            Assert.NotNull(parsedContent);
+
+            var result = parsedContent["result"] as JObject;
+            Assert.NotNull(result);
 
             Assert.True(result.ContainsKey("token"));
-            Assert.True(result.ContainsKey("login"));
-            Assert.True(result.ContainsKey("role"));
+            Assert.True(result["user"]?["iin"] != null);
+            Assert.True(result["user"]?["role"] != null);
 
-            Assert.Equal(login, result["login"].ToString());
-            Assert.Equal(expectedRole, result["role"].ToString());
+            Assert.Equal(iin, result["user"]?["iin"].ToString());
+            Assert.Equal(role, result["user"]?["role"].ToString());
         }
 
         [Fact]
@@ -58,8 +63,9 @@ namespace ChildVac.Test.ApiTests
             // Arrange
             var data = new JObject
             {
-                ["login"] = "qwerty",
-                ["password"] = "12345"
+                ["iin"] = "123456789000",
+                ["password"] = "12345",
+                ["role"] = ""
             };
 
             var content = new StringContent(data.ToString(),

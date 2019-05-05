@@ -29,11 +29,13 @@ namespace ChildVac.Test.ApiTests
         {
             // Arrange
             var name = "test vaccine";
-            var recieveTime = 1;
+            var recieveMonth = 1;
+            var description = "test";
             var vaccine = new JObject
             {
                 ["name"] = name,
-                ["RecieveTime"] = recieveTime
+                ["recieveMonth"] = recieveMonth,
+                ["description"] = description
             };
 
             var content = new StringContent(vaccine.ToString(),
@@ -57,7 +59,8 @@ namespace ChildVac.Test.ApiTests
 
                 var actualVaccine = context.Vaccines.First();
                 Assert.Equal(name, actualVaccine.Name);
-                Assert.Equal(recieveTime, actualVaccine.RecieveMonth);
+                Assert.Equal(recieveMonth, actualVaccine.RecieveMonth);
+                Assert.Equal(description, actualVaccine.Description);
 
                 context.Vaccines.Remove(actualVaccine);
                 context.SaveChanges();
@@ -157,15 +160,18 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveMonth = 1
+                RecieveMonth = 1,
+                Description = "test"
             };
             var second = new Vaccine
             {
                 Name = "test name 2",
-                RecieveMonth = 2
+                RecieveMonth = 2,
+                Description = "test2"
             };
             var updatedName = "updated name";
-            var updatedRecieveTime = 3;
+            var updatedRecieveMonth = 3;
+            var updatedDescription = "test 3";
 
             using (var scope = ScopeFactory.CreateScope())
             {
@@ -179,7 +185,8 @@ namespace ChildVac.Test.ApiTests
             {
                 ["id"] = first.Id,
                 ["name"] = updatedName,
-                ["recieveTime"] = updatedRecieveTime
+                ["recieveMonth"] = updatedRecieveMonth,
+                ["description"] = updatedDescription
             };
 
             var token = await AuthenticationHelper.GetAdminToken(Client);
@@ -202,10 +209,10 @@ namespace ChildVac.Test.ApiTests
                 var actual = context.Vaccines.First(x => x.Id == first.Id);
                 var last = context.Vaccines.Last();
 
-                Assert.Equal(updatedRecieveTime, actual.RecieveMonth);
+                Assert.Equal(updatedRecieveMonth, actual.RecieveMonth);
                 Assert.Equal(updatedName, actual.Name);
 
-                Assert.NotEqual(updatedRecieveTime, last.RecieveMonth);
+                Assert.NotEqual(updatedRecieveMonth, last.RecieveMonth);
                 Assert.NotEqual(updatedName, last.Name);
 
                 context.Vaccines.RemoveRange(context.Vaccines);
@@ -220,12 +227,14 @@ namespace ChildVac.Test.ApiTests
             var first = new Vaccine
             {
                 Name = "test name",
-                RecieveMonth = 1
+                RecieveMonth = 1,
+                Description = "test"
             };
             var second = new Vaccine
             {
                 Name = "test name 2",
-                RecieveMonth = 2
+                RecieveMonth = 2,
+                Description = "test 2"
             };
 
             using (var scope = ScopeFactory.CreateScope())

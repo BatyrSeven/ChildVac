@@ -16,8 +16,6 @@ namespace ChildVac.Test
         
         [Theory]
         [InlineData("/")]
-        [InlineData("/Home/Index")]
-        [InlineData("/Home/Privacy")]
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange
