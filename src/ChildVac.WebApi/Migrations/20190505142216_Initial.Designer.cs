@@ -5,18 +5,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChildVac.WebApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190505045430_Initial")]
+    [Migration("20190505142216_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Advice", b =>
                 {
@@ -416,7 +419,7 @@ namespace ChildVac.WebApi.Migrations
                             Password = "123456",
                             Patronim = "Арманович",
                             RoleId = 2,
-                            DateOfBirth = new DateTime(2019, 5, 4, 10, 54, 29, 750, DateTimeKind.Local).AddTicks(9233),
+                            DateOfBirth = new DateTime(2019, 5, 4, 20, 22, 16, 12, DateTimeKind.Local).AddTicks(9664),
                             ParentId = 3
                         });
                 });
@@ -429,7 +432,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10);
+                        .HasMaxLength(12);
 
                     b.HasIndex("HospitalId");
 
@@ -464,7 +467,7 @@ namespace ChildVac.WebApi.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnName("Parent_PhoneNumber")
-                        .HasMaxLength(10);
+                        .HasMaxLength(12);
 
                     b.HasDiscriminator().HasValue("Parent");
 

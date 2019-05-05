@@ -41,10 +41,10 @@ namespace ChildVac.WebApi
                 if (!options.IsConfigured)
                 {
                     // for production
-                    //options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase"));
+                    options.UseNpgsql(Configuration.GetConnectionString("ChildVacDatabase"));
 
                     // sqlite for development only
-                    options.UseSqlite($"Data Source={DbPath}");
+                    //options.UseSqlite($"Data Source={DbPath}");
                 }
             });
 

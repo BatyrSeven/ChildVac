@@ -10,7 +10,7 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
         {
             builder.Property(x => x.PhoneNumber)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(12);
 
             builder.HasBaseType<User>();
 
