@@ -23,6 +23,11 @@
         /// <summary>
         ///     Ticket was canceled
         /// </summary>
-        Canceled
+        Canceled,
+
+        /// <summary>
+        ///     Ticket was requested to postpone by parent
+        /// </summary>
+        Postponed
     }
 }

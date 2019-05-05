@@ -1,10 +1,32 @@
 ﻿.nav_button-wrapper {
-    min-width:550px;
+    min-width: 600px;
 }
 
 .nav_button {
-    width: 130px;
-    min-height: 120px
+    width: 140px;
+    min-height: 105px;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    padding-top: 12px;
+    line-height: 1.2;
+}
+
+.nav_text-wrapper {
+    display: flex;
+    -o-justify-content: center;
+    -webkit-justify-content: center;
+    justify-content: center; /* align horizontal */
+    -ms-align-items: center;
+    -o-align-items: center;
+    -webkit-align-items: center;
+    align-items: center; /* align vertical */
+    height: 38px;
+}
+
+.nav_text {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
 
 @media (min-width: 768px) {

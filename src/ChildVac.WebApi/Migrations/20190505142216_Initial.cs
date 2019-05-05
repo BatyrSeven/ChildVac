@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChildVac.WebApi.Migrations
 {
@@ -12,7 +13,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(maxLength: 1000, nullable: false),
                     Text = table.Column<string>(maxLength: 5000, nullable: true)
                 },
@@ -26,7 +27,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
                     Address = table.Column<string>(maxLength: 100, nullable: false)
                 },
@@ -40,7 +41,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -53,7 +54,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     RecieveMonth = table.Column<int>(nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: false)
@@ -68,7 +69,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Iin = table.Column<string>(maxLength: 12, nullable: false),
                     Password = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
@@ -79,10 +80,11 @@ namespace ChildVac.WebApi.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: true),
                     ParentId = table.Column<int>(nullable: true),
-                    PhoneNumber = table.Column<string>(maxLength: 10, nullable: true),
+                    PhoneNumber = table.Column<string>(maxLength: 12, nullable: true),
                     HospitalId = table.Column<int>(nullable: true),
                     Address = table.Column<string>(maxLength: 100, nullable: true),
-                    Parent_PhoneNumber = table.Column<string>(maxLength: 10, nullable: true)
+                    Parent_PhoneNumber = table.Column<string>(maxLength: 12, nullable: true),
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,7 +136,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Title = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: true),
                     Room = table.Column<string>(nullable: true),
@@ -173,7 +175,7 @@ namespace ChildVac.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     DateTime = table.Column<DateTime>(nullable: false),
                     Diagnosis = table.Column<string>(nullable: true),
                     Medication = table.Column<string>(nullable: true),
@@ -195,22 +197,13 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Advices",
                 columns: new[] { "Id", "Text", "Title" },
-                values: new object[] { 1, "Вакцина — это лекарство, которое создает у человека устойчивость (иммунитет) к болезни. Слово «вакцинация» происходит от «вакциния» (название вируса коровьей оспы). Этот вирус использовался в первой в истории вакцине(от оспы). Современная медицина создала множество вакцин. Вакцины ПРЕДУПРЕЖДАЮТ вирусные и бактериальные инфекции, которые когда - то приводили к тяжелым болезням и смерти.", "Что такое вакцина?" });
-
-            migrationBuilder.InsertData(
-                table: "Advices",
-                columns: new[] { "Id", "Text", "Title" },
-                values: new object[] { 2, "У маленьких детей иммунитет лучше, чем у взрослых людей и детей постарше.Когда маленькому ребенку одновременно делают несколько прививок, у него формируется хороший иммунитет к нескольким болезням. Даже если ребенку сделать 11 прививок одновременно, его иммунная система потратит на них только 0, 1 % своих возможностей.", "Не слишком ли часто ребенку делают прививки?" });
-
-            migrationBuilder.InsertData(
-                table: "Advices",
-                columns: new[] { "Id", "Text", "Title" },
-                values: new object[] { 3, "Нет! Это распространенное заблуждение. Прививки можно делать, даже если ребенок немножко болен.Переоценить важность своевременных прививок невозможно. Не переносите прививку из-за того, что ребенок немножко сопливый. Прививки можно делать, даже когда ребенка лечат антибиотиками.", "Мой ребенок простужен. Не отложить ли прививки?" });
-
-            migrationBuilder.InsertData(
-                table: "Advices",
-                columns: new[] { "Id", "Text", "Title" },
-                values: new object[] { 4, "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ", "А можно я все-таки не буду прививать ребенка?" });
+                values: new object[,]
+                {
+                    { 1, "Вакцина — это лекарство, которое создает у человека устойчивость (иммунитет) к болезни. Слово «вакцинация» происходит от «вакциния» (название вируса коровьей оспы). Этот вирус использовался в первой в истории вакцине(от оспы). Современная медицина создала множество вакцин. Вакцины ПРЕДУПРЕЖДАЮТ вирусные и бактериальные инфекции, которые когда - то приводили к тяжелым болезням и смерти.", "Что такое вакцина?" },
+                    { 2, "У маленьких детей иммунитет лучше, чем у взрослых людей и детей постарше.Когда маленькому ребенку одновременно делают несколько прививок, у него формируется хороший иммунитет к нескольким болезням. Даже если ребенку сделать 11 прививок одновременно, его иммунная система потратит на них только 0, 1 % своих возможностей.", "Не слишком ли часто ребенку делают прививки?" },
+                    { 3, "Нет! Это распространенное заблуждение. Прививки можно делать, даже если ребенок немножко болен.Переоценить важность своевременных прививок невозможно. Не переносите прививку из-за того, что ребенок немножко сопливый. Прививки можно делать, даже когда ребенка лечат антибиотиками.", "Мой ребенок простужен. Не отложить ли прививки?" },
+                    { 4, "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность заражения серьезными заболеваниями, которые можно было бы предотвратить.", "А можно я все-таки не буду прививать ребенка?" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Hospitals",
@@ -220,97 +213,35 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Admin" });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 2, "Child" });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 3, "Doctor" });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 4, "Parent" });
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "Child" },
+                    { 3, "Doctor" },
+                    { 4, "Parent" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Vaccines",
                 columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 13, "Против кори, краснухи и эпидемического паротита.", "ККП", 72 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 12, "Против кори, краснухи и эпидемического паротита.", "ККП", 12 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 11, "Полио - против полиомиелита - оральная.", "ОПВ", 12 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 10, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 18 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 9, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 3 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 8, "Против пневмококковой инфекции", "Пневмо", 12 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 3, "Вакцина против вирусного гепатита В.", "ВГВ", 0 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 6, "Против пневмококковой инфекции", "Пневмо", 2 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 4, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 2 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 2, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 72 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 1, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 0 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 7, "Против пневмококковой инфекции", "Пневмо", 4 });
-
-            migrationBuilder.InsertData(
-                table: "Vaccines",
-                columns: new[] { "Id", "Description", "Name", "RecieveMonth" },
-                values: new object[] { 15, "Против дифтерии и столбняка.", "АДС-М", 192 });
+                values: new object[,]
+                {
+                    { 13, "Против кори, краснухи и эпидемического паротита.", "ККП", 72 },
+                    { 12, "Против кори, краснухи и эпидемического паротита.", "ККП", 12 },
+                    { 11, "Полио - против полиомиелита - оральная.", "ОПВ", 12 },
+                    { 10, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 18 },
+                    { 9, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ИПВ", 3 },
+                    { 8, "Против пневмококковой инфекции", "Пневмо", 12 },
+                    { 3, "Вакцина против вирусного гепатита В.", "ВГВ", 0 },
+                    { 6, "Против пневмококковой инфекции", "Пневмо", 2 },
+                    { 5, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 4 },
+                    { 4, "Против коклюша, дифтерии, столбняка, вирусного гепатита B, гемофильной инфекции типа b и инактивированная полиовакцина.", "АбКДС + Хиб + ВГВ + ИПВ", 2 },
+                    { 14, "Против дифтерии, коклюша и столбняка.", "АбКДС", 72 },
+                    { 2, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 72 },
+                    { 1, "БЦЖ (Bacillus Calmette – Guérin - Бацилла Кальметта — Герена) – вакцина от туберкулеза. Прививка делается дважды: в 1- 4 дни жизни еще в роддоме и ревакцинация в 6 лет.", "БЦЖ", 0 },
+                    { 7, "Против пневмококковой инфекции", "Пневмо", 4 },
+                    { 15, "Против дифтерии и столбняка.", "АДС-М", 192 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
@@ -320,7 +251,17 @@ namespace ChildVac.WebApi.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "HospitalId", "PhoneNumber" },
-                values: new object[] { 2, "Doctor", "Test", 1, "970812300739", "Doctor", "test", "Testovich", 3, 1, "7087260265" });
+                values: new object[] { 2, "Doctor", "Батыржан", 1, "970812300739", "Жетписбаев", "test", "Дулатович", 3, 1, "+77087260265" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "Address", "Email", "Parent_PhoneNumber" },
+                values: new object[] { 3, "Parent", "Арман", 1, "970625350560", "Киалбеков", "123456", "Жылдабылович", 4, "ул. Сейфулина, 134А, 33", "arman.kialbekov@gmail.com", "+77089134584" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Discriminator", "FirstName", "Gender", "Iin", "LastName", "Password", "Patronim", "RoleId", "DateOfBirth", "ParentId" },
+                values: new object[] { 4, "Child", "Чойбек", 1, "148814881488", "Киалбеков", "123456", "Арманович", 2, new DateTime(2019, 5, 4, 20, 22, 16, 12, DateTimeKind.Local).AddTicks(9664), 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_UserId",

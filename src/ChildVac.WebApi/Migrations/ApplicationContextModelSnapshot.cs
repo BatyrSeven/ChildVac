@@ -4,6 +4,7 @@ using ChildVac.WebApi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChildVac.WebApi.Migrations
 {
@@ -14,7 +15,9 @@ namespace ChildVac.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Advice", b =>
                 {
@@ -54,7 +57,7 @@ namespace ChildVac.WebApi.Migrations
                         new
                         {
                             Id = 4,
-                            Text = "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность серьезные заболеваний, которые можно было бы предотвратить. ",
+                            Text = "Да, но мы вам это не советуем. Отказываться от прививок небезопасно. Ребенок может заразиться опасным инфекционным заболеванием. Кроме того, такой ребенок создает для детского коллектива опасность заражения серьезными заболеваниями, которые можно было бы предотвратить.",
                             Title = "А можно я все-таки не буду прививать ребенка?"
                         });
                 });
@@ -402,6 +405,21 @@ namespace ChildVac.WebApi.Migrations
                     b.HasIndex("ParentId");
 
                     b.HasDiscriminator().HasValue("Child");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Чойбек",
+                            Gender = 1,
+                            Iin = "148814881488",
+                            LastName = "Киалбеков",
+                            Password = "123456",
+                            Patronim = "Арманович",
+                            RoleId = 2,
+                            DateOfBirth = new DateTime(2019, 5, 4, 20, 22, 16, 12, DateTimeKind.Local).AddTicks(9664),
+                            ParentId = 3
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Doctor", b =>
@@ -412,7 +430,7 @@ namespace ChildVac.WebApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10);
+                        .HasMaxLength(12);
 
                     b.HasIndex("HospitalId");
 
@@ -422,15 +440,15 @@ namespace ChildVac.WebApi.Migrations
                         new
                         {
                             Id = 2,
-                            FirstName = "Test",
+                            FirstName = "Батыржан",
                             Gender = 1,
                             Iin = "970812300739",
-                            LastName = "Doctor",
+                            LastName = "Жетписбаев",
                             Password = "test",
-                            Patronim = "Testovich",
+                            Patronim = "Дулатович",
                             RoleId = 3,
                             HospitalId = 1,
-                            PhoneNumber = "7087260265"
+                            PhoneNumber = "+77087260265"
                         });
                 });
 
@@ -442,12 +460,30 @@ namespace ChildVac.WebApi.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<string>("Email");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnName("Parent_PhoneNumber")
-                        .HasMaxLength(10);
+                        .HasMaxLength(12);
 
                     b.HasDiscriminator().HasValue("Parent");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Арман",
+                            Gender = 1,
+                            Iin = "970625350560",
+                            LastName = "Киалбеков",
+                            Password = "123456",
+                            Patronim = "Жылдабылович",
+                            RoleId = 4,
+                            Address = "ул. Сейфулина, 134А, 33",
+                            Email = "arman.kialbekov@gmail.com",
+                            PhoneNumber = "+77089134584"
+                        });
                 });
 
             modelBuilder.Entity("ChildVac.WebApi.Domain.Entities.Feedback", b =>

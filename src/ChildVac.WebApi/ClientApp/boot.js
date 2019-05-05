@@ -2,7 +2,7 @@
 import BootstrapVue from 'bootstrap-vue';
 import vueEventCalendar from 'vue-event-calendar'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee, faUser, faCalendarWeek, faPen, faUserMd, faBaby, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCoffee, faUser, faCalendarWeek, faPen, faUserMd, faBaby, faUserPlus, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'promise-polyfill/src/polyfill';
@@ -24,7 +24,7 @@ Vue.use(vueEventCalendar,
         weekStartOn: 1
     });
 
-library.add(faCoffee, faUser, faCalendarWeek, faPen, faUserMd, faBaby, faUserPlus);
+library.add(faCoffee, faUser, faCalendarWeek, faPen, faUserMd, faBaby, faUserPlus, faSearch);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

@@ -12,6 +12,7 @@
             <b-form-group id="input-group-first-name" label="Имя:" label-for="input-first-name" label-cols-md="2" label-align-md="right">
                 <b-form-input id="input-first-name"
                               v-model="form.firstName"
+                              type="text"
                               required
                               placeholder="Введите имя"></b-form-input>
             </b-form-group>
@@ -19,6 +20,7 @@
             <b-form-group id="input-group-last-name" label="Фамилия:" label-for="input-last-name" label-cols-md="2" label-align-md="right">
                 <b-form-input id="input-last-name"
                               v-model="form.lastName"
+                              type="text"
                               required
                               placeholder="Введите фамилию"></b-form-input>
             </b-form-group>
@@ -49,6 +51,14 @@
                               type="tel"
                               v-model="form.phoneNumber"
                               placeholder="Введите номер телефона"></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="input-group-email" label="Email:" label-for="input-email" label-cols-md="2" label-align-md="right">
+                <b-form-input id="input-email"
+                              type="text"
+                              v-model="form.email"
+                              required
+                              placeholder="Введите Email"></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-group-address" label="Адрес проживания:" label-for="input-address" label-cols-md="2" label-align-md="right">

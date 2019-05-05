@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChildVac.WebApi.Application.Models;
+using ChildVac.WebApi.Application.Utils;
 using ChildVac.WebApi.Domain.Entities;
 using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -15,10 +18,12 @@ namespace ChildVac.WebApi.Controllers
     public class ParentController : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<ParentController> _logger;
 
-        public ParentController(ApplicationContext context)
+        public ParentController(ApplicationContext context ,ILogger<ParentController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/<controller>
@@ -104,7 +109,7 @@ namespace ChildVac.WebApi.Controllers
                         "Проверьте правильность данных и попробуйте снова.")));
             }
 
-            parent.Password = "123456";
+            parent.Password = AccountHelper.GenerateRandomPassword();
             parent.Role = _context.Roles.FirstOrDefault(
                 x => x.Name.Equals("Parent",
                 StringComparison.InvariantCultureIgnoreCase));
@@ -112,10 +117,26 @@ namespace ChildVac.WebApi.Controllers
             _context.Parents.Add(parent);
             await _context.SaveChangesAsync();
 
+            try
+            {
+                var emailSubject = "Регистрация в системе ChildVac";
+                var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+                emailBody += "\n\nВы были зарегистрированы в системе ChildVac.";
+                emailBody += "\nИспользуйте указанные ниже данные для входа:";
+                emailBody += $"\nЛогин: {parent.Iin}";
+                emailBody += $"\nПароль: {parent.Password}";
+                emailBody += "\n\n С уваженим, администрация ChildVac";
+                SmtpServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to send email");
+            }
+
             return CreatedAtAction(nameof(GetById), new { id = parent.Id },
                 new MessageResponseModel(true,
                     new MessageModel("Регистрация прошла успешно!",
-                        "Временный пароль для входа в систему: " + parent.Password)));
+                        "На Email родителя было отправлено письмо с данными для авторизации.")));
         }
 
         // PUT api/<controller>/5

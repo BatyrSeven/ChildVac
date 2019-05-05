@@ -3,7 +3,7 @@
         return {
             ticket_id: this.$route.params.id,
             form: {
-                childId: 0,
+                childId: null,
                 doctorId: 0,
                 date: null,
                 time: null,
@@ -15,7 +15,6 @@
             },
             searchChildIin: '',
             children: [],
-            childId: 0,
             child: "",
             show: true,
             alerts: [],
@@ -25,38 +24,8 @@
     },
     watch: {
         searchChildIin(newValue) {
-            this.children = [];
-            this.childId = 0;
             if (newValue.length > 3) {
                 this.findChildByIin(newValue);
-            }
-        },
-        childId(newValue) {
-            this.form.childId = newValue;
-            this.children = [];
-
-            if (newValue !== 0) {
-                window.fetch('/api/child/' + newValue,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json, text/plain, */*',
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(response => {
-                        return response.json();
-                    }).then(response => {
-                        var child = response.result;
-                        this.child =
-                            "<strong>" +
-                            child.iin +
-                            "</strong> - " +
-                            child.lastName +
-                            " " +
-                            child.firstName +
-                            " " +
-                            child.patronim;
-                    });
             }
         }
     },
@@ -132,6 +101,7 @@
                 });
         },
         updateTicket() {
+            this.submited = true;
             var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify({
                 id: this.ticket_id,
@@ -227,6 +197,10 @@
                 });
 
                 this.children = children;
+
+                if (children.length) {
+                    this.form.childId = children[0].value;
+                }
             });
         },
         getVaccines() {
@@ -251,7 +225,7 @@
         },
         resetSearchChildSuggestions() {
             this.children = [];
-            this.childId = 0;
+            this.form.childId = null;
             this.searchChildIin = "";
             this.child = "";
         },

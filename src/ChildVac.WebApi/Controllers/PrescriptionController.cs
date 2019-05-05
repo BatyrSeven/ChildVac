@@ -9,6 +9,7 @@ using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -21,14 +22,17 @@ namespace ChildVac.WebApi.Controllers
     public class PrescriptionController : ControllerBase
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<PrescriptionController> _logger;
+
 
         /// <summary>
         /// Prescription Controller contructor
         /// </summary>
         /// <param name="context">Application Database Context</param>
-        public PrescriptionController(ApplicationContext context)
+        public PrescriptionController(ApplicationContext context, ILogger<PrescriptionController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -93,9 +97,32 @@ namespace ChildVac.WebApi.Controllers
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
 
+            var ticket = _context.Tickets
+                .Include(x => x.Child)
+                .ThenInclude(x => x.Parent)
+                .FirstOrDefault(x => x.Id == prescription.TicketId);
+
+            var parent = ticket.Child.Parent;
+
+            try
+            {
+                var emailSubject = "Врач выписал вам назначение";
+                var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+                emailBody += "\n\nВрач выписал вам назначение в системе ChildVac.";
+                emailBody += $"\nДиагноз: {prescription.Diagnosis}";
+                emailBody += $"\nЛечение: {prescription.Medication}";
+                emailBody += $"\nПримечания: {prescription.Description}";
+                emailBody += "\n\n С уваженим, администрация ChildVac";
+                SmtpServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to send email");
+            }
+
             return CreatedAtAction(nameof(GetById), new { id = prescription.Id },
                 new MessageResponseModel(true,
-                    new MessageModel("Запись на прием была успешно сохранена.")));
+                    new MessageModel("Назначение было успешно добавлено.")));
         }
 
         /// <summary>

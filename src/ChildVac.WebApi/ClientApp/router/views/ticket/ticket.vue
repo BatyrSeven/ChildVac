@@ -21,23 +21,19 @@
             </b-row>
 
             <div v-else>
-                <b-form-group v-show="!childId" id="input-group-child-iin" label="ИИН ребёнка:" label-for="input-child-iin" label-cols-md="2" label-align-md="right">
+                <b-form-group id="input-group-child-iin" label="ИИН ребёнка:" label-for="input-child-iin" label-cols-md="2" label-align-md="right">
                     <b-form-input id="input-child-iin"
+                                  class="mb-3"
                                   type="text"
                                   v-model="searchChildIin"
                                   placeholder="Начните вводить ИИН ребёнка"></b-form-input>
-                    <b-form-select v-show="children.length" v-model="childId" :options="children" :select-size="children.length + 1"></b-form-select>
+                    <b-form-select v-model="form.childId"
+                                   :options="children">
+                        <template slot="first">
+                            <option :value="null" disabled>Выберите из поиска</option>
+                        </template>
+                    </b-form-select>
                 </b-form-group>
-
-                <div class="mb-3" v-show="childId">
-                    <div class="row">
-                        <div class="col-md-2 text-md-right pr-0">Ребёнок:</div>
-                        <div class="col">
-                            <div class="mb-1" v-html="child"></div>
-                            <b-button variant="outline-primary" @click="resetSearchChildSuggestions">Изменить</b-button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <b-form-group id="input-group-date-of-birth" label="Время приема:" label-for="input-date-of-birth" label-cols-md="2" label-align-md="right">
@@ -93,7 +89,6 @@
                                      v-model="form.title"
                                      placeholder=""
                                      rows="2"
-                                     required
                                      max-rows="10"></b-form-textarea>
                 </b-col>
             </b-row>

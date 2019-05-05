@@ -18,9 +18,24 @@ namespace ChildVac.WebApi.Infrastructure.Configurations
 
             builder.Property(x => x.PhoneNumber)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(12);
 
             builder.HasBaseType<User>();
+
+            builder.HasData(new Parent
+            {
+                Id = 3,
+                Iin = "970625350560",
+                Password = "123456",
+                FirstName = "Арман",
+                LastName = "Киалбеков",
+                Patronim = "Жылдабылович",
+                Gender = Gender.Male,
+                Address = "ул. Сейфулина, 134А, 33",
+                PhoneNumber = "+77089134584",
+                Email = "arman.kialbekov@gmail.com",
+                RoleId = 4
+            });
         }
     }
 }
