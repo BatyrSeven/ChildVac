@@ -101,6 +101,7 @@
                 });
         },
         updateTicket() {
+            this.submited = true;
             var authHeader = 'Bearer ' + this.$store.state.token;
             let data = JSON.stringify({
                 id: this.ticket_id,

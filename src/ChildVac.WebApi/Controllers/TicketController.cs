@@ -9,6 +9,7 @@ using ChildVac.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ChildVac.WebApi.Controllers
 {
@@ -20,14 +21,16 @@ namespace ChildVac.WebApi.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<TicketController> _logger;
 
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="context">Application Database Context</param>
-        public TicketController(ApplicationContext context)
+        public TicketController(ApplicationContext context, ILogger<TicketController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -121,22 +124,33 @@ namespace ChildVac.WebApi.Controllers
                 _context.Tickets.Add(ticket);
                 await _context.SaveChangesAsync();
 
-                var childId = ticket.ChildId;
-                var child = _context.Children
-                    .Include(x => x.Parent)
-                    .FirstOrDefault(x => x.Id == childId);
+                try
+                {
+                    var childId = ticket.ChildId;
+                    var child = _context.Children
+                        .Include(x => x.Parent)
+                        .FirstOrDefault(x => x.Id == childId);
 
-                var parent = child.Parent;
+                    var parent = child?.Parent;
 
-                var emailSubject = "Назначен прием к врачу";
-                var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
-                emailBody += $"\n\nВашему ребенку была назначена " 
-                    + (ticket.TicketType == TicketType.Consultation ? "консультация" : "вакцинация")
-                    + " в системе ChildVac.";
-                emailBody += $"\nВремя: { ticket.StartDateTime.ToString("dd.MM.yyyy HH:mm")}";
-                emailBody += $"\nКабинет: { ticket.Room}";
-                emailBody += "\n\n С уваженим, администрация ChildVac";
-                GmailServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+                    if (parent != null)
+                    {
+
+                        var emailSubject = "Назначен прием к врачу";
+                        var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+                        emailBody += $"\n\nВашему ребенку была назначена "
+                                     + (ticket.TicketType == TicketType.Consultation ? "консультация" : "вакцинация")
+                                     + " в системе ChildVac.";
+                        emailBody += $"\nВремя: {ticket.StartDateTime.ToString("dd.MM.yyyy HH:mm")}";
+                        emailBody += $"\nКабинет: {ticket.Room}";
+                        emailBody += "\n\n С уваженим, администрация ChildVac";
+                        SmtpServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Failed to send email");
+                }
             }
             catch (Exception)
             {
@@ -168,6 +182,33 @@ namespace ChildVac.WebApi.Controllers
                 ticket.Status = TicketStatus.Waiting;
                 _context.Tickets.Update(ticket);
                 await _context.SaveChangesAsync();
+
+                try
+                {
+                    var childId = ticket.ChildId;
+                    var child = _context.Children
+                        .Include(x => x.Parent)
+                        .FirstOrDefault(x => x.Id == childId);
+
+                    var parent = child?.Parent;
+
+                    if (parent != null)
+                    {
+                        var emailSubject = "Изменения в записи к врачу";
+                        var emailBody = $"Здравствуйте, {parent.FirstName} {parent.Patronim}!";
+                        emailBody += "\n\n"
+                                     + (ticket.TicketType == TicketType.Consultation ? "Консультация" : "Вакцинация")
+                                     + ", назначенная вам раннее в системе ChildVac была изменена врачем.";
+                        emailBody += $"\nВремя: {ticket.StartDateTime:dd.MM.yyyy HH:mm}";
+                        emailBody += $"\nКабинет: {ticket.Room}";
+                        emailBody += "\n\n С уваженим, администрация ChildVac";
+                        SmtpServiceHelper.SendMail(parent.Email, emailSubject, emailBody);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Failed to send email");
+                }
             }
             catch (Exception e)
             {

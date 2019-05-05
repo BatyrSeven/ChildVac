@@ -1,25 +1,19 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Gmail.v1;
-using Google.Apis.Gmail.v1.Data;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
-using MimeKit;
-using System;
-using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Threading;
 
 namespace ChildVac.WebApi.Application.Utils
 {
-    public static class GmailServiceHelper
+    /// <summary>
+    ///     Used for sending emails though SMTP
+    /// </summary>
+    public static class SmtpServiceHelper
     {
-        // If modifying these scopes, delete your previously saved credentials
-        // at ~/.credentials/gmail-dotnet-quickstart.json
-        static string[] Scopes = { GmailService.Scope.GmailReadonly };
-        static string ApplicationName = "Childvac Gmail API .NET";
-        
-
+        /// <summary>
+        ///     Sends emails though SMTP
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
         public static void SendMail(string to, string subject, string body)
         {
             var fromAddress = new MailAddress("childvac@gmail.com");
@@ -43,16 +37,6 @@ namespace ChildVac.WebApi.Application.Utils
             {
                 smtp.Send(message);
             }
-        }
-
-        private static string Encode(string text)
-        {
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(text);
-
-            return System.Convert.ToBase64String(bytes)
-                .Replace('+', '-')
-                .Replace('/', '_')
-                .Replace("=", "");
         }
     }
 }
