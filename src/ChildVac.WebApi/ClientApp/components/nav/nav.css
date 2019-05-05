@@ -1,13 +1,13 @@
 ﻿.nav_button-wrapper {
-    min-width:570px;
+    min-width: 600px;
 }
 
 .nav_button {
-    width: 130px;
-    min-height: 120px;
+    width: 140px;
+    min-height: 110px;
     -ms-border-radius: 10px;
     border-radius: 10px;
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 @media (min-width: 768px) {
