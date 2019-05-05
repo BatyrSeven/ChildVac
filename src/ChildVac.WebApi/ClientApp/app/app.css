@@ -1,5 +1,11 @@
-﻿body {
+﻿@font-face {
+    font-family: Gilroy-Regular;
+    src: url(../fonts/Gilroy-Regular.ttf);
+}
+
+body {
     background: #ffffff;
+    font-family: Gilroy-Regular;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -7,3 +13,4 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none; 
     margin: 0; 
 }
+
